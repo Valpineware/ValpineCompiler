@@ -4,13 +4,15 @@
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 
-class Library
-{
-public:
-	Library();
+#include <memory>
 
-    static int add(int a, int b);
-    static int divide(int a, int b);
-};
+template <typename T>
+using strong = std::shared_ptr<T>;
+
+template <typename T>
+using weak = std::weak_ptr<T>;
+
+template <typename T>
+using unique = std::unique_ptr<T>;
 
 #endif // LIBRARY_H

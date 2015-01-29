@@ -5,27 +5,9 @@
 // This file is licensed under the MIT License.
 //==================================================================================================================|
 
-#include <Library.h>
-
-#include "Statement.h"
-#include "Block.h"
-
-#ifndef _vc_graph_Function_h
-#define _vc_graph_Function_h
+#include "Graph.h"
 
 namespace vc { namespace graph
 {
-	/**
-	 * @brief Represents the body of a function of control structure that is executed.
-	 */
-	class Function : public Statement
-	{
-	public:
-		
-
-	private:
-		Block mBlock;
-	};
+	
 }}
-
-#endif

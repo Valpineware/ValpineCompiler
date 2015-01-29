@@ -36,12 +36,15 @@ void Application::onButtonCompileClicked()
 	using namespace vc;
 
 	parser::Parser sourceParser;
-	graph::Graph sourceGraph = sourceParser.parseFile("./Main.val");
-
 	QString filepath = mTextField->property("text").toString();
 
+	if (!sourceParser.parseFile(filepath))
+	{
+		qDebug() << "Aborting...error parsing file" << filepath;
+	}
+
 	mocker::Mocker mocker;
-	mocker.mock(sourceGraph);
+	mocker.mock(sourceParser.graph());
 
 	compiler::Compiler compiler;
 	compiler.compile(mocker.outputFilepath());

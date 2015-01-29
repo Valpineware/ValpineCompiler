@@ -19,7 +19,30 @@ namespace vc { namespace parser
 	class Parser
 	{
 	public:
-		graph::Graph parseFile(const QString &filepath);
+		bool parseFile(const QString &filepath);
+
+		graph::Graph& graph() { return mCurrentGraph; }	//TODO these two lines are a pain to have to do in C++
+		const graph::Graph& graph() const { return mCurrentGraph; }	//let's find a way to eliminate this in Valpine
+
+	private:
+		graph::Graph mCurrentGraph;
+		QVector<QString> mLineBuffer;
+
+		void parseLineBuffer();
+
+		bool isFunctionDeclaration(const QString &line);
+
+
+
+		/**
+		 * The following methods return an integer indicating the line where the entire statement ended.
+		 * For function declarations, the return value is equal to the line index for the closing brace.
+		 * The input parameter line is the index position for the line where the statment starts.
+		 */
+		 
+		int parseStatement_preprocessor(int index);
+		int parseStatement_function(int index);
+		int parseStatement_block(int index);
 	};
 }}
 

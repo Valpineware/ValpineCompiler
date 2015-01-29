@@ -8,15 +8,15 @@
 #include <Library.h>
 #include "Statement.h"
 
-#ifndef _vc_graph_ExecutionBlock_h
-#define _vc_graph_ExecutionBlock_h
+#ifndef _vc_graph_Block_h
+#define _vc_graph_Block_h
 
 namespace vc { namespace graph
 {
 	/**
-	 * @brief Represents the body of a function of control structure that is executed.
+	 * @brief Represents the body of a generic block (global block, function, class definition, while body, etc.).
 	 */
-	class ExecutionBlock
+	class Block
 	{
 	public:
 		void appendStatement(const Statement &statement) { mStatements.append(statement); }
