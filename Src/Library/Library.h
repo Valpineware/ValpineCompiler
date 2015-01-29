@@ -1,6 +1,9 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+
 class Library
 {
 public:

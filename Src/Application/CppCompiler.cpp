@@ -21,7 +21,7 @@ void CppCompiler::run()
 					 this, SLOT(onCompileProcessFinished(int, QProcess::ExitStatus)));
 
 	mCompilerProcess.start(program, arguments);
-	mCompilerProcess.waitForFinished(2);
+	mCompilerProcess.waitForFinished(mCompileTimeoutMs);
 
 	if (mCompilerProcess.error() == QProcess::ProcessError::Timedout)
 	{
@@ -33,11 +33,11 @@ void CppCompiler::run()
 
 void CppCompiler::onCompileProcessError(QProcess::ProcessError error)
 {
-	qDebug() << "Error while compiling with G++, code=" << error;
+	qDebug() << "C++ compiler process encountered an error code=" << static_cast<int>(error);
 }
 
 
 void CppCompiler::onCompileProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-	qDebug() << "Compilation finished";
+	qDebug() << "C++ compiler finished";
 }

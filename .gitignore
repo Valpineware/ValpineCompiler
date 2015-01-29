@@ -28,3 +28,6 @@
 *.app
 *.user
 IDE/
+*.suo
+*.pdb
+Guitar.config
