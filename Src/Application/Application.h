@@ -1,21 +1,20 @@
 //==================================================================================================================|
-// Created 2015.01.28 by Daniel L. Watkins
+// Created 2015.01.29 by Daniel L. Watkins
 //
 // Copyright (C) 2015 Valpineware
 // This file is licensed under the MIT License.
 //==================================================================================================================|
 
-#include <QGuiApplication>
+#include <QQuickView>
 
-#include <Application.h>
+#include <Library.h>
 
-int main(int argc, char *argv[])
+class Application : public QQuickView
 {
-	QGuiApplication a(argc, argv);
+	Q_OBJECT
 
-	Application application;
-	application.init();
-	application.show();
+public:
+	void init();
 
-	return a.exec();
-}
+private:
+};

@@ -16,18 +16,53 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{ba955cac-80d4-4bbe-a47f-a552f5e83484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\qml">
+      <UniqueIdentifier>{4d7bd1be-ac3c-4585-8451-c6dacc0d0e41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\Application\Main.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_CppCompiler.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_CppCompiler.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Application\CppCompiler.cpp" />
+    <ClCompile Include="..\..\Src\Application\CppCompiler.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Application\Main.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_Main.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Application\Application.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Application.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Application.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\Src\Application\CppCompiler.h" />
+    <CustomBuild Include="..\..\Src\Application\CppCompiler.h">
+      <Filter>Src</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Src\Application\qml\Main.qrc">
+      <Filter>Src\qml</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Src\Application\Application.h">
+      <Filter>Src</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Src\Application\qml\Main.qml">
+      <Filter>Src\qml</Filter>
+    </None>
   </ItemGroup>
 </Project>

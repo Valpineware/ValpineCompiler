@@ -39,5 +39,5 @@ void CppCompiler::onCompileProcessError(QProcess::ProcessError error)
 
 void CppCompiler::onCompileProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-	qDebug() << "C++ compiler finished";
+	qDebug() << "C++ compiler finished with exit code " << exitCode << " and status " << static_cast<int>(exitStatus);
 }
