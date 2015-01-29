@@ -16,11 +16,62 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{05e84c2e-61d2-4d55-903b-47386b660ac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Compiler">
+      <UniqueIdentifier>{b630c31b-600f-452b-a65c-d9118961ee4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Mocker">
+      <UniqueIdentifier>{150db0c6-3351-4f3f-a0c3-c212c325f3cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Graph">
+      <UniqueIdentifier>{5949f6df-a0f0-4dcf-8ebe-3579d5b0c0a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Parser">
+      <UniqueIdentifier>{b6aa3c61-293d-4d35-bdaa-8dbc6d85b4a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Src\Library\Library.h" />
+    <ClCompile Include="..\..\Src\Library\Library.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Library\Compiler\Compiler.cpp">
+      <Filter>Src\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Compiler.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Compiler.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Library\Mocker\Mocker.cpp">
+      <Filter>Src\Mocker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Library\Graph\Graph.cpp">
+      <Filter>Src\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Library\Parser\Parser.cpp">
+      <Filter>Src\Parser</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\Library\Library.cpp" />
+    <ClInclude Include="..\..\Src\Library\Library.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Library\Mocker\Mocker.h">
+      <Filter>Src\Mocker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Library\Graph\Graph.h">
+      <Filter>Src\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Library\Parser\Parser.h">
+      <Filter>Src\Parser</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\Src\Library\Compiler\Compiler.h">
+      <Filter>Src\Compiler</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

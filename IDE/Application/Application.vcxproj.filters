@@ -24,15 +24,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GeneratedFiles\Debug\moc_CppCompiler.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_CppCompiler.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Application\CppCompiler.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Application\Main.cpp">
       <Filter>Src</Filter>
     </ClCompile>
@@ -50,9 +41,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\Src\Application\CppCompiler.h">
-      <Filter>Src</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\..\Src\Application\qml\Main.qrc">
       <Filter>Src\qml</Filter>
     </CustomBuild>

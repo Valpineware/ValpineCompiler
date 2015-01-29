@@ -7,20 +7,23 @@
 
 #include <QtCore/QProcess>
 
-class CppCompiler : public QObject
+namespace vc { namespace compiler
 {
-	Q_OBJECT
+	class Compiler : public QObject
+	{
+		Q_OBJECT
 
-public:
-	void run();
-
-
-private slots:
-	void onCompileProcessError(QProcess::ProcessError error);
-	void onCompileProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+	public:
+		void run();
 
 
-private:
-	QProcess mCompilerProcess;
-	const int mCompileTimeoutMs = 1000 * 60 * 10;	//10 minutes
-};
+	private slots:
+		void onCompileProcessError(QProcess::ProcessError error);
+		void onCompileProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
+
+	private:
+		QProcess mCompilerProcess;
+		const int mCompileTimeoutMs = 1000 * 60 * 10;	//10 minutes
+	};
+}}
