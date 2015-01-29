@@ -5,6 +5,11 @@
 // This file is licensed under the MIT License.
 //==================================================================================================================|
 
+#ifndef _vc_mocker_Mocker_h
+#define _vc_mocker_Mocker_h
+
+#include <Graph/Graph.h>
+
 namespace vc { namespace mocker
 {
 	/**
@@ -12,6 +17,10 @@ namespace vc { namespace mocker
 	 */
 	class Mocker
 	{
-
+	public:
+		void mock(const graph::Graph &graph) {}
+		QString outputFilepath() const { return ""; }
 	};
 }}
+
+#endif

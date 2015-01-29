@@ -5,6 +5,9 @@
 // This file is licensed under the MIT License.
 //==================================================================================================================|
 
+#ifndef _vc_graph_Graph_h
+#define _vc_graph_Graph_h
+
 namespace vc { namespace graph
 {
 	/**
@@ -12,6 +15,9 @@ namespace vc { namespace graph
 	 */
 	class Graph
 	{
-
+	public:
+		int a=9;
 	};
 }}
+
+#endif

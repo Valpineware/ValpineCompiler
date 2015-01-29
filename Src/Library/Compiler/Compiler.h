@@ -5,6 +5,9 @@
 // This file is licensed under the MIT License.
 //==================================================================================================================|
 
+#ifndef _vc_compiler_Compiler_h
+#define _vc_compiler_Compiler_h
+
 #include <QtCore/QProcess>
 
 namespace vc { namespace compiler
@@ -14,7 +17,7 @@ namespace vc { namespace compiler
 		Q_OBJECT
 
 	public:
-		void run();
+		void compile(const QString &filepath);
 
 
 	private slots:
@@ -23,7 +26,9 @@ namespace vc { namespace compiler
 
 
 	private:
-		QProcess mCompilerProcess;
-		const int mCompileTimeoutMs = 1000 * 60 * 10;	//10 minutes
+		QProcess mProcess;
+		const int mTimeoutMs = 1000 * 60 * 10;	//10 minutes
 	};
 }}
+
+#endif

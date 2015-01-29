@@ -16,5 +16,11 @@ class Application : public QQuickView
 public:
 	void init();
 
+private slots:
+	void onButtonCompileClicked();
+
 private:
+	void keyPressEvent(QKeyEvent *ev) override;
+	
+	QObject *mTextField;
 };

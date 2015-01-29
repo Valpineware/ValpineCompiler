@@ -1,0 +1,8 @@
+#include <iostream>
+
+//This is 100% C++ and 100% Valpine (there is no difference yet)
+int main()
+{
+	std::cout << "ValpineCompiler Test" << std::endl;
+	return 0;
+}

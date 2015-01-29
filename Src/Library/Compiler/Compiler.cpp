@@ -10,24 +10,24 @@
 
 namespace vc { namespace compiler
 {
-	void Compiler::run()
+	void Compiler::compile(const QString &filepath)
 	{
 		QString program = "g++";
 		QStringList arguments;
 		arguments << "Main.cpp" << "-o" << "Main.exe";
 
-		QObject::connect(&mCompilerProcess, SIGNAL(error(QProcess::ProcessError)),
+		QObject::connect(&mProcess, SIGNAL(error(QProcess::ProcessError)),
 						 this, SLOT(onCompileProcessError(QProcess::ProcessError)));
 
-		QObject::connect(&mCompilerProcess, SIGNAL(finished(int, QProcess::ExitStatus)),
+		QObject::connect(&mProcess, SIGNAL(finished(int, QProcess::ExitStatus)),
 						 this, SLOT(onCompileProcessFinished(int, QProcess::ExitStatus)));
 
-		mCompilerProcess.start(program, arguments);
-		mCompilerProcess.waitForFinished(mCompileTimeoutMs);
+		mProcess.start(program, arguments);
+		mProcess.waitForFinished(mTimeoutMs);
 
-		if (mCompilerProcess.error() == QProcess::ProcessError::Timedout)
+		if (mProcess.error() == QProcess::ProcessError::Timedout)
 		{
-			qDebug() << "Compile timed out after " << mCompileTimeoutMs/1000 << " seconds.";
+			qDebug() << "Compile timed out after " << mTimeoutMs/1000 << " seconds.";
 		}
 	}
 
