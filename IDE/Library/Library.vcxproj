@@ -11,7 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Src\Library\Graph\ExecutionBlock.h" />
+    <ClInclude Include="..\..\Src\Library\Graph\Function.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Graph.h" />
+    <ClInclude Include="..\..\Src\Library\Graph\Statement.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\Mocker.h" />
     <ClInclude Include="..\..\Src\Library\Parser\Parser.h" />
     <CustomBuild Include="..\..\Src\Library\Compiler\Compiler.h">
@@ -28,7 +31,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Library\Compiler\Compiler.cpp" />
+    <ClCompile Include="..\..\Src\Library\Graph\ExecutionBlock.cpp" />
+    <ClCompile Include="..\..\Src\Library\Graph\Function.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Graph.cpp" />
+    <ClCompile Include="..\..\Src\Library\Graph\Statement.cpp" />
     <ClCompile Include="..\..\Src\Library\Library.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Mocker.cpp" />
     <ClCompile Include="..\..\Src\Library\Parser\Parser.cpp" />
