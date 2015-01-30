@@ -21,6 +21,9 @@
       <Extensions>cpp;cxx;c;def</Extensions>
       <ParseFiles>true</ParseFiles>
     </Filter>
+    <Filter Include="Src\Parser">
+      <UniqueIdentifier>{6879b9f6-0b67-43f8-9f45-04b4271a4874}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\DanWatkins\Terrain3D\Src\Tests\Tests.h">
@@ -30,6 +33,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\Src\Tests\Tests.cpp">
       <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Tests\Parser\Test_Parser.cpp">
+      <Filter>Src\Parser</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

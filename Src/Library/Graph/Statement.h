@@ -21,18 +21,16 @@ namespace vc { namespace graph
 		virtual ~Statement() {}
 
 		Statement() = delete;
-		Statement(const QString &verbatim) : mVerbatim(verbatim) {}
+		Statement(const QString &verbatim) : mVerbatim(verbatim) { removeLeadingTrailingWhiteSpace(mVerbatim); }
 
 		/**
 		 * @returns the statement as a string as it appeared in the Valpine source file.
 		 */
 		QString verbatim() const { return mVerbatim; }
 
-	protected:
-		void setVerbatim(const QString &verbatim) { mVerbatim = verbatim; }
-
 	private:
 		QString mVerbatim;
+		static void removeLeadingTrailingWhiteSpace(QString &line);
 	};
 }}
 

@@ -28,7 +28,7 @@ namespace vc { namespace graph
 		}
 
 		void appendStatement(Statement* statement) { mStatements.append(statement); }
-		QListIterator<Statement*> statementIterator() { return QListIterator<Statement*>(mStatements); }
+		const QList<Statement*>& statements() const { return mStatements; }
 
 	private:
 		QList<Statement*> mStatements;

@@ -5,7 +5,7 @@
 
 #include <QtCore/QString>
 
-const QString gTestDir = "./TestDir/";
+const QString gTestDir = "./Tests/";
 
 /**
  * First #define a class identifier. Then declare this followed

@@ -24,7 +24,6 @@ namespace vc { namespace parser
 			mLineBuffer.append(line);
 		}
 
-
 		//parse the global block (entire file) starting at line 0
 		parseStatement_block(0, &mCurrentGraph.block());
 
@@ -40,14 +39,7 @@ namespace vc { namespace parser
 	
 	bool Parser::isBlankLine(const QString &line)
 	{
-		QString verify = line;
-		verify.replace("\t", "");
-		verify.replace(" ", ""); 
-		verify.replace("\n", "");
-
-		return verify == "";
-
-		//TODO this method is unreliable when other whitespace characters are present
+		return graph::Statement(line).verbatim() == "";
 	}
 
 

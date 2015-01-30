@@ -1,7 +1,0 @@
-#include <iostream>
-
-int main()
-{
-	std::cout << "ValpineCompiler Test" << std::endl;
-	return 0;
-}

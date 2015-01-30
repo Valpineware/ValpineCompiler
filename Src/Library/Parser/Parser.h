@@ -33,8 +33,6 @@ namespace vc { namespace parser
 		bool isFunctionDeclaration(const QString &line);
 		bool isBlankLine(const QString &line);
 
-
-
 		/**
 		 * The following methods return an integer indicating the line where the entire statement ended.
 		 * For function declarations, the return value is equal to the line index for the closing brace.
