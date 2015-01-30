@@ -33,7 +33,25 @@ namespace vc { namespace parser
 
 	bool Parser::isFunctionDeclaration(const QString &line)
 	{
-		return line == "int main()";
+		QStringList components = line.split(QRegExp(" |\t|\n"));
+
+		if (components.isEmpty())
+			return false;
+		 
+		//TODO we need an actual function regognition system here
+		//for now, we are just going to check if the first component
+		//is a primitive type
+		#define T(str) types.append(#str)
+		QStringList types; T(int); T(void); T(float); T(double);
+
+		QStringListIterator iter(types);
+		while (iter.hasNext())
+		{
+			if (iter.next() == components.first())
+				return true;
+		}
+
+		return false;
 	}
 
 	
