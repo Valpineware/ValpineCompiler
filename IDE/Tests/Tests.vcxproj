@@ -19,10 +19,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\DanWatkins\Terrain3D\Src\Tests\Tests.cpp" />
+    <ClInclude Include="..\..\..\..\DanWatkins\Terrain3D\Src\Tests\Tests.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\DanWatkins\Terrain3D\Src\Tests\Tests.h" />
+    <ClCompile Include="..\..\Src\Tests\Tests.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{271266B0-26EE-4DEC-932B-16085893185C}</ProjectGuid>
@@ -113,7 +113,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="0" lreleaseOptions="" Qt5Version_x0020_Win32="5.3.1" MocOptions="" />
+      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="0" lreleaseOptions="" Qt5Version_x0020_Win32="$(DefaultQtVersion)" MocOptions="" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
