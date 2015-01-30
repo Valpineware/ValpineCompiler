@@ -21,7 +21,12 @@ namespace vc { namespace graph
 	class Function : public Statement
 	{
 	public:
-		
+		Function() = delete;
+
+		Function(const QString &verbatim) : Statement(verbatim) {}
+
+		Block& block() { return mBlock; }
+		const Block& block() const { return mBlock; }
 
 	private:
 		Block mBlock;

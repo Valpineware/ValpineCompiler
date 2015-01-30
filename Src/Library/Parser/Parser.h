@@ -31,6 +31,7 @@ namespace vc { namespace parser
 		void parseLineBuffer();
 
 		bool isFunctionDeclaration(const QString &line);
+		bool isBlankLine(const QString &line);
 
 
 
@@ -40,9 +41,9 @@ namespace vc { namespace parser
 		 * The input parameter line is the index position for the line where the statment starts.
 		 */
 		 
-		int parseStatement_preprocessor(int index);
-		int parseStatement_function(int index);
-		int parseStatement_block(int index);
+		int parseStatement_preprocessor(int index, graph::Block &parent);
+		int parseStatement_function(int index, graph::Block &parent);
+		int parseStatement_block(int index, graph::Block *host);
 	};
 }}
 

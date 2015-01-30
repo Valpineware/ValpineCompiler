@@ -19,7 +19,7 @@ namespace vc { namespace graph
 	{
 		//nothing yet. Just want to represent this as a preprocessor statement
 	public:
-		Preprocessor(const QString &verbatim) { setVerbatim(verbatim); }
+		Preprocessor(const QString &verbatim) : Statement(verbatim) {}
 	};
 }}
 

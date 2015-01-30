@@ -18,6 +18,11 @@ namespace vc { namespace graph
 	class Statement
 	{
 	public:
+		virtual ~Statement() {}
+
+		Statement() = delete;
+		Statement(const QString &verbatim) : mVerbatim(verbatim) {}
+
 		/**
 		 * @returns the statement as a string as it appeared in the Valpine source file.
 		 */

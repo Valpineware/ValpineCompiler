@@ -5,25 +5,33 @@
 // This file is licensed under the MIT License.
 //==================================================================================================================|
 
-#include <Library.h>
-#include "Statement.h"
-
 #ifndef _vc_graph_Block_h
 #define _vc_graph_Block_h
+
+#include <Library.h>
+#include "Statement.h"
 
 namespace vc { namespace graph
 {
 	/**
 	 * @brief Represents the body of a generic block (global block, function, class definition, while body, etc.).
 	 */
-	class Block
+	class Block : public Statement
 	{
 	public:
-		void appendStatement(const Statement &statement) { mStatements.append(statement); }
-		QListIterator<Statement> statementIterator() { return QListIterator<Statement>(mStatements); }
+		Block() : Statement("") {}
+
+		~Block()
+		{
+			for (Statement* s : mStatements)
+				delete s;
+		}
+
+		void appendStatement(Statement* statement) { mStatements.append(statement); }
+		QListIterator<Statement*> statementIterator() { return QListIterator<Statement*>(mStatements); }
 
 	private:
-		QList<Statement> mStatements;
+		QList<Statement*> mStatements;
 	};
 }}
 

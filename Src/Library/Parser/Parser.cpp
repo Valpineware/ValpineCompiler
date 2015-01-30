@@ -26,7 +26,7 @@ namespace vc { namespace parser
 
 
 		//parse the global block (entire file) starting at line 0
-		parseStatement_block(0);
+		parseStatement_block(0, &mCurrentGraph.block());
 
 		return true;
 	}
@@ -37,41 +37,75 @@ namespace vc { namespace parser
 		return line == "int main()";
 	}
 
+	
+	bool Parser::isBlankLine(const QString &line)
+	{
+		QString verify = line;
+		verify.replace("\t", "");
+		verify.replace(" ", ""); 
+		verify.replace("\n", "");
 
-	int Parser::parseStatement_preprocessor(int index)
+		return verify == "";
+
+		//TODO this method is unreliable when other whitespace characters are present
+	}
+
+
+	int Parser::parseStatement_preprocessor(int index, graph::Block &parent)
 	{
 		//TODO for now we will assume all preprocessor statements are 1 liners
-		mCurrentGraph.rootBlock().appendStatement(graph::Preprocessor(mLineBuffer[index]));
+		parent.appendStatement(new graph::Preprocessor(mLineBuffer[index]));
 		return index;
 	}
 
 
-	int Parser::parseStatement_function(int index)
+	int Parser::parseStatement_function(int index, graph::Block &parent)
 	{
+		graph::Function *func = new graph::Function(mLineBuffer[index]);
+		parent.appendStatement(func);
+
 		//if next line is an opening brace, it must be a block
 		if (mLineBuffer[++index] == "{")
 		{
-			index = parseStatement_block(++index);
+			index = parseStatement_block(++index, &func->block());
 		}
 
 		return index;
 	}
 
 
-	int Parser::parseStatement_block(int index)
+	int Parser::parseStatement_block(int index, graph::Block *host)
 	{
-		QString& line = mLineBuffer[index];
-
-		// Statement : Preprocessor
-		if (line.startsWith("#"))
+		while (index < mLineBuffer.count()  &&  mLineBuffer[index] != "}")
 		{
-			index = parseStatement_preprocessor(index);
-		}
+			QString& line = mLineBuffer[index];
 
-		// Statement : Function
-		else if (isFunctionDeclaration(line))
-		{
-			index = parseStatement_function(index);
+			// Statement : Preprocessor
+			if (line.startsWith("#"))
+			{
+				index = parseStatement_preprocessor(index, *host);
+			}
+
+			// Statement : Function
+			else if (isFunctionDeclaration(line))
+			{
+				index = parseStatement_function(index, *host);
+			}
+
+			// Blank line
+			else if (isBlankLine(line))
+			{
+				//do nothing
+			}
+
+
+			// Statement : Regular
+			else
+			{
+				host->appendStatement(new graph::Statement(line));
+			}
+
+			index++;
 		}
 
 		return index;

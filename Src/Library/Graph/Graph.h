@@ -22,11 +22,11 @@ namespace vc { namespace graph
 	class Graph
 	{
 	public:
-		Block& rootBlock() { return mRootBlock; }
-		const Block& rootBlock() const { return mRootBlock; }
+		Block& block() { return mBlock; }
+		const Block& block() const { return mBlock; }
 
 	private:
-		Block mRootBlock;
+		Block mBlock;
 	};
 }}
 
