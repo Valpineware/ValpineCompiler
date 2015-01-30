@@ -1,8 +1,12 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
+#pragma warning(push, 0)
+	#include <QtCore/QDebug>
+	#include <QtCore/QDir>
+
+	#include <QtCore/QProcess>
+#pragma warning(pop)
 
 #include <memory>
 

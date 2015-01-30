@@ -19,32 +19,16 @@ namespace vc { namespace parser
 
 		QTextStream textStream(&file);
 		while (!textStream.atEnd())
-			mLineBuffer.append(textStream.readLine());
+		{
+			QString line = textStream.readLine();
+			mLineBuffer.append(line);
+		}
 
-		parseLineBuffer();
+
+		//parse the global block (entire file) starting at line 0
+		parseStatement_block(0);
 
 		return true;
-	}
-
-
-	void Parser::parseLineBuffer()
-	{
-		for (int i=0; i<mLineBuffer.count(); i++)
-		{
-			QString& line = mLineBuffer[i];
-
-			// Statement : Preprocessor
-			if (line.startsWith("#"))
-			{
-				i = parseStatement_preprocessor(i);
-			}
-
-			// Statement : Function
-			else if (isFunctionDeclaration(line))
-			{
-				i = parseStatement_function(i);
-			}
-		}
 	}
 
 
@@ -65,9 +49,9 @@ namespace vc { namespace parser
 	int Parser::parseStatement_function(int index)
 	{
 		//if next line is an opening brace, it must be a block
-		if (mLineBuffer[index] == "{")
+		if (mLineBuffer[++index] == "{")
 		{
-			index = parseStatement_block(index);
+			index = parseStatement_block(++index);
 		}
 
 		return index;
@@ -76,6 +60,20 @@ namespace vc { namespace parser
 
 	int Parser::parseStatement_block(int index)
 	{
+		QString& line = mLineBuffer[index];
+
+		// Statement : Preprocessor
+		if (line.startsWith("#"))
+		{
+			index = parseStatement_preprocessor(index);
+		}
+
+		// Statement : Function
+		else if (isFunctionDeclaration(line))
+		{
+			index = parseStatement_function(index);
+		}
+
 		return index;
 	}
 }}

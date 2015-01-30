@@ -8,7 +8,7 @@
 #ifndef _vc_compiler_Compiler_h
 #define _vc_compiler_Compiler_h
 
-#include <QtCore/QProcess>
+#include <Library.h>
 
 namespace vc { namespace compiler
 {
