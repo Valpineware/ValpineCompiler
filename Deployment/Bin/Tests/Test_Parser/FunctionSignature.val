@@ -1,0 +1,15 @@
+int * access(bool opened, int count)
+{
+	return new int;
+}
+
+
+void apply(float amount=14.0f)
+{
+}
+
+
+bool** longDistanceCommunication(Type1 t1, Type2, t2, float distance=320.0f)
+{
+	return &(new bool);	//yes, this is a bad thing to do
+}

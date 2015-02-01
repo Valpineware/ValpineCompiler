@@ -30,8 +30,9 @@ namespace vc { namespace parser
 
 		void parseLineBuffer();
 
-		bool isFunctionDeclaration(const QString &line);
 		bool isBlankLine(const QString &line);
+
+		void parseFunctionSignature(const QString &signature, graph::Function &function);
 
 		/**
 		 * The following methods return an integer indicating the line where the entire statement ended.

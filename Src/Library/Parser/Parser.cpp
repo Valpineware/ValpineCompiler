@@ -6,6 +6,7 @@
 //==================================================================================================================|
 
 #include "Parser.h"
+#include "Recognizer.h"
 
 namespace vc { namespace parser
 {
@@ -30,34 +31,21 @@ namespace vc { namespace parser
 		return true;
 	}
 
-
-	bool Parser::isFunctionDeclaration(const QString &line)
-	{
-		QStringList components = line.split(QRegExp(" |\t|\n"));
-
-		if (components.isEmpty())
-			return false;
-		 
-		//TODO we need an actual function regognition system here
-		//for now, we are just going to check if the first component
-		//is a primitive type
-		#define T(str) types.append(#str)
-		QStringList types; T(int); T(void); T(float); T(double);
-
-		QStringListIterator iter(types);
-		while (iter.hasNext())
-		{
-			if (iter.next() == components.first())
-				return true;
-		}
-
-		return false;
-	}
-
 	
 	bool Parser::isBlankLine(const QString &line)
 	{
 		return graph::Statement(line).verbatim() == "";
+	}
+
+
+	void Parser::parseFunctionSignature(const QString &signature, graph::Function &function)
+	{
+		QStringList components = signature.split(QRegExp(" |\t|\n"));
+
+		if (components.count() < 2)
+			return;
+
+		 
 	}
 
 
@@ -72,6 +60,7 @@ namespace vc { namespace parser
 	int Parser::parseStatement_function(int index, graph::Block &parent)
 	{
 		graph::Function *func = new graph::Function(mLineBuffer[index]);
+		parseFunctionSignature(mLineBuffer[index], *func);
 		parent.appendStatement(func);
 
 		//if next line is an opening brace, it must be a block
@@ -97,7 +86,7 @@ namespace vc { namespace parser
 			}
 
 			// Statement : Function
-			else if (isFunctionDeclaration(line))
+			else if (Recognizer::isFunctionHeader(line))
 			{
 				index = parseStatement_function(index, *host);
 			}

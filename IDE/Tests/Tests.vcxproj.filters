@@ -37,5 +37,8 @@
     <ClCompile Include="..\..\Src\Tests\Parser\Test_Parser.cpp">
       <Filter>Src\Parser</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Tests\Parser\Test_Recognizer.cpp">
+      <Filter>Src\Parser</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
