@@ -9,6 +9,7 @@
 #define _vc_parser_Recognizer_h
 
 #include <Library.h>
+#include <Graph/Function.h>
 
 namespace vc { namespace parser
 {
@@ -18,7 +19,7 @@ namespace vc { namespace parser
 	class Recognizer
 	{
 	public:
-		static bool isFunctionHeader(const QString &testStr);
+		static graph::Function* parseFunctionSignature(const QString &signature);
 	};
 }}
 

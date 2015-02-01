@@ -84,7 +84,7 @@ namespace vc { namespace parser
 			}
 
 			// Statement : Function
-			else if (Recognizer::isFunctionHeader(line))
+			else if (graph::Function *f = Recognizer::parseFunctionSignature(line))
 			{
 				index = parseStatement_function(index, *host);
 			}

@@ -13,7 +13,7 @@ TEST_CLASS
 
 TEST_CASE(FunctionHeader_WhatIs)
 {
-	#define tst(what) ASSERT_TRUE(parser::Recognizer::isFunctionHeader(what))
+	#define tst(what) ASSERT_NOT_NULL(parser::Recognizer::parseFunctionSignature(what))
 
 	tst("void simple()");
 	tst("int		 wacky	( ) ");
@@ -29,6 +29,8 @@ TEST_CASE(FunctionHeader_WhatIs)
 	tst("QString what()");
 	tst("const __MyWeirdTyPe_________ *** _function_Name_Is_Here ( )");
 
+	tst("void prm(int p1)");
+
 	#undef tst
 }
 
@@ -37,7 +39,7 @@ TEST_CASE(FunctionHeader_WhatIsNot)
 {
 	const QString header = "void process()";
 
-	#define tst(what) ASSERT_FALSE(parser::Recognizer::isFunctionHeader(what))
+	#define tst(what) ASSERT_NULL(parser::Recognizer::parseFunctionSignature(what))
 
 	tst("123Type doesNotWork()");
 	tst("NoGo 999Function		( )");
