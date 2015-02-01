@@ -9,11 +9,45 @@
 
 namespace vc { namespace parser
 {
+	const QRegExp gRegExp_identifier("([A-Za-z_]\\w*)");
+	const QRegExp gRegExp_typeMod("(const|&|\\*|\\s)*");
+	const QRegExp gRegExp_typeId("(const|&|\\*|\\s|([A-Za-z_]\\w*))*");
+
+
+	bool couldThisPossiblyBeAFunction(const QString &signature)
+	{
+		//there should be exactly one ( and one ) TODO chop comments before this in the future
+		if (!signature.contains("(") || !signature.contains(")"))	//TODO we should actually check the count here, because you can only have 1 of each
+			return false;
+
+		if (signature.contains(";"))
+			return false;
+
+		return true;
+	}
+
+
+	void preProcessFunctionSignature(QString &signature, QStringList &list)
+	{
+		signature.replace("(", " ( ");
+		signature.replace(")", " ) ");
+
+		//3) Split into a list deliminated by " "
+		list = signature.split(QRegExp("\\s"));
+
+		//remove all remaining whitespace strings
+		QMutableStringListIterator mi(list);
+		while (mi.hasNext())
+		{
+			if (QRegExp("\\s*").exactMatch(mi.next()))
+				mi.remove();
+		}
+	}
+
+
 	graph::Function* parseType(QStringListIterator &i, graph::Function *function)
 	{
 		//TODO use the new QRegularExpression class instead
-		QRegExp typeMod("(const|&|\\*|\\s)*");
-		QRegExp typeId("(const|&|\\*|\\s|([A-Za-z_]\\w*))*");
 		QString returnType;
 		bool foundBaseType = false;
 			
@@ -21,9 +55,9 @@ namespace vc { namespace parser
 		{
 			const QString &cmp = i.next();
 
-			if (typeMod.exactMatch(cmp))
+			if (gRegExp_typeMod.exactMatch(cmp))
 				returnType.append(" "+cmp);
-			else if (!foundBaseType && typeId.exactMatch(cmp))
+			else if (!foundBaseType && gRegExp_typeId.exactMatch(cmp))
 			{
 				foundBaseType = true;
 				returnType.append(" "+cmp);
@@ -43,7 +77,7 @@ namespace vc { namespace parser
 		{
 			const QString &cmp = i.next();
 
-			if (QRegExp("([A-Za-z_]\\w*)").exactMatch(cmp))
+			if (gRegExp_identifier.exactMatch(cmp))
 			{
 				function->setId(cmp);
 			}
@@ -57,13 +91,10 @@ namespace vc { namespace parser
 	}
 
 
-
 	graph::Function* parseParameters(QStringListIterator &i, graph::Function *function)
 	{
 		while (i.hasNext())
 		{
-			QRegExp typeMod("(const|&|\\*|\\s)*");
-			QRegExp typeId("(const|&|\\*|\\s|([A-Za-z_]\\w*))*");
 			graph::Parameter prm;
 			bool foundBaseType = false;
 			bool foundEndTag = false;
@@ -78,9 +109,9 @@ namespace vc { namespace parser
 					foundEndTag = true;
 					break;
 				}
-				else if (typeMod.exactMatch(cmp))
+				else if (gRegExp_typeMod.exactMatch(cmp))
 					prm.type.append(" "+cmp);
-				else if (!foundBaseType && typeId.exactMatch(cmp))
+				else if (!foundBaseType && gRegExp_typeId.exactMatch(cmp))
 				{
 					foundBaseType = true;
 					prm.type.append(" "+cmp);
@@ -99,7 +130,7 @@ namespace vc { namespace parser
 			{
 				const QString &cmp = i.next();
 
-				if (QRegExp("([A-Za-z_]\\w*)").exactMatch(cmp))
+				if (gRegExp_identifier.exactMatch(cmp))
 				{
 					prm.id = cmp;
 					function->addParameter(prm);
@@ -115,40 +146,16 @@ namespace vc { namespace parser
 	}
 
 
-
 	graph::Function* Recognizer::parseFunctionSignature(const QString &signature)
 	{
-		//early exit tests
-		{
-			//there should be exactly one ( and one ) TODO chop comments before this in the future
-			if (!signature.contains("(") || !signature.contains(")"))	//TODO we should actually check the count here, because you can only have 1 of each
-				return nullptr;
-
-			if (signature.contains(";"))
-				return nullptr;
-		}
+		if (!couldThisPossiblyBeAFunction(signature))
+			return nullptr;
 
 		graph::Function *function = new graph::Function(signature);
 		QString filtered = signature;
-
-		filtered.replace("(", " ( ");
-		filtered.replace(")", " ) ");
-
-		//3) Split into a list deliminated by " "
-		QStringList list = filtered.split(QRegExp("\\s"));
-
-		//remove all remaining whitespace strings
-		QMutableStringListIterator mi(list);
-		while (mi.hasNext())
-		{
-			if (QRegExp("\\s*").exactMatch(mi.next()))
-				mi.remove();
-		}
-
+		QStringList list;
+		preProcessFunctionSignature(filtered, list);
 		QStringListIterator i(list);
-
-		//4) Iterate through the list. Build the Function instance from here. If an error is detected, null the function instance and return
-		//	a) Pre-Modifiers TODO
 
 		//Return type
 		if (! (function = parseType(i, function)))
@@ -164,8 +171,6 @@ namespace vc { namespace parser
 		//Parameters
 		if (! (function = parseParameters(i, function)))
 			return nullptr;
-
-		//	e) Post-Modifiers
 
 		return function;
 	}
