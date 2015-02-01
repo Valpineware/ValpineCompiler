@@ -100,7 +100,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <WarningLevel>Level4</WarningLevel>
-      <DisableSpecificWarnings>4718</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4718; 4127</DisableSpecificWarnings>
       <ObjectFileName>$(IntDir)/obj/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -122,7 +122,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <WarningLevel>Level4</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4718</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4718; 4127</DisableSpecificWarnings>
       <ObjectFileName>$(IntDir)/obj/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>

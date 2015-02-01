@@ -44,8 +44,6 @@ namespace vc { namespace parser
 
 		if (components.count() < 2)
 			return;
-
-		 
 	}
 
 
