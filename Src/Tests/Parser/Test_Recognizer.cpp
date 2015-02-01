@@ -31,6 +31,9 @@ TEST_CASE(FunctionHeader_WhatIs)
 
 	tst("void singleParameter(int p1)");
 	tst("void defaultParameter(int count=12)");
+	tst("float multipleDefaultParameters(int mag=10000, int size=147)");
+	tst("BigBoolean multipleDefaultParameters(int mag=10000, int size=147)");
+	tst("double someDefaultParameters(int a, float m, int size=50)");
 
 	#undef tst
 }
@@ -49,6 +52,8 @@ TEST_CASE(FunctionHeader_WhatIsNot)
 
 	tst("float Not A Function()");
 	tst("float functionDeclarationsDontExistInValpine() ;");
+
+	tst("float thisIsImpossible(int a==3254, int m=  =	9832)");
 
 	#undef tst
 }

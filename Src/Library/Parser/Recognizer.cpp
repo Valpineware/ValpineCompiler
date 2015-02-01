@@ -101,6 +101,13 @@ namespace vc { namespace parser
 			bool foundBaseType = false;
 			bool foundEndTag = false;
 
+			//are we at a comma?
+			if (i.hasNext() && QRegExp("\\s*,\\s*").exactMatch(i.next()))
+				continue;
+			else
+				i.previous();
+
+
 			//get the return type
 			while (i.hasNext())
 			{
