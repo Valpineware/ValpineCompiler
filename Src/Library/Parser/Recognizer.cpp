@@ -31,6 +31,8 @@ namespace vc { namespace parser
 	{
 		signature.replace("(", " ( ");
 		signature.replace(")", " ) ");
+		signature.replace(",", " , ");
+		signature.replace("=", " = ");
 
 		//3) Split into a list deliminated by " "
 		list = signature.split(QRegExp("\\s"));
@@ -133,13 +135,33 @@ namespace vc { namespace parser
 				if (gRegExp_identifier.exactMatch(cmp))
 				{
 					prm.id = cmp;
-					function->addParameter(prm);
 				}
 				else
 					return nullptr;								//Error: invalid identifier
 			}
 			else if (!foundEndTag)
 				return nullptr;									//Error: nothing following return type
+
+
+			//default value?
+			if (i.hasNext())
+			{
+				const QString &cmp = i.next();
+				
+				if (QRegExp("\\s*=\\s*").exactMatch(cmp))
+				{
+					if (i.hasNext())
+					{
+						prm.defaultValue = i.next();
+					}
+				}
+				else
+				{
+					i.previous();
+				}
+
+				function->addParameter(prm);
+			}
 		}
 
 		return function;

@@ -29,7 +29,8 @@ TEST_CASE(FunctionHeader_WhatIs)
 	tst("QString what()");
 	tst("const __MyWeirdTyPe_________ *** _function_Name_Is_Here ( )");
 
-	tst("void prm(int p1)");
+	tst("void singleParameter(int p1)");
+	tst("void defaultParameter(int count=12)");
 
 	#undef tst
 }
