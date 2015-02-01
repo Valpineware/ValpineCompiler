@@ -21,6 +21,11 @@ TEST_CASE(FunctionHeader_WhatIs)
 	tst("		float __compilerFunction ()");
 	tst("		double whatIsPi(		)");
 
+	tst(" int* pointer1()");
+	tst(" *** void ** crazyPointerThatWontActuallyCompile()");
+	tst("const double& cosntRefPlease()");
+	tst("	const void		* const *	const	*& superLongPointerRefThing()");
+
 
 	#undef tst
 }
