@@ -54,6 +54,7 @@ TEST_CASE(FunctionHeader_WhatIsNot)
 	tst("float functionDeclarationsDontExistInValpine() ;");
 
 	tst("float thisIsImpossible(int a==3254, int m=  =	9832)");
+	tst("return &(new bool);");
 
 	#undef tst
 }

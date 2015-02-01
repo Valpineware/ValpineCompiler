@@ -38,15 +38,6 @@ namespace vc { namespace parser
 	}
 
 
-	void Parser::parseFunctionSignature(const QString &signature, graph::Function &function)
-	{
-		QStringList components = signature.split(QRegExp(" |\t|\n"));
-
-		if (components.count() < 2)
-			return;
-	}
-
-
 	int Parser::parseStatement_preprocessor(int index, graph::Block &parent)
 	{
 		//TODO for now we will assume all preprocessor statements are 1 liners
@@ -55,16 +46,12 @@ namespace vc { namespace parser
 	}
 
 
-	int Parser::parseStatement_function(int index, graph::Block &parent)
+	int Parser::parseStatement_function(int index, graph::Function &function)
 	{
-		graph::Function *func = new graph::Function(mLineBuffer[index]);
-		parseFunctionSignature(mLineBuffer[index], *func);
-		parent.appendStatement(func);
-
 		//if next line is an opening brace, it must be a block
 		if (mLineBuffer[++index] == "{")
 		{
-			index = parseStatement_block(++index, &func->block());
+			index = parseStatement_block(++index, &function.block());
 		}
 
 		return index;
@@ -86,7 +73,8 @@ namespace vc { namespace parser
 			// Statement : Function
 			else if (graph::Function *f = Recognizer::parseFunctionSignature(line))
 			{
-				index = parseStatement_function(index, *host);
+				host->appendStatement(f);
+				index = parseStatement_function(index, *f);
 			}
 
 			// Blank line

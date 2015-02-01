@@ -32,8 +32,6 @@ namespace vc { namespace parser
 
 		bool isBlankLine(const QString &line);
 
-		void parseFunctionSignature(const QString &signature, graph::Function &function);
-
 		/**
 		 * The following methods return an integer indicating the line where the entire statement ended.
 		 * For function declarations, the return value is equal to the line index for the closing brace.
@@ -41,7 +39,7 @@ namespace vc { namespace parser
 		 */
 		 
 		int parseStatement_preprocessor(int index, graph::Block &parent);
-		int parseStatement_function(int index, graph::Block &parent);
+		int parseStatement_function(int index, graph::Function &function);
 		int parseStatement_block(int index, graph::Block *host);
 	};
 }}
