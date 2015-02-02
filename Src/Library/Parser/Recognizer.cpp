@@ -9,9 +9,9 @@
 
 namespace vc { namespace parser
 {
-	const QRegExp gRegExp_identifier("([A-Za-z_]\\w*)");
-	const QRegExp gRegExp_typeMod("(const|&|\\*|\\s)*");
-	const QRegExp gRegExp_typeId("(const|&|\\*|\\s|([A-Za-z_]\\w*))*");
+	const QRegExp gRegExp_identifier = QRegExp("([A-Za-z_]\\w*)");
+	const QRegExp gRegExp_typeMod = QRegExp("(const|&|\\*|\\s)*");
+	const QRegExp gRegExp_typeId = QRegExp("(const|&|\\*|\\s|([A-Za-z_]\\w*))*");
 
 
 	bool couldThisPossiblyBeAFunction(const QString &signature)

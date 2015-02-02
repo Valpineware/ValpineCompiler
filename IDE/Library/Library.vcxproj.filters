@@ -98,6 +98,9 @@
     <ClInclude Include="..\..\Src\Library\Parser\Recognizer.h">
       <Filter>Src\Parser</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\library\graph\TypeExpression.h">
+      <Filter>Src\Graph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\Src\Library\Compiler\Compiler.h">

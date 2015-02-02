@@ -16,6 +16,7 @@
     <ClInclude Include="..\..\Src\Library\Graph\Graph.h" />
     <ClInclude Include="..\..\src\library\graph\Preprocessor.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Statement.h" />
+    <ClInclude Include="..\..\src\library\graph\TypeExpression.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\Mocker.h" />
     <ClInclude Include="..\..\Src\Library\Parser\Parser.h" />
     <ClInclude Include="..\..\Src\Library\Parser\Recognizer.h" />
