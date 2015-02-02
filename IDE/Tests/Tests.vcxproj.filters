@@ -24,6 +24,9 @@
     <Filter Include="Src\Parser">
       <UniqueIdentifier>{6879b9f6-0b67-43f8-9f45-04b4271a4874}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Graph">
+      <UniqueIdentifier>{88b6f573-a6de-41a0-9828-cbc0c85920ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\DanWatkins\Terrain3D\Src\Tests\Tests.h">
@@ -39,6 +42,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Tests\Parser\Test_Recognizer.cpp">
       <Filter>Src\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Tests\Graph\Test_TypeExpression.cpp">
+      <Filter>Src\Graph</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

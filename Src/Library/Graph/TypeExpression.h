@@ -21,13 +21,46 @@ namespace vc { namespace graph
 	class TypeExpression
 	{
 	public:
-		void appendPreModifier(const QString &preModifier) { mPreModifiers.append(preModifier); }
-		void appendPostModifier(const QString &postModifier) { mPostModifiers.append(postModifier); }
-		void setBaseType(const QString &baseType) { mBaseType = baseType; }
+		TypeExpression()
+		{
+		}
+
+		TypeExpression(const QString &verbatim)
+		{
+			QString filtered = verbatim;
+			filtered.replace("*", " * ");
+			filtered.replace("&", " & ");
+
+			bool foundBaseType = false;
+			QStringList list = filtered.split(QRegExp("\\s"));
+			list.removeAll("");
+
+			for (QString s : list)
+			{
+				if (QRegExp("const|\\*|&").exactMatch(s))
+				{
+					if (foundBaseType)
+						mPostModifiers.append(s);
+					else
+						mPreModifiers.append(s);
+				}
+				else if (!foundBaseType)
+				{
+					mBaseType = s;
+					foundBaseType = true;
+				}
+				else
+				{
+					qDebug() << "Unknown string component in type expression verbatim";
+				}
+			}
+		}
+
 
 		const QVector<QString>& preModifiers() const { return mPreModifiers; }
 		const QVector<QString>& postModifiers() const { return mPostModifiers; }
 		QString baseType() const { return mBaseType; }
+
 
 		QString fullType() const
 		{

@@ -9,6 +9,7 @@
 
 #include "Statement.h"
 #include "Block.h"
+#include "TypeExpression.h"
 
 #ifndef _vc_graph_Function_h
 #define _vc_graph_Function_h
@@ -17,7 +18,7 @@ namespace vc { namespace graph
 {
 	struct Parameter
 	{
-		QString type;
+		TypeExpression type;
 		QString id;
 		QString defaultValue;
 	};
@@ -34,8 +35,8 @@ namespace vc { namespace graph
 
 		void setId(const QString &id) { mId = id; }
 		QString id() const { return mId; }
-		void setReturnType(const QString &returnType) { mReturnType = returnType; }
-		QString returnType() const { return mReturnType; }
+		void setReturnType(const TypeExpression &returnType) { mReturnType = returnType; }
+		TypeExpression returnType() const { return mReturnType; }
 
 		void addParameter(const Parameter &parameter) { mParameters.append(parameter); }
 		const QVector<Parameter>& parameters() const { return mParameters; }
@@ -47,7 +48,7 @@ namespace vc { namespace graph
 	private:
 		Block mBlock;
 		QString mId;
-		QString mReturnType;
+		TypeExpression mReturnType;
 		QVector<Parameter> mParameters;
 	};
 }}

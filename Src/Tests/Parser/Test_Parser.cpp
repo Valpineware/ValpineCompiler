@@ -92,14 +92,58 @@ TEST_CASE(FunctionSignature)
 		ASSERT_NOT_NULL(f1);
 		EXPECT_EQ("access", f1->id());
 		{
-			EXPECT_EQ(" int *", f1->returnType());	//TODO we need a better formed return type
-			
-			QVector<Parameter> prms = f1->parameters();
-			ASSERT_EQ(2,prms.count());
-			EXPECT_EQ(" bool", prms[0].type);
-			EXPECT_EQ("opened", prms[0].id);
-			//EXPECT_EQ(" int", prms[1].id);		//TODO better formed TYPES
-			EXPECT_EQ("count", prms[1].id);
+			graph::TypeExpression te = f1->returnType();
+			EXPECT_EQ("int", te.baseType());
+			EXPECT_EQ("*", te.postModifiers()[0]);
+			{
+				QVector<Parameter> prms = f1->parameters();
+				ASSERT_EQ(2,prms.count());
+				EXPECT_EQ("bool", prms[0].type.baseType());
+				EXPECT_EQ("opened", prms[0].id);
+				EXPECT_EQ("int", prms[1].type.baseType());
+				EXPECT_EQ("count", prms[1].id);
+			}
+		}
+
+
+		Function *f2 = dynamic_cast<Function*>(iter.next());
+		ASSERT_NOT_NULL(f2);
+		EXPECT_EQ("apply", f2->id());
+		{
+			graph::TypeExpression te = f2->returnType();
+			EXPECT_EQ("void", te.baseType());
+			{
+				QVector<Parameter> prms = f2->parameters();
+				ASSERT_EQ(1,prms.count());
+				EXPECT_EQ("float", prms[0].type.baseType());
+				EXPECT_EQ("amount", prms[0].id);
+				EXPECT_EQ("14.0f", prms[0].defaultValue);
+
+			}
+		}
+
+
+		Function *f3 = dynamic_cast<Function*>(iter.next());
+		ASSERT_NOT_NULL(f3);
+		EXPECT_EQ("longDistanceCommunication", f3->id());
+		{
+			graph::TypeExpression te = f3->returnType();
+			EXPECT_EQ("bool", te.baseType());
+			EXPECT_EQ("*", te.postModifiers()[0]);
+			EXPECT_EQ("*", te.postModifiers()[1]);
+			{
+				QVector<Parameter> prms = f3->parameters();
+				ASSERT_EQ(3,prms.count());
+				EXPECT_EQ("Type1", prms[0].type.baseType());
+				EXPECT_EQ("t1", prms[0].id);
+				
+				EXPECT_EQ("Type2", prms[1].type.baseType());
+				EXPECT_EQ("t2", prms[1].id);
+				
+				EXPECT_EQ("float", prms[2].type.baseType());
+				EXPECT_EQ("distance", prms[2].id);
+				EXPECT_EQ("320.0f", prms[2].defaultValue);
+			}
 		}
 	}
 }

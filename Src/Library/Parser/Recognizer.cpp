@@ -69,7 +69,7 @@ namespace vc { namespace parser
 			else
 			{
 				i.previous();
-				function->setReturnType(returnType);
+				function->setReturnType(graph::TypeExpression(returnType));
 				break;
 			}
 		}			
@@ -98,6 +98,7 @@ namespace vc { namespace parser
 		while (i.hasNext())
 		{
 			graph::Parameter prm;
+			QString typeBuffer;
 			bool foundBaseType = false;
 			bool foundEndTag = false;
 
@@ -119,13 +120,15 @@ namespace vc { namespace parser
 					break;
 				}
 				else if (gRegExp_typeMod.exactMatch(cmp))
-					prm.type.append(" "+cmp);
+				{
+					typeBuffer.append(" "+cmp);
+				}
 				else if (!foundBaseType && gRegExp_typeId.exactMatch(cmp))
 				{
 					foundBaseType = true;
-					prm.type.append(" "+cmp);
+					typeBuffer.append(" "+cmp);
 				}
-				else if (prm.type.isEmpty())
+				else if (typeBuffer.isEmpty())
 					return nullptr;								//Error: No valid return type
 				else
 				{
@@ -133,6 +136,8 @@ namespace vc { namespace parser
 					break;
 				}
 			}
+
+			prm.type = graph::TypeExpression(typeBuffer);
 
 			//get the argument name
 			if (i.hasNext())
