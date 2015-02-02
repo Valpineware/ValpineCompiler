@@ -22,6 +22,7 @@
     <ClInclude Include="..\..\..\..\DanWatkins\Terrain3D\Src\Tests\Tests.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\Tests\Graph\Test_ControlStructure.cpp" />
     <ClCompile Include="..\..\Src\Tests\Graph\Test_Function.cpp" />
     <ClCompile Include="..\..\Src\Tests\Graph\Test_TypeExpression.cpp" />
     <ClCompile Include="..\..\Src\Tests\Parser\Test_Parser.cpp" />

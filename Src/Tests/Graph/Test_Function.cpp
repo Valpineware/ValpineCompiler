@@ -1,7 +1,7 @@
 #include "Tests.h"
 #include <Graph/Function.h>
 
-#define CLASS Test_Recognizer
+#define CLASS Test_Function
 using namespace vc;
 
 TEST_CLASS

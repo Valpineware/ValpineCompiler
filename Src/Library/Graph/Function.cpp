@@ -17,7 +17,7 @@ namespace vc { namespace graph
 	bool couldThisPossiblyBeAFunction(const QString &signature)
 	{
 		//there should be exactly one ( and one ) TODO chop comments before this in the future
-		if (!signature.contains("(") || !signature.contains(")"))	//TODO we should actually check the count here, because you can only have 1 of each
+		if (signature.count("(") != 1 || signature.count(")") != 1)	//TODO we should actually check the count here, because you can only have 1 of each
 			return false;
 
 		if (signature.contains(";"))

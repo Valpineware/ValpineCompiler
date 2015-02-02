@@ -21,6 +21,8 @@ namespace vc { namespace graph
 	public:
 		ControlStructure(const QString &verbatim) : Statement(verbatim) {}
 
+		static ControlStructure* createFromVerbatimSignature(const QString signature);
+
 		void setName(const QString &name) { mName = name; }
 		QString name() const { return mName; }
 

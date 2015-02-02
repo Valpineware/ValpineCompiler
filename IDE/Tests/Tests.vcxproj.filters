@@ -46,5 +46,8 @@
     <ClCompile Include="..\..\Src\Tests\Graph\Test_Function.cpp">
       <Filter>Src\Graph</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Tests\Graph\Test_ControlStructure.cpp">
+      <Filter>Src\Graph</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
