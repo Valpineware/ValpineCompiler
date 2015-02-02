@@ -6,7 +6,6 @@
 //==================================================================================================================|
 
 #include "Parser.h"
-#include "Recognizer.h"
 
 namespace vc { namespace parser
 {
@@ -71,7 +70,7 @@ namespace vc { namespace parser
 			}
 
 			// Statement : Function
-			else if (graph::Function *f = Recognizer::parseFunctionSignature(line))
+			else if (graph::Function *f = graph::Function::createFromVerbatimSignature(line))
 			{
 				host->appendStatement(f);
 				index = parseStatement_function(index, *f);

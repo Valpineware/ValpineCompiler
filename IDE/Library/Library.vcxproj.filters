@@ -66,8 +66,8 @@
     <ClCompile Include="..\..\Src\Library\Graph\Block.cpp">
       <Filter>Src\Graph</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Library\Parser\Recognizer.cpp">
-      <Filter>Src\Parser</Filter>
+    <ClCompile Include="..\..\Src\Library\Graph\ControlStructure.cpp">
+      <Filter>Src\Graph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,10 +95,10 @@
     <ClInclude Include="..\..\Src\Library\Graph\Block.h">
       <Filter>Src\Graph</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Library\Parser\Recognizer.h">
-      <Filter>Src\Parser</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\library\graph\TypeExpression.h">
+      <Filter>Src\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Library\Graph\ControlStructure.h">
       <Filter>Src\Graph</Filter>
     </ClInclude>
   </ItemGroup>

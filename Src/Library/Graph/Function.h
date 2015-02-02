@@ -33,6 +33,8 @@ namespace vc { namespace graph
 		Function() = delete;
 		Function(const QString &verbatim) : Statement(verbatim) {}
 
+		static Function* createFromVerbatimSignature(const QString signature);
+
 		void setId(const QString &id) { mId = id; }
 		QString id() const { return mId; }
 		void setReturnType(const TypeExpression &returnType) { mReturnType = returnType; }

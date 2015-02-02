@@ -1,7 +1,5 @@
 #include "Tests.h"
-#include <Parser/Recognizer.h>
-#include <regex>
-
+#include <Graph/Function.h>
 
 #define CLASS Test_Recognizer
 using namespace vc;
@@ -13,7 +11,7 @@ TEST_CLASS
 
 TEST_CASE(FunctionHeader_WhatIs)
 {
-	#define tst(what) ASSERT_NOT_NULL(parser::Recognizer::parseFunctionSignature(what))
+	#define tst(what) ASSERT_NOT_NULL(graph::Function::createFromVerbatimSignature(what))
 
 	tst("void simple()");
 	tst("int		 wacky	( ) ");
@@ -43,7 +41,7 @@ TEST_CASE(FunctionHeader_WhatIsNot)
 {
 	const QString header = "void process()";
 
-	#define tst(what) ASSERT_NULL(parser::Recognizer::parseFunctionSignature(what))
+	#define tst(what) ASSERT_NULL(graph::Function::createFromVerbatimSignature(what))
 
 	tst("123Type doesNotWork()");
 	tst("NoGo 999Function		( )");

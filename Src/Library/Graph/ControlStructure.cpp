@@ -1,21 +1,13 @@
 //==================================================================================================================|
-// Created 2015.01.28 by Daniel L. Watkins
+// Created 2015.02.02 by Daniel L. Watkins
 //
 // Copyright (C) 2015 Valpineware
 // This file is licensed under the MIT License.
 //==================================================================================================================|
 
-#include <QGuiApplication>
+#include "ControlStructure.h"
 
-#include <Application.h>
-
-int main(int argc, char *argv[])
+namespace vc { namespace graph
 {
-	QGuiApplication a(argc, argv);
-
-	Application application;
-	application.init();
-	application.show();
-
-	return a.exec();
-}
+	
+}}

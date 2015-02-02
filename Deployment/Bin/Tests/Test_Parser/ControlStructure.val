@@ -1,0 +1,36 @@
+#include <QtCore/QDebug>
+
+int main()
+{
+	for (int i=0; i<100; i++)
+	{
+		qDebug() << i;
+	}
+	
+	bool quit = false;
+	int n = 0;
+	
+	while (!quit)
+	{
+		QThread::msleep(100);
+		n += 40;
+		quit = n>50000;
+	}
+	
+	QString username = "DanWatkins";
+	if (username == "JohnKoehn")
+	{
+		qDebug() << 56;
+	}
+	else if (username == "Noob" && false)
+	{
+		while (true)
+		{
+			qDebug() << "Stuck in a loop that will never execute";
+		}
+	}
+	else
+	{
+		qDebug() << "You must be Dan";
+	}
+}
