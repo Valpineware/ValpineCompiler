@@ -28,8 +28,8 @@ TEST_CASE(FunctionHeader_WhatIs)
 		EXPECT_EQ("b > 42 && myName != \"Dan\"", cs->expression());
 	}
 
-	IF ("else if ( (true) || (a + b < 90))") {
-		EXPECT_EQ("else if", cs->name());
+	IF ("elseif ( (true) || (a + b < 90))") {
+		EXPECT_EQ("elseif", cs->name());
 		EXPECT_EQ(" (true) || (a + b < 90)", cs->expression());
 	}
 

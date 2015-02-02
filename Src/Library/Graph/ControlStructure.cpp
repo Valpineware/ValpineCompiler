@@ -9,6 +9,39 @@
 
 namespace vc { namespace graph
 {
+	QStringList registeredNames()
+	{
+		QStringList list;
+		#define A(what) list.append(what)
+
+		A("for");
+		A("while");
+		A("if");
+		A("elseif");
+		A("else");
+
+		#undef A
+		return list;
+	} QStringList gRegisteredNames = registeredNames();
+
+
+	QRegExp registeredNamesRegExp()
+	{
+		QString buffer;
+		buffer.reserve(gRegisteredNames.count() * 4);
+
+		for (QString s : gRegisteredNames)
+		{
+			buffer.append(s + "|");
+		}
+
+		if (buffer.at(buffer.count()-1) == "|")
+			buffer.chop(1);
+
+		return QRegExp(buffer);
+	} QRegExp gRegisteredNamesRegExp = registeredNamesRegExp();	//TODO it would be cool if we could initialize this variable with a block thing to avoid name pollution. Lamda?
+
+
 	void preProcessControlStructureSignature(QString &signature, QStringList &list)
 	{
 		signature.replace("(", " ( ");
@@ -44,7 +77,7 @@ namespace vc { namespace graph
 		{
 			const QString &cmp = i.next();
 
-			if (QRegExp("for|while|if|else if|else").exactMatch(cmp))
+			if (gRegisteredNamesRegExp.exactMatch(cmp))
 				cs->setName(cmp);
 			else
 				return nullptr;
