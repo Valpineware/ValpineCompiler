@@ -62,9 +62,6 @@ namespace vc { namespace graph
 
 	ControlStructure* ControlStructure::createFromVerbatimSignature(const QString signature)
 	{
-		if ((signature.count("(") < 1 || signature.count(")") < 1))
-			return nullptr;
-
 		QStringList list;
 		QString filtered = signature;
 		preProcessControlStructureSignature(filtered, list);
