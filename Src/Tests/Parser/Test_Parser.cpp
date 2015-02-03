@@ -147,3 +147,39 @@ TEST_CASE(FunctionSignature)
 		}
 	}
 }
+
+
+TEST_CASE(ControlStructure)
+{
+	parser::Parser sp;
+	sp.parseFile(gTestDir_Parser + "ControlStructure.val");
+
+	using namespace graph;
+
+	Block &root = sp.graph().block();
+	ASSERT_EQ(2, root.statements().count());
+	{
+		QListIterator<Statement*> iter(root.statements());
+
+		Preprocessor *include = dynamic_cast<Preprocessor*>(iter.next());
+		ASSERT_NOT_NULL(include);
+		EXPECT_EQ("#include <QtCore/QDebug>", include->verbatim());
+
+		Function *f1 = dynamic_cast<Function*>(iter.next());
+		ASSERT_NOT_NULL(f1);
+		EXPECT_EQ("main", f1->id());
+		{
+			QListIterator<Statement*> f1Iter(f1->block().statements());
+
+			ControlStructure *csFor = dynamic_cast<ControlStructure*>(f1Iter.next());
+			ASSERT_NOT_NULL(csFor);
+			EXPECT_EQ("for", csFor->name());
+			EXPECT_EQ("int i=0; i<100; i++", csFor->expression());
+			{
+				EXPECT_EQ("qDebug() << i;", csFor->block().statements().first()->verbatim());
+			}
+		}
+
+		//TODO finish testing rest of the file
+	}
+}

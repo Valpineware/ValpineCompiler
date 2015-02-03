@@ -22,7 +22,7 @@ int main()
 	{
 		qDebug() << 56;
 	}
-	else if (username == "Noob" && false)
+	elseif (username == "Noob" && false)
 	{
 		while (true)
 		{

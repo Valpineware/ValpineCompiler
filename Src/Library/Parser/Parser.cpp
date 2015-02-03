@@ -45,12 +45,12 @@ namespace vc { namespace parser
 	}
 
 
-	int Parser::parseStatement_function(int index, graph::Function &function)
+	int Parser::parseStatement_subBlock(int index, graph::Block &block)
 	{
 		//if next line is an opening brace, it must be a block
-		if (mLineBuffer[++index] == "{")
+		if (QRegExp("\\s*\\{\\s*").exactMatch(mLineBuffer[++index]))
 		{
-			index = parseStatement_block(++index, &function.block());
+			index = parseStatement_block(++index, &block);
 		}
 
 		return index;
@@ -59,7 +59,7 @@ namespace vc { namespace parser
 
 	int Parser::parseStatement_block(int index, graph::Block *host)
 	{
-		while (index < mLineBuffer.count()  &&  mLineBuffer[index] != "}")
+		while (index < mLineBuffer.count()  &&  !QRegExp("\\s*\\}\\s*").exactMatch(mLineBuffer[index]))//mLineBuffer[index] != "}")
 		{
 			QString& line = mLineBuffer[index];
 
@@ -73,7 +73,14 @@ namespace vc { namespace parser
 			else if (graph::Function *f = graph::Function::createFromVerbatimSignature(line))
 			{
 				host->appendStatement(f);
-				index = parseStatement_function(index, *f);
+				index = parseStatement_subBlock(index, f->block());
+			}
+
+			// Statement : ControlStructure
+			else if (graph::ControlStructure *cs = graph::ControlStructure::createFromVerbatimSignature(line))
+			{
+				host->appendStatement(cs);
+				index = parseStatement_subBlock(index, cs->block());
 			}
 
 			// Blank line

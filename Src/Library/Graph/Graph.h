@@ -12,6 +12,7 @@
 
 #include "Preprocessor.h"
 #include "Function.h"
+#include "ControlStructure.h"
 #include "Block.h"
 
 namespace vc { namespace graph
