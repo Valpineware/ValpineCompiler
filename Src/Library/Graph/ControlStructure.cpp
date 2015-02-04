@@ -9,20 +9,28 @@
 
 namespace vc { namespace graph
 {
-	QStringList registeredNames()
+	struct Type
 	{
-		QStringList list;
-		#define A(what) list.append(what)
+		//blank indicates no keyword associated and should not be parsed
+		QString startKeyword = "";
+		bool needsStartExp = false;
+	};
 
-		A("for");
-		A("while");
-		A("if");
-		A("elseif");
-		A("else");
+	QList<Type> registeredNames()
+	{
+		QList<Type> list;
+
+		#define A(start, need) {Type t; t.startKeyword = start; t.needsStartExp = need; list.append( t );}
+
+		A("for", true)
+		A("while", true)
+		A("if", true)
+		A("elseif", true)
+		A("else", false)
 
 		#undef A
 		return list;
-	} QStringList gRegisteredNames = registeredNames();
+	} QList<Type> gRegisteredNames = registeredNames();
 
 
 	QRegExp registeredNamesRegExp()
@@ -30,9 +38,9 @@ namespace vc { namespace graph
 		QString buffer;
 		buffer.reserve(gRegisteredNames.count() * 4);
 
-		for (QString s : gRegisteredNames)
+		for (Type t : gRegisteredNames)
 		{
-			buffer.append(s + "|");
+			buffer.append(t.startKeyword + "|");
 		}
 
 		if (buffer.at(buffer.count()-1) == "|")
@@ -82,8 +90,18 @@ namespace vc { namespace graph
 		else
 			return nullptr;
 
-		//this is sort of a hack, but what else should be done?
-		if (cs->name() == "else")
+		//what registered type of control structure is this?
+		Type type;
+		for (Type &t : gRegisteredNames)
+		{
+			if (t.startKeyword == cs->name())
+			{
+				type = t;
+				break;
+			}
+		}
+
+		if (!type.needsStartExp)
 			return cs;
 
 		//there should be an opening parenthesis next and a closing one at the very end
