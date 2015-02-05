@@ -128,7 +128,7 @@ namespace vc { namespace parser
 
 					if (multiEnd != -1)
 					{
-						mLineBuffer[j] = mLineBuffer[j].left(multiEnd);
+						mLineBuffer[j].remove(multiStart, multiEnd-multiStart+2);
 						break;
 					}
 					else

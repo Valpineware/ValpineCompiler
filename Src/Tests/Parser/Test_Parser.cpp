@@ -32,7 +32,7 @@ TEST_CASE(HelloWorld)
 		ASSERT_EQ(2, main->block().statements().count());
 		{
 			ASSERT_EQ("std::cout << \"HelloWorld\" << std::endl;", main->block().statements().first()->verbatim());
-			ASSERT_EQ("return 0;", main->block().statements().last()->verbatim());
+			ASSERT_EQ("return  0;", main->block().statements().last()->verbatim());
 		}
 	}
 }
