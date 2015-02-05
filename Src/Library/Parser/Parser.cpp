@@ -25,6 +25,7 @@ namespace vc { namespace parser
 		}
 
 		removeComments();
+		adjustCurlyBraces();
 
 		//parse the global block (entire file) starting at line 0
 		parseStatement_block(0, &mCurrentGraph.block());
@@ -61,7 +62,7 @@ namespace vc { namespace parser
 
 	int Parser::parseStatement_block(int index, graph::Block *host)
 	{
-		while (index < mLineBuffer.count()  &&  !QRegExp("\\s*\\}\\s*").exactMatch(mLineBuffer[index]))//mLineBuffer[index] != "}")
+		while (index < mLineBuffer.count()  &&  !QRegExp("\\s*\\}\\s*").exactMatch(mLineBuffer[index]))
 		{
 			QString& line = mLineBuffer[index];
 
@@ -122,7 +123,7 @@ namespace vc { namespace parser
 			else if (PRECEDES(multiStart, singleStart))
 			{
 				//Find the line with an end tag. Clear lines in between.
-				for (int j=i; j<mLineBuffer.count(); j++)
+				for (int j=i; j<mLineBuffer.count(); j++)	//TODO j should be i+1 initially
 				{
 					int multiEnd = mLineBuffer[j].indexOf("*/");
 
@@ -146,5 +147,43 @@ namespace vc { namespace parser
 			if (QRegExp("\\s*").exactMatch(mLineBuffer[i]))
 				mLineBuffer.remove(i--);
 		}
+	}
+
+
+	void cleanBrace(QVector<QString> &lineBuffer, const QString &what)
+	{
+		for (int i=0; i<lineBuffer.count(); i++)
+		{
+			//if this line doesn't have a {, or if the { is by itself, just go to the next line
+			if (!lineBuffer[i].contains(what) || QRegExp("\\s*\\" + what + "\\s*").exactMatch(lineBuffer[i]))
+				continue;
+
+			//move everything after and including the first {
+			int index = lineBuffer[i].indexOf(what);
+
+			if (index != -1)
+			{
+				//is there anything other than whitespace before this?
+				bool onlyPreWhiteSpace = QRegExp("\\s*\\" + what + ".*").exactMatch(lineBuffer[i]);
+
+				int endCount = lineBuffer[i].count()-index;
+
+				//if there is only pre whitespace, no need to move the { down with this line
+				if (onlyPreWhiteSpace)
+					endCount--;
+
+				QString chopped = lineBuffer[i].right(endCount);
+
+				lineBuffer[i].chop(endCount);
+				lineBuffer.insert(i+1, 1, chopped);
+			}
+		}
+	}
+
+
+	void Parser::adjustCurlyBraces()
+	{
+		cleanBrace(mLineBuffer, "{");
+		cleanBrace(mLineBuffer, "}");
 	}
 }}

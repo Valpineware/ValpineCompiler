@@ -43,6 +43,7 @@ namespace vc { namespace parser
 		int parseStatement_block(int index, graph::Block *host);
 
 		void removeComments();
+		void adjustCurlyBraces();
 	};
 }}
 
