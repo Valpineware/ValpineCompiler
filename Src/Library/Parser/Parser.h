@@ -42,8 +42,11 @@ namespace vc { namespace parser
 		int Parser::parseStatement_subBlock(int index, graph::Block &block);
 		int parseStatement_block(int index, graph::Block *host);
 
+		void removeBlankLines();
+
 		void removeComments();
 		void adjustCurlyBraces();
+		void matchParenthesis();
 		void adjustStatements();
 	};
 }}

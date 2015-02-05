@@ -4,6 +4,8 @@ int main() {foo();
 	return 0;
 }
 
-void foo()
+void foo(
+)
+
 {
 	std::cout << "Called foo" << std::endl; }

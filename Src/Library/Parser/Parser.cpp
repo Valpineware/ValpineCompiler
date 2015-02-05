@@ -26,6 +26,7 @@ namespace vc { namespace parser
 
 		removeComments();
 		adjustCurlyBraces();
+		matchParenthesis();
 		adjustStatements();
 
 		//parse the global block (entire file) starting at line 0
@@ -107,6 +108,16 @@ namespace vc { namespace parser
 	}
 
 
+	void Parser::removeBlankLines()
+	{
+		for (int i=0; i<mLineBuffer.count(); i++)
+		{
+			if (QRegExp("\\s*").exactMatch(mLineBuffer[i]))
+				mLineBuffer.remove(i--);
+		}
+	}
+
+
 	void Parser::removeComments()
 	{
 		//1. Remove comments
@@ -141,13 +152,7 @@ namespace vc { namespace parser
 #undef PRECEDES
 		}
 
-
-		//2. Remove blank lines from mLineBuffer
-		for (int i=0; i<mLineBuffer.count(); i++)
-		{
-			if (QRegExp("\\s*").exactMatch(mLineBuffer[i]))
-				mLineBuffer.remove(i--);
-		}
+		removeBlankLines();
 	}
 
 
@@ -186,6 +191,44 @@ namespace vc { namespace parser
 	{
 		cleanBrace(mLineBuffer, "{");
 		cleanBrace(mLineBuffer, "}");
+	}
+
+
+	void Parser::matchParenthesis()
+	{
+		for (int i=0; i<mLineBuffer.count(); i++)
+		{
+			QString &line = mLineBuffer[i];
+			int openCount = line.count("(");
+			int closedCount = line.count(")");
+			
+			if (openCount > closedCount)
+			{
+				int still = openCount-closedCount;
+				int j=i+1;
+
+				while (still > 0 && j < mLineBuffer.count())
+				{
+					QString &nextLine = mLineBuffer[j];
+					int index = nextLine.indexOf(")");
+
+					if (index != -1)
+					{
+						line.append(nextLine.left(index+1));
+						nextLine.remove(0, index+1);
+						still--;
+					}
+					else
+						j++;
+				}
+			}
+			else if (closedCount > openCount)
+			{
+				qDebug() << "Error: Too many closing parenthisis encountered on line " << i;
+			}
+		}
+
+		removeBlankLines();
 	}
 
 
