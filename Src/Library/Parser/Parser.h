@@ -44,6 +44,7 @@ namespace vc { namespace parser
 
 		void removeComments();
 		void adjustCurlyBraces();
+		void adjustStatements();
 	};
 }}
 

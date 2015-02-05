@@ -26,6 +26,7 @@ namespace vc { namespace parser
 
 		removeComments();
 		adjustCurlyBraces();
+		adjustStatements();
 
 		//parse the global block (entire file) starting at line 0
 		parseStatement_block(0, &mCurrentGraph.block());
@@ -185,5 +186,31 @@ namespace vc { namespace parser
 	{
 		cleanBrace(mLineBuffer, "{");
 		cleanBrace(mLineBuffer, "}");
+	}
+
+
+	void Parser::adjustStatements()
+	{
+		for (int i=0; i<mLineBuffer.count(); i++)
+		{
+			QString &line = mLineBuffer[i];
+
+			if (QRegExp(".*;\\s*\\S+.*").exactMatch(line))
+			{
+				//if we are in between two parenthesis, ignore this
+				int index = line.indexOf(";");
+				int openBefore = line.leftRef(index+1).count("(");
+				int closedBefore = line.leftRef(index+1).count(")");
+
+				if (openBefore > closedBefore)
+					continue;
+
+				//move everything after this semi-colon to the next line
+				int chopCount = line.count() - index - 1;
+				QString chopped = line.right(chopCount);
+				line.chop(chopCount);
+				mLineBuffer.insert(i+1, 1, chopped);
+			}
+		}
 	}
 }}
