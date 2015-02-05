@@ -7,8 +7,7 @@
 
 #include <Library.h>
 
-#include "Statement.h"
-#include "Block.h"
+#include "SubBlock.h"
 #include "TypeExpression.h"
 
 #ifndef _vc_graph_Function_h
@@ -27,11 +26,11 @@ namespace vc { namespace graph
 	/**
 	 * @brief Represents the body of a function of control structure that is executed.
 	 */
-	class Function : public Statement
+	class Function : public SubBlock
 	{
 	public:
 		Function() = delete;
-		Function(const QString &verbatim) : Statement(verbatim) {}
+		Function(const QString &verbatim) : SubBlock(verbatim) {}
 
 		static Function* createFromVerbatimSignature(const QString signature);
 
@@ -43,12 +42,7 @@ namespace vc { namespace graph
 		void addParameter(const Parameter &parameter) { mParameters.append(parameter); }
 		const QVector<Parameter>& parameters() const { return mParameters; }
 
-
-		Block& block() { return mBlock; }	//TODO move this into a base class so Function and Control can share this
-		const Block& block() const { return mBlock; }
-
 	private:
-		Block mBlock;
 		QString mId;
 		TypeExpression mReturnType;
 		QVector<Parameter> mParameters;

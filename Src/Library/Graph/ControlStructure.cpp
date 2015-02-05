@@ -47,7 +47,7 @@ namespace vc { namespace graph
 			buffer.chop(1);
 
 		return QRegExp(buffer);
-	} QRegExp gRegisteredNamesRegExp = registeredNamesRegExp();	//TODO it would be cool if we could initialize this variable with a block thing to avoid name pollution. Lamda?
+	} QRegExp gRegisteredNamesRegExp = registeredNamesRegExp();
 
 
 	void preProcessControlStructureSignature(QString &signature, QStringList &list)

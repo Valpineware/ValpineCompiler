@@ -135,7 +135,7 @@ namespace vc { namespace parser
 			else if (PRECEDES(multiStart, singleStart))
 			{
 				//Find the line with an end tag. Clear lines in between.
-				for (int j=i; j<mLineBuffer.count(); j++)	//TODO j should be i+1 initially
+				for (int j=i; j<mLineBuffer.count(); j++)
 				{
 					int multiEnd = mLineBuffer[j].indexOf("*/");
 
