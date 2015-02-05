@@ -24,6 +24,8 @@ namespace vc { namespace parser
 			mLineBuffer.append(line);
 		}
 
+		removeComments();
+
 		//parse the global block (entire file) starting at line 0
 		parseStatement_block(0, &mCurrentGraph.block());
 
@@ -100,5 +102,49 @@ namespace vc { namespace parser
 		}
 
 		return index;
+	}
+
+
+	void Parser::removeComments()
+	{
+		//1. Remove comments
+		for (int i=0; i<mLineBuffer.count(); i++)
+		{
+			QString &line = mLineBuffer[i];
+
+			int singleStart = line.indexOf("//");
+			int multiStart = line.indexOf("/*");
+
+#define PRECEDES(a, b) a > 0 && (b == -1 || a < b)
+
+			if (PRECEDES(singleStart, multiStart))
+				line.chop(line.count() - singleStart);
+			else if (PRECEDES(multiStart, singleStart))
+			{
+				//Find the line with an end tag. Clear lines in between.
+				for (int j=i; j<mLineBuffer.count(); j++)
+				{
+					int multiEnd = mLineBuffer[j].indexOf("*/");
+
+					if (multiEnd != -1)
+					{
+						mLineBuffer[j] = mLineBuffer[j].left(multiEnd);
+						break;
+					}
+					else
+						mLineBuffer[j].clear();
+				}
+			}
+
+#undef PRECEDES
+		}
+
+
+		//2. Remove blank lines from mLineBuffer
+		for (int i=0; i<mLineBuffer.count(); i++)
+		{
+			if (QRegExp("\\s*").exactMatch(mLineBuffer[i]))
+				mLineBuffer.remove(i--);
+		}
 	}
 }}
