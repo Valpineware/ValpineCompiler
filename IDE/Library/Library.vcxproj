@@ -21,6 +21,7 @@
     <ClInclude Include="..\..\src\library\graph\TypeExpression.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\Mocker.h" />
     <ClInclude Include="..\..\Src\Library\Parser\Parser.h" />
+    <ClInclude Include="FileGenerator.h" />
     <CustomBuild Include="..\..\Src\Library\Compiler\Compiler.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Compiler.h...</Message>

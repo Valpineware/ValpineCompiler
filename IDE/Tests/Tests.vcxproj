@@ -25,6 +25,7 @@
     <ClCompile Include="..\..\Src\Tests\Graph\Test_ControlStructure.cpp" />
     <ClCompile Include="..\..\Src\Tests\Graph\Test_Function.cpp" />
     <ClCompile Include="..\..\Src\Tests\Graph\Test_TypeExpression.cpp" />
+    <ClCompile Include="..\..\Src\Tests\Mocker\Test_Mocker.cpp" />
     <ClCompile Include="..\..\Src\Tests\Parser\Test_Parser.cpp" />
     <ClCompile Include="..\..\Src\Tests\Tests.cpp" />
   </ItemGroup>

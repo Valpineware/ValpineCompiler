@@ -17,9 +17,14 @@ namespace vc { namespace mocker
 	 */
 	class Mocker
 	{
+	private:
+		graph::Graph graph;
+
 	public:
-		void mock(const graph::Graph &graph) { Q_UNUSED(graph) }
+		Mocker(const graph::Graph &graph);
 		QString outputFilepath() const { return ""; }
+		graph::Graph getGraph() { return graph; }
+		int run();
 	};
 }}
 
