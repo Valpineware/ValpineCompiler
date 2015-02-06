@@ -58,24 +58,42 @@ namespace vc { namespace parser
 			return index;
 		}
 
+		graph::Class::AccessType currentAccessType = graph::Class::Private;
+
 		while (++index < mLineBuffer.count()  &&  !QRegExp("\\s*\\}\\s*").exactMatch(mLineBuffer[index]))
 		{
 			QString &line = mLineBuffer[index];
-			graph::Class::Member *member = new graph::Class::Member;
-
-			// Statement : Function
-			if (graph::Function *f = graph::Function::createFromVerbatimSignature(line))
-			{
-				index = parseStatement_subBlock(index, f->block());
-				member->statement = f;
-			}
-			// Statement : Regular
+			
+			//look for access modifiers
+			if (QRegExp("\\s*public\\s*:\\s*").exactMatch(line))
+				currentAccessType = graph::Class::Public;
+			else if (QRegExp("\\s*protected\\s*:\\s*").exactMatch(line))
+				currentAccessType = graph::Class::Protected;
+			else if (QRegExp("\\s*private\\s*:\\s*").exactMatch(line))
+				currentAccessType = graph::Class::Private;
+			
+			//otherwise look for statements
 			else
 			{
-				member->statement = new graph::Statement(line);
+				graph::Class::Member *member = new graph::Class::Member;
+				member->accessType = currentAccessType;
+
+				// Statement : Function
+				if (graph::Function *f = graph::Function::createFromVerbatimSignature(line))
+				{
+					index = parseStatement_subBlock(index, f->block());
+					member->statement = f;
+				}
+				// Statement : Regular
+				else
+				{
+					member->statement = new graph::Statement(line);
+				}
+
+				host.addMember(member);
 			}
 
-			host.addMember(member);
+			
 		}
 
 		return index;

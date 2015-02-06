@@ -208,7 +208,7 @@ TEST_CASE(Class)
 	using namespace graph;
 
 	Block &root = sp.graph().block();
-	ASSERT_EQ(2, root.statements().count());
+	ASSERT_EQ(3, root.statements().count());
 	{
 		QListIterator<Statement*> iter(root.statements());
 
@@ -222,12 +222,29 @@ TEST_CASE(Class)
 		{
 			QListIterator<Class::Member*> clsIter(cls->members());
 
-			const Class::Member *m1 = clsIter.next();
-			EXPECT_EQ(Class::Public, m1->accessType);
 			{
-				Function *f = dynamic_cast<Function*>(m1->statement);
+				const Class::Member *m = clsIter.next();
+				EXPECT_EQ(Class::Public, m->accessType);
+				Function *f = dynamic_cast<Function*>(m->statement);
 				ASSERT_NOT_NULL(f);
 				EXPECT_EQ("setText", f->id());
+			}
+
+			
+			{
+				const Class::Member *m = clsIter.next();
+				EXPECT_EQ(Class::Public, m->accessType);
+				Function *f = dynamic_cast<Function*>(m->statement);
+				ASSERT_NOT_NULL(f);
+				EXPECT_EQ("read", f->id());
+			}
+
+
+			{
+				const Class::Member *m = clsIter.next();
+				EXPECT_EQ(Class::Private, m->accessType);
+				ASSERT_NOT_NULL(m->statement);
+				EXPECT_EQ("QString mText;", m->statement->verbatim());
 			}
 		}
 	}
