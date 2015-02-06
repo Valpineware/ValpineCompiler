@@ -74,9 +74,7 @@ namespace vc { namespace graph
 			const QString &cmp = i.next();
 
 			if (gRegExp_identifier.exactMatch(cmp))
-			{
 				function->setId(cmp);
-			}
 			else
 				return nullptr;								//Error: invalid identifier
 		}

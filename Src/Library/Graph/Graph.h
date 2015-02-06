@@ -15,6 +15,7 @@
 #include "ControlStructure.h"
 #include "Block.h"
 #include "Class.h"
+#include "Variable.h"
 
 namespace vc { namespace graph
 {

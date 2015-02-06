@@ -84,16 +84,14 @@ namespace vc { namespace parser
 					index = parseStatement_subBlock(index, f->block());
 					member->statement = f;
 				}
-				// Statement : Regular
+				// Statement : Variable
 				else
 				{
-					member->statement = new graph::Statement(line);
+					member->statement = graph::Variable::createFromVerbatimSignature(line);
 				}
 
 				host.addMember(member);
 			}
-
-			
 		}
 
 		return index;

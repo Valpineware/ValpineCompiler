@@ -243,8 +243,10 @@ TEST_CASE(Class)
 			{
 				const Class::Member *m = clsIter.next();
 				EXPECT_EQ(Class::Private, m->accessType);
-				ASSERT_NOT_NULL(m->statement);
-				EXPECT_EQ("QString mText;", m->statement->verbatim());
+				Variable *v = dynamic_cast<Variable*>(m->statement);
+				ASSERT_NOT_NULL(v);
+				EXPECT_EQ("QString", v->typeExpression().fullType());
+				EXPECT_EQ("mText", v->id());
 			}
 		}
 	}
