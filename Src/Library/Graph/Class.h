@@ -8,18 +8,51 @@
 #ifndef _vc_graph_Class_h
 #define _vc_graph_Class_h
 
-#include "SubBlock.h"
+#include "Statement.h"
 #include "Function.h"
 
 namespace vc { namespace graph
 {
 	/**
-	 * @brief Represents a "class" construct.
+	 * @brief 
 	 */
-	class Class : public SubBlock
+	class Class : public Statement
 	{
 	public:
-		Class(const QString &verbatim) : SubBlock(verbatim) {}
+		/**
+		 * Access type for members
+		 */
+		enum AccessType
+		{
+			Private,
+			Protected,
+			Public
+		};
+
+
+		/**
+		 * @brief Associates an AccessType with a Statement
+		 */
+		struct Member
+		{
+			Member() {}
+
+			AccessType accessType = AccessType::Private;
+			Statement *statement = nullptr;
+
+			~Member()
+			{
+				if (statement != nullptr)
+					delete statement;
+			}
+
+		private:
+			Q_DISABLE_COPY(Member);	//effectively forces heap allocation since our destructor deletes statement
+		};
+
+
+	public:
+		Class(const QString &verbatim) : Statement(verbatim) {}
 
 		/**
 		 * @returns nullptr if \p signature does not represent a valid class header. Otherwise
@@ -28,44 +61,12 @@ namespace vc { namespace graph
 		static Class* createFromVerbatimSignature(const QString &signature);
 
 		QString id() const { return mId; }
-
-		/**
-		 * Baseclass used to distinguish the access type of statements within a Class.
-		 * Subclasses should inherit from Member and from a designated Statement type.
-		 */
-		class Member
-		{
-		public:
-			enum AccessType
-			{
-				Private,
-				Protected,
-				Public
-			};
-
-			AccessType accessType() { return Public; }
-		};
-
-
-		/**
-		 * @brief Represents a Member Function
-		 */
-		class Method : public Member, public Function
-		{
-			Method(const QString &verbatim) : Function(verbatim) {}
-		};
-
-
-		/**
-		 * @brief Represents an instance variable. TODO for now any statement is valid YIKES
-		 */
-		class IVar : public Member, public Statement
-		{
-			IVar(const QString &verbatim) : Statement(verbatim) {}
-		};
+		const QList<Member*>& members() const { return mMembers; }
+		void addMember(Member *member) { mMembers.append(member); }
 
 	private:
 		QString mId;
+		QList<Member*> mMembers;
 	};
 }}
 

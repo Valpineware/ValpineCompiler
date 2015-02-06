@@ -3,7 +3,7 @@
 class Book
 {
 public:
-	void setText(const QString &text)
+	void setText(const QString & text)
 	{
 		mText = text;
 	}

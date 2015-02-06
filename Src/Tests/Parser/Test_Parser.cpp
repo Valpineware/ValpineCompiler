@@ -220,13 +220,14 @@ TEST_CASE(Class)
 		ASSERT_NOT_NULL(cls);
 		EXPECT_EQ("Book", cls->id());
 		{
-			QListIterator<Statement*> f1Iter(cls->block().statements());
+			QListIterator<Class::Member*> clsIter(cls->members());
 
-			Class::Method *mf1 = dynamic_cast<Class::Method*>(iter.next());
+			const Class::Member *m1 = clsIter.next();
+			EXPECT_EQ(Class::Public, m1->accessType);
 			{
-				ASSERT_NOT_NULL(mf1);
-				EXPECT_EQ("setText", mf1->id());
-				EXPECT_EQ(Class::Member::Public, mf1->accessType());
+				Function *f = dynamic_cast<Function*>(m1->statement);
+				ASSERT_NOT_NULL(f);
+				EXPECT_EQ("setText", f->id());
 			}
 		}
 	}
