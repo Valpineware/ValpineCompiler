@@ -14,6 +14,7 @@
 #include "Function.h"
 #include "ControlStructure.h"
 #include "Block.h"
+#include "Class.h"
 
 namespace vc { namespace graph
 {

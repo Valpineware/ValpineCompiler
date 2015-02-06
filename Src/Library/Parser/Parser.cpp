@@ -87,6 +87,12 @@ namespace vc { namespace parser
 				host->appendStatement(cs);
 				index = parseStatement_subBlock(index, cs->block());
 			}
+			
+			else if (graph::Class *cls = graph::Class::createFromVerbatimSignature(line))
+			{
+				host->appendStatement(cls);
+				index = parseStatement_subBlock(index, cls->block());
+			}
 
 			// Blank line
 			else if (isBlankLine(line))

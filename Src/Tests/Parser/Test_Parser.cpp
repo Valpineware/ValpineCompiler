@@ -198,3 +198,36 @@ TEST_CASE(ControlStructure)
 		//TODO finish testing rest of the file
 	}
 }
+
+
+TEST_CASE(Class)
+{
+	parser::Parser sp;
+	sp.parseFile(gTestDir_Parser + "Class.val");
+
+	using namespace graph;
+
+	Block &root = sp.graph().block();
+	ASSERT_EQ(2, root.statements().count());
+	{
+		QListIterator<Statement*> iter(root.statements());
+
+		Preprocessor *include = dynamic_cast<Preprocessor*>(iter.next());
+		ASSERT_NOT_NULL(include);
+		EXPECT_EQ("#include <QtCore/QDebug>", include->verbatim());
+
+		Class *cls = dynamic_cast<Class*>(iter.next());
+		ASSERT_NOT_NULL(cls);
+		EXPECT_EQ("Book", cls->id());
+		{
+			QListIterator<Statement*> f1Iter(cls->block().statements());
+
+			Class::Method *mf1 = dynamic_cast<Class::Method*>(iter.next());
+			{
+				ASSERT_NOT_NULL(mf1);
+				EXPECT_EQ("setText", mf1->id());
+				EXPECT_EQ(Class::Member::Public, mf1->accessType());
+			}
+		}
+	}
+}

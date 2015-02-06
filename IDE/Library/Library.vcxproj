@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Library\Graph\Block.h" />
+    <ClInclude Include="..\..\Src\Library\Graph\Class.h" />
     <ClInclude Include="..\..\Src\Library\Graph\ControlStructure.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Function.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Graph.h" />
@@ -36,6 +37,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Src\Library\Compiler\Compiler.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Block.cpp" />
+    <ClCompile Include="..\..\Src\Library\Graph\Class.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\ControlStructure.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Function.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Graph.cpp" />
