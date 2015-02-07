@@ -9,6 +9,7 @@
 #define _vc_mocker_Mocker_h
 
 #include <Graph/Graph.h>
+#include <Library.h>
 
 namespace vc { namespace mocker
 {
@@ -18,13 +19,14 @@ namespace vc { namespace mocker
 	class Mocker
 	{
 	private:
-		graph::Graph graph;
+		const graph::Graph* graph;
+		void buildFunction(QVector<QString>& program, graph::Function& function);
 
 	public:
-		Mocker(const graph::Graph &graph);
+		Mocker() {};
+		void mock(const graph::Graph &graph);
 		QString outputFilepath() const { return ""; }
-		graph::Graph getGraph() { return graph; }
-		int run();
+		QVector<QString> buildList();
 	};
 }}
 

@@ -9,27 +9,48 @@
 
 namespace vc { namespace mocker
 {
-	Mocker::Mocker(const graph::Graph &graph)
+	void Mocker::mock(const graph::Graph &graph)
 	{
-		this->graph = graph;
-		run();
+		this->graph = &graph;
 	}
 
-	int Mocker::run()
+	QVector<QString> Mocker::buildList()
 	{
-		graph::Block &root = graph.block();
+		const graph::Block &root = graph->block();
+		QVector<QString> program;
 
-		//traverse through the statements
 		QListIterator<graph::Statement*> iter(root.statements());
 
-		int count = 0;
+		graph::Preprocessor* preprocessor;
+		graph::Function* function;
+		graph::Statement* statement;
+
 		while (iter.hasNext())
 		{
-			iter.next();
-			count++;
+			statement = iter.next();
+
+			//check the type of this statement
+			preprocessor = dynamic_cast<graph::Preprocessor*> (statement);
+			if (preprocessor != NULL)
+			{
+				program.append(preprocessor->verbatim());
+			}
+			else if ((function = dynamic_cast<graph::Function*>(statement)) != NULL)
+			{
+				buildFunction(program, *function);
+			}
 		}
 
-		return count;
+		return program;
+	}
+
+
+	void Mocker::buildFunction(QVector<QString>& program, graph::Function& function)
+	{
+		/*program.append(function.verbatim());
+		program.append("{");
+
+		QListIterator<graph::Statement*> iter(program.);*/
 	}
 
 }}

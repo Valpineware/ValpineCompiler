@@ -19,6 +19,10 @@ TEST_CASE(HelloWorld)
 	using namespace graph;
 	using namespace mocker;
 
-	Mocker mocker(const sp.graph());
+	Mocker mocker;
+	mocker.mock(sp.graph());
 
+	QVector<QString> strings = mocker.buildList();
+
+	ASSERT_EQ("#include <iostream>", strings[0]);
 }
