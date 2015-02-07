@@ -9,11 +9,6 @@
 
 namespace vc { namespace graph
 {
-	const QRegExp gRegExp_identifier = QRegExp("([A-Za-z_]\\w*)");
-	const QRegExp gRegExp_typeMod = QRegExp("(const|&|\\*|\\s)*");
-	const QRegExp gRegExp_typeId = QRegExp("(const|&|\\*|\\s|([A-Za-z_]\\w*))*");
-
-
 	bool couldThisPossiblyBeAFunction(const QString &signature)
 	{
 		//there should be exactly one ( and one )
@@ -79,9 +74,7 @@ namespace vc { namespace graph
 			const QString &cmp = i.next();
 
 			if (gRegExp_identifier.exactMatch(cmp))
-			{
 				function->setId(cmp);
-			}
 			else
 				return nullptr;								//Error: invalid identifier
 		}

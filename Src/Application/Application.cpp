@@ -38,9 +38,10 @@ void Application::onButtonCompileClicked()
 	parser::Parser sourceParser;
 	QString filepath = mTextField->property("text").toString();
 
+
 	if (!sourceParser.parseFile(filepath))
 	{
-		qDebug() << "Aborting...error parsing file" << filepath;
+		qDebug() << "Unable to parse " << filepath;
 	}
 
 	mocker::Mocker mocker;
@@ -53,6 +54,8 @@ void Application::onButtonCompileClicked()
 
 void Application::keyPressEvent(QKeyEvent *ev)
 {
+	QQuickView::keyPressEvent(ev);
+
 	switch (ev->key())
 	{
 		case Qt::Key_Escape:

@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Library\Graph\Block.h" />
+    <ClInclude Include="..\..\Src\Library\Graph\Class.h" />
     <ClInclude Include="..\..\Src\Library\Graph\ControlStructure.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Function.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Graph.h" />
@@ -19,6 +20,7 @@
     <ClInclude Include="..\..\Src\Library\Graph\Statement.h" />
     <ClInclude Include="..\..\Src\Library\Graph\SubBlock.h" />
     <ClInclude Include="..\..\src\library\graph\TypeExpression.h" />
+    <ClInclude Include="..\..\Src\Library\Graph\Variable.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\Mocker.h" />
     <ClInclude Include="..\..\Src\Library\Parser\Parser.h" />
     <ClInclude Include="FileGenerator.h" />
@@ -37,11 +39,13 @@
   <ItemGroup>
     <ClCompile Include="..\..\Src\Library\Compiler\Compiler.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Block.cpp" />
+    <ClCompile Include="..\..\Src\Library\Graph\Class.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\ControlStructure.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Function.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Graph.cpp" />
     <ClCompile Include="..\..\src\library\graph\Preprocessor.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Statement.cpp" />
+    <ClCompile Include="..\..\Src\Library\Graph\Variable.cpp" />
     <ClCompile Include="..\..\Src\Library\Library.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Mocker.cpp" />
     <ClCompile Include="..\..\Src\Library\Parser\Parser.cpp" />

@@ -198,3 +198,56 @@ TEST_CASE(ControlStructure)
 		//TODO finish testing rest of the file
 	}
 }
+
+
+TEST_CASE(Class)
+{
+	parser::Parser sp;
+	sp.parseFile(gTestDir_Parser + "Class.val");
+
+	using namespace graph;
+
+	Block &root = sp.graph().block();
+	ASSERT_EQ(3, root.statements().count());
+	{
+		QListIterator<Statement*> iter(root.statements());
+
+		Preprocessor *include = dynamic_cast<Preprocessor*>(iter.next());
+		ASSERT_NOT_NULL(include);
+		EXPECT_EQ("#include <QtCore/QDebug>", include->verbatim());
+
+		Class *cls = dynamic_cast<Class*>(iter.next());
+		ASSERT_NOT_NULL(cls);
+		EXPECT_EQ("Book", cls->id());
+		{
+			QListIterator<Class::Member*> clsIter(cls->members());
+
+			{
+				const Class::Member *m = clsIter.next();
+				EXPECT_EQ(Class::Public, m->accessType);
+				Function *f = dynamic_cast<Function*>(m->statement);
+				ASSERT_NOT_NULL(f);
+				EXPECT_EQ("setText", f->id());
+			}
+
+			
+			{
+				const Class::Member *m = clsIter.next();
+				EXPECT_EQ(Class::Public, m->accessType);
+				Function *f = dynamic_cast<Function*>(m->statement);
+				ASSERT_NOT_NULL(f);
+				EXPECT_EQ("read", f->id());
+			}
+
+
+			{
+				const Class::Member *m = clsIter.next();
+				EXPECT_EQ(Class::Private, m->accessType);
+				Variable *v = dynamic_cast<Variable*>(m->statement);
+				ASSERT_NOT_NULL(v);
+				EXPECT_EQ("QString", v->typeExpression().fullType());
+				EXPECT_EQ("mText", v->id());
+			}
+		}
+	}
+}

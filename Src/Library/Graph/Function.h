@@ -34,11 +34,11 @@ namespace vc { namespace graph
 
 		static Function* createFromVerbatimSignature(const QString signature);
 
-		void setId(const QString &id) { mId = id; }
-		QString id() const { return mId; }
 		void setReturnType(const TypeExpression &returnType) { mReturnType = returnType; }
 		TypeExpression returnType() const { return mReturnType; }
-
+		void setId(const QString &id) { mId = id; }
+		QString id() const { return mId; }
+		
 		void addParameter(const Parameter &parameter) { mParameters.append(parameter); }
 		const QVector<Parameter>& parameters() const { return mParameters; }
 

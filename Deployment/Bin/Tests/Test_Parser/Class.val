@@ -1,0 +1,19 @@
+#include <QtCore/QDebug>
+
+class Book
+{
+public:
+	void setText(const QString & text)
+	{
+		mText = text;
+	}
+	
+	
+	void read()
+	{
+		qDebug() << mText;
+	}
+	
+private:
+	QString mText;
+};

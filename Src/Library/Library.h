@@ -21,4 +21,8 @@ using weak = std::weak_ptr<T>;
 template <typename T>
 using unique = std::unique_ptr<T>;
 
+const QRegExp gRegExp_identifier = QRegExp("([A-Za-z_]\\w*)");
+const QRegExp gRegExp_typeMod = QRegExp("(const|&|\\*|\\s)*");
+const QRegExp gRegExp_typeId = QRegExp("(const|&|\\*|\\s|([A-Za-z_]\\w*))*");
+
 #endif // LIBRARY_H
