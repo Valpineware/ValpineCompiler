@@ -14,7 +14,10 @@ namespace vc { namespace compiler
 	{
 		QString program = "g++";
 		QStringList arguments;
-		arguments << "Main.cpp" << "-o" << "Main.exe";
+
+		QFileInfo fileInfo(filepath);
+		QString outputFile = fileInfo.dir().absolutePath() + "/" + fileInfo.baseName() + ".exe";
+		arguments << filepath << "-o" << outputFile;
 
 		QObject::connect(&mProcess, SIGNAL(error(QProcess::ProcessError)),
 						 this, SLOT(onCompileProcessError(QProcess::ProcessError)));
@@ -24,18 +27,26 @@ namespace vc { namespace compiler
 
 		mProcess.start(program, arguments);
 		mProcess.waitForFinished(mTimeoutMs);
-
-		if (mProcess.error() == QProcess::ProcessError::Timedout)
-		{
-			qDebug() << "Compile timed out after " << mTimeoutMs/1000 << " seconds.";
-		}
 	}
-
 
 
 	void Compiler::onCompileProcessError(QProcess::ProcessError error)
 	{
-		qDebug() << "C++ compiler process encountered an error code=" << static_cast<int>(error);
+		switch (error)
+		{
+		case QProcess::FailedToStart:
+			qDebug() << "G++: The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program."; break;
+		case QProcess::Crashed:
+			qDebug() << "G++: crashed!"; break;
+		case QProcess::Timedout:
+			qDebug() << "G++: Compile timed out after " << mTimeoutMs/1000 << " seconds and has been terminated."; break;
+		case QProcess::ReadError:
+			qDebug() << "G++: An error occurred when attempting to read from the process. For example, the process may not be running."; break;
+		case QProcess::WriteError:
+			qDebug() << "G++: An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel."; break;
+		case QProcess::UnknownError:
+			qDebug() << "G++: An unknown error occured while running."; break;
+		}
 	}
 
 
