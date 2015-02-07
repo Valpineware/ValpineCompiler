@@ -77,7 +77,7 @@ namespace vc { namespace graph
 
 			//everything after the first "=" should be shoved into the init expression
 			int index = signature.indexOf("=");
-			variable->setInitExpression(signature.mid(index, signature.count()-index));
+			variable->setInitExpression(signature.mid(index+1, signature.count()-index).remove(";").trimmed());
 		}
 
 		return variable;
