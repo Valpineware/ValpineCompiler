@@ -25,4 +25,11 @@ TEST_CASE(HelloWorld)
 	QVector<QString> strings = mocker.buildList();
 
 	ASSERT_EQ("#include <iostream>", strings[0]);
+	ASSERT_EQ("int main()", strings[1]);
+	ASSERT_EQ("{", strings[2]);
+	ASSERT_EQ("std::cout << \"HelloWorld\" << std::endl;", strings[3]);
+	ASSERT_EQ("return  0;", strings[4]);
+	ASSERT_EQ("}", strings[5]);
+
+	ASSERT_EQ(6, strings.size());
 }
