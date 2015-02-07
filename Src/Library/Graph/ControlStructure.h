@@ -8,18 +8,17 @@
 #ifndef _vc_graph_ControlStructure_h
 #define _vc_graph_ControlStructure_h
 
-#include "Statement.h"
-#include "Block.h"
+#include "SubBlock.h"
 
 namespace vc { namespace graph
 {
 	/**
 	 * @brief 
 	 */
-	class ControlStructure : public Statement
+	class ControlStructure : public SubBlock
 	{
 	public:
-		ControlStructure(const QString &verbatim) : Statement(verbatim) {}
+		ControlStructure(const QString &verbatim) : SubBlock(verbatim) {}
 
 		static ControlStructure* createFromVerbatimSignature(const QString signature);
 
@@ -29,12 +28,8 @@ namespace vc { namespace graph
 		void setExpression(const QString &expression) { mExpression = expression; }
 		QString expression() const { return mExpression; }
 
-		Block& block() { return mBlock; }
-		const Block& block() const { return mBlock; }
-
 	private:
 		QString mName, mExpression;
-		Block mBlock;
 	};
 }}
 

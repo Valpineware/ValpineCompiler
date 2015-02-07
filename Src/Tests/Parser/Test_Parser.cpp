@@ -32,7 +32,7 @@ TEST_CASE(HelloWorld)
 		ASSERT_EQ(2, main->block().statements().count());
 		{
 			ASSERT_EQ("std::cout << \"HelloWorld\" << std::endl;", main->block().statements().first()->verbatim());
-			ASSERT_EQ("return 0;", main->block().statements().last()->verbatim());
+			ASSERT_EQ("return  0;", main->block().statements().last()->verbatim());
 		}
 	}
 }
@@ -177,6 +177,21 @@ TEST_CASE(ControlStructure)
 			EXPECT_EQ("int i=0; i<100; i++", csFor->expression());
 			{
 				EXPECT_EQ("qDebug() << i;", csFor->block().statements().first()->verbatim());
+			}
+
+			EXPECT_EQ("bool quit = false;", f1Iter.next()->verbatim());
+			EXPECT_EQ("int n = 0;", f1Iter.next()->verbatim());
+
+			ControlStructure *csWhile = dynamic_cast<ControlStructure*>(f1Iter.next());
+			ASSERT_NOT_NULL(csWhile);
+			EXPECT_EQ("while", csWhile->name());
+			EXPECT_EQ("!quit", csWhile->expression());
+			{
+				QListIterator<Statement*> csWhileIter(csWhile->block().statements());
+
+				EXPECT_EQ("QThread::msleep(100);", csWhileIter.next()->verbatim());
+				EXPECT_EQ("n += 40;", csWhileIter.next()->verbatim());
+				EXPECT_EQ("agsdg	quit = n>50000;", csWhileIter.next()->verbatim());
 			}
 		}
 

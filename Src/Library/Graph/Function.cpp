@@ -16,8 +16,8 @@ namespace vc { namespace graph
 
 	bool couldThisPossiblyBeAFunction(const QString &signature)
 	{
-		//there should be exactly one ( and one ) TODO chop comments before this in the future
-		if (signature.count("(") != 1 || signature.count(")") != 1)	//TODO we should actually check the count here, because you can only have 1 of each
+		//there should be exactly one ( and one )
+		if (signature.count("(") != 1 || signature.count(")") != 1)
 			return false;
 
 		if (signature.contains(";"))
@@ -49,7 +49,6 @@ namespace vc { namespace graph
 
 	graph::Function* parseType(QStringListIterator &i, graph::Function *function)
 	{
-		//TODO use the new QRegularExpression class instead
 		QString returnType;
 		bool foundBaseType = false;
 			
@@ -72,7 +71,7 @@ namespace vc { namespace graph
 				function->setReturnType(graph::TypeExpression(returnType));
 				break;
 			}
-		}			
+		}
 
 		//	c) Identifier
 		if (i.hasNext())

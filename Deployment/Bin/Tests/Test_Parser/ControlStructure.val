@@ -12,9 +12,7 @@ int main()
 	
 	while (!quit)
 	{
-		QThread::msleep(100);
-		n += 40;
-		quit = n>50000;
+		QThread::msleep(100); n += 40;	agsdg	quit = n>50000;
 	}
 	
 	QString username = "DanWatkins";

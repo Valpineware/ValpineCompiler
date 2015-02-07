@@ -27,6 +27,9 @@
     <Filter Include="Src\Graph">
       <UniqueIdentifier>{88b6f573-a6de-41a0-9828-cbc0c85920ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Mocker">
+      <UniqueIdentifier>{0ce82d0b-374f-4840-9258-42f0750d0b2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\DanWatkins\Terrain3D\Src\Tests\Tests.h">
@@ -48,6 +51,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Tests\Graph\Test_ControlStructure.cpp">
       <Filter>Src\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Tests\Mocker\Test_Mocker.cpp">
+      <Filter>Src\Mocker</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -9,17 +9,34 @@
 #define _vc_mocker_Mocker_h
 
 #include <Graph/Graph.h>
+#include <Library.h>
 
 namespace vc { namespace mocker
 {
+	struct StatementTypes
+	{
+		graph::Preprocessor* preprocessor;
+		graph::Function* function;
+		graph::Statement* statement;
+	};
+
 	/**
 	 * @brief Mocks a Valpine source graph as C++.
 	 */
 	class Mocker
 	{
+	private:
+		const graph::Graph* graph;
+		StatementTypes types;
+
+		void buildFunction(QVector<QString>& program, graph::Function& function);
+		void processBlock(QVector<QString>& program, QListIterator<graph::Statement*>& iter);
+
 	public:
-		void mock(const graph::Graph &graph) { Q_UNUSED(graph) }
+		Mocker() {};
+		void mock(const graph::Graph &graph);
 		QString outputFilepath() const { return ""; }
+		QVector<QString> buildList();
 	};
 }}
 

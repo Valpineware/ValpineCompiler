@@ -24,6 +24,11 @@ namespace vc { namespace parser
 			mLineBuffer.append(line);
 		}
 
+		removeComments();
+		adjustCurlyBraces();
+		matchParenthesis();
+		adjustStatements();
+
 		//parse the global block (entire file) starting at line 0
 		parseStatement_block(0, &mCurrentGraph.block());
 
@@ -59,7 +64,7 @@ namespace vc { namespace parser
 
 	int Parser::parseStatement_block(int index, graph::Block *host)
 	{
-		while (index < mLineBuffer.count()  &&  !QRegExp("\\s*\\}\\s*").exactMatch(mLineBuffer[index]))//mLineBuffer[index] != "}")
+		while (index < mLineBuffer.count()  &&  !QRegExp("\\s*\\}\\s*").exactMatch(mLineBuffer[index]))
 		{
 			QString& line = mLineBuffer[index];
 
@@ -100,5 +105,155 @@ namespace vc { namespace parser
 		}
 
 		return index;
+	}
+
+
+	void Parser::removeBlankLines()
+	{
+		for (int i=0; i<mLineBuffer.count(); i++)
+		{
+			if (QRegExp("\\s*").exactMatch(mLineBuffer[i]))
+				mLineBuffer.remove(i--);
+		}
+	}
+
+
+	void Parser::removeComments()
+	{
+		//1. Remove comments
+		for (int i=0; i<mLineBuffer.count(); i++)
+		{
+			QString &line = mLineBuffer[i];
+
+			int singleStart = line.indexOf("//");
+			int multiStart = line.indexOf("/*");
+
+#define PRECEDES(a, b) a > 0 && (b == -1 || a < b)
+
+			if (PRECEDES(singleStart, multiStart))
+				line.chop(line.count() - singleStart);
+			else if (PRECEDES(multiStart, singleStart))
+			{
+				//Find the line with an end tag. Clear lines in between.
+				for (int j=i; j<mLineBuffer.count(); j++)
+				{
+					int multiEnd = mLineBuffer[j].indexOf("*/");
+
+					if (multiEnd != -1)
+					{
+						mLineBuffer[j].remove(multiStart, multiEnd-multiStart+2);
+						break;
+					}
+					else
+						mLineBuffer[j].clear();
+				}
+			}
+
+#undef PRECEDES
+		}
+
+		removeBlankLines();
+	}
+
+
+	void cleanBrace(QVector<QString> &lineBuffer, const QString &what)
+	{
+		for (int i=0; i<lineBuffer.count(); i++)
+		{
+			//if this line doesn't have a {, or if the { is by itself, just go to the next line
+			if (!lineBuffer[i].contains(what) || QRegExp("\\s*\\" + what + "\\s*").exactMatch(lineBuffer[i]))
+				continue;
+
+			//move everything after and including the first {
+			int index = lineBuffer[i].indexOf(what);
+
+			if (index != -1)
+			{
+				//is there anything other than whitespace before this?
+				bool onlyPreWhiteSpace = QRegExp("\\s*\\" + what + ".*").exactMatch(lineBuffer[i]);
+
+				int endCount = lineBuffer[i].count()-index;
+
+				//if there is only pre whitespace, no need to move the { down with this line
+				if (onlyPreWhiteSpace)
+					endCount--;
+
+				QString chopped = lineBuffer[i].right(endCount);
+
+				lineBuffer[i].chop(endCount);
+				lineBuffer.insert(i+1, 1, chopped);
+			}
+		}
+	}
+
+
+	void Parser::adjustCurlyBraces()
+	{
+		cleanBrace(mLineBuffer, "{");
+		cleanBrace(mLineBuffer, "}");
+	}
+
+
+	void Parser::matchParenthesis()
+	{
+		for (int i=0; i<mLineBuffer.count(); i++)
+		{
+			QString &line = mLineBuffer[i];
+			int openCount = line.count("(");
+			int closedCount = line.count(")");
+			
+			if (openCount > closedCount)
+			{
+				int still = openCount-closedCount;
+				int j=i+1;
+
+				while (still > 0 && j < mLineBuffer.count())
+				{
+					QString &nextLine = mLineBuffer[j];
+					int index = nextLine.indexOf(")");
+
+					if (index != -1)
+					{
+						line.append(nextLine.left(index+1));
+						nextLine.remove(0, index+1);
+						still--;
+					}
+					else
+						j++;
+				}
+			}
+			else if (closedCount > openCount)
+			{
+				qDebug() << "Error: Too many closing parenthisis encountered on line " << i;
+			}
+		}
+
+		removeBlankLines();
+	}
+
+
+	void Parser::adjustStatements()
+	{
+		for (int i=0; i<mLineBuffer.count(); i++)
+		{
+			QString &line = mLineBuffer[i];
+
+			if (QRegExp(".*;\\s*\\S+.*").exactMatch(line))
+			{
+				//if we are in between two parenthesis, ignore this
+				int index = line.indexOf(";");
+				int openBefore = line.leftRef(index+1).count("(");
+				int closedBefore = line.leftRef(index+1).count(")");
+
+				if (openBefore > closedBefore)
+					continue;
+
+				//move everything after this semi-colon to the next line
+				int chopCount = line.count() - index - 1;
+				QString chopped = line.right(chopCount);
+				line.chop(chopCount);
+				mLineBuffer.insert(i+1, 1, chopped);
+			}
+		}
 	}
 }}
