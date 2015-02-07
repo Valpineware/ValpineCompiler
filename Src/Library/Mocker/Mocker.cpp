@@ -11,9 +11,8 @@ namespace vc { namespace mocker
 {
 	bool Mocker::mock(const graph::Graph &graph, const QString &outputFile)
 	{
-		this->graph = &graph;
 		QVector<QString> buffer;
-		buildList(buffer);
+		buildList(buffer, graph.block());
 
 		QFile file(outputFile);
 		if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -31,13 +30,9 @@ namespace vc { namespace mocker
 		return true;
 	}
 
-	void Mocker::buildList(QVector<QString> &buffer)
+	void Mocker::buildList(QVector<QString> &buffer, const graph::Block &rootBlock)
 	{
-		const graph::Block &root = graph->block();
-
-		QListIterator<graph::Statement*> iter(root.statements());
-
-		processBlock(buffer, iter);
+		buildBlock(buffer, rootBlock);
 	}
 
 
@@ -46,32 +41,31 @@ namespace vc { namespace mocker
 		program.append(function.verbatim());
 		program.append("{");
 
-		QListIterator<graph::Statement*> iter(function.block().statements());
-
-		processBlock(program, iter);
+		buildBlock(program, function.block());
 
 		program.append("}");
 	}
 
 
-	void Mocker::processBlock(QVector<QString> &program, QListIterator<graph::Statement*> &iter)
+	void Mocker::buildBlock(QVector<QString> &program, const graph::Block &block)
 	{
+		QListIterator<graph::Statement*> iter(block.statements());
+
 		while (iter.hasNext())
 		{
-			types.statement = iter.next();
+			graph::Statement *statement = iter.next();
 
-			types.preprocessor = dynamic_cast<graph::Preprocessor*> (types.statement);
-			if (types.preprocessor != NULL)
+			if (graph::Preprocessor *preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
-				program.append(types.preprocessor->verbatim());
+				program.append(preprocessor->verbatim());
 			}
-			else if ((types.function = dynamic_cast<graph::Function*>(types.statement)) != NULL)
+			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				buildFunction(program, *(types.function));
+				buildFunction(program, *function);
 			}
 			else
 			{
-				program.append(types.statement->verbatim());
+				program.append(statement->verbatim());
 			}
 		}
 	}

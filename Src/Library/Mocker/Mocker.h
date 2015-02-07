@@ -13,30 +13,19 @@
 
 namespace vc { namespace mocker
 {
-	struct StatementTypes
-	{
-		graph::Preprocessor* preprocessor;
-		graph::Function* function;
-		graph::Statement* statement;
-	};
-
 	/**
 	 * @brief Mocks a Valpine source graph as C++.
 	 */
 	class Mocker
 	{
 	private:
-		const graph::Graph* graph;
-
-		StatementTypes types;
-
+		void buildList(QVector<QString> &buffer, const graph::Block &rootBlock);
 		void buildFunction(QVector<QString> &program, graph::Function &function);
-		void processBlock(QVector<QString> &program, QListIterator<graph::Statement*> &iter);
+		void buildBlock(QVector<QString> &program, const graph::Block &block);
 
 	public:
 		Mocker() {};
 		bool mock(const graph::Graph &graph, const QString &outputFile);
-		void buildList(QVector<QString> &buffer);
 	};
 }}
 
