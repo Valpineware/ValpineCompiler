@@ -15,6 +15,8 @@
 
 #include "Application.h"
 
+using namespace vc;
+
 void Application::init()
 {
 	setSource(QUrl("qrc:///Main.qml"));
@@ -26,29 +28,34 @@ void Application::init()
 		QObject::connect(rootObject()->findChild<QObject*>("button_compile"), SIGNAL(clicked()),
 						 this, SLOT(onButtonCompileClicked()));
 		
-		mTextField = rootObject()->findChild<QObject*>("textField_filepath");
+		mTextField_parseFilepath = rootObject()->findChild<QObject*>("textField_parseFilepath");
+		mTextField_mockFilepath = rootObject()->findChild<QObject*>("textField_mockFilepath");
+		mTextField_outputFilepath = rootObject()->findChild<QObject*>("textField_outputFilepath");
 	}
 }
 
 
 void Application::onButtonCompileClicked()
 {
-	using namespace vc;
-
+	// 1. Parse from Valpine
 	parser::Parser sourceParser;
-	QString filepath = mTextField->property("text").toString();
+	QString parseFilepath = mTextField_parseFilepath->property("text").toString();
 
-
-	if (!sourceParser.parseFile(filepath))
+	if (!sourceParser.parseFile(parseFilepath))
 	{
-		qDebug() << "Unable to parse " << filepath;
+		qDebug() << "Unable to parse " << parseFilepath;
+		return;
 	}
-
+	
+	// 2. Mock to C++
 	mocker::Mocker mocker;
-	mocker.mock(sourceParser.graph());
-
+	QString mockFilepath = mTextField_mockFilepath->property("text").toString();
+	if (!mocker.mock(sourceParser.graph(), mockFilepath))
+		return;
+	
+	// 3. Compile to Executable
 	compiler::Compiler compiler;
-	compiler.compile(mocker.outputFilepath());
+	compiler.compile(mockFilepath, mTextField_outputFilepath->property("text").toString());
 }
 
 

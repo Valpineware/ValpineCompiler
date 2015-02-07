@@ -10,14 +10,13 @@
 
 namespace vc { namespace compiler
 {
-	void Compiler::compile(const QString &filepath)
+	void Compiler::compile(const QString &mockFilepath, const QString &outputFilepath)
 	{
 		QString program = "g++";
 		QStringList arguments;
 
-		QFileInfo fileInfo(filepath);
-		QString outputFile = fileInfo.dir().absolutePath() + "/" + fileInfo.baseName() + ".exe";
-		arguments << filepath << "-o" << outputFile;
+		QFileInfo fileInfo(mockFilepath);
+		arguments << mockFilepath << "-o" << outputFilepath;
 
 		QObject::connect(&mProcess, SIGNAL(error(QProcess::ProcessError)),
 						 this, SLOT(onCompileProcessError(QProcess::ProcessError)));

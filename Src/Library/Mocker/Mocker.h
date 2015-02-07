@@ -27,16 +27,16 @@ namespace vc { namespace mocker
 	{
 	private:
 		const graph::Graph* graph;
+
 		StatementTypes types;
 
-		void buildFunction(QVector<QString>& program, graph::Function& function);
-		void processBlock(QVector<QString>& program, QListIterator<graph::Statement*>& iter);
+		void buildFunction(QVector<QString> &program, graph::Function &function);
+		void processBlock(QVector<QString> &program, QListIterator<graph::Statement*> &iter);
 
 	public:
 		Mocker() {};
-		void mock(const graph::Graph &graph);
-		QString outputFilepath() const { return ""; }
-		QVector<QString> buildList();
+		bool mock(const graph::Graph &graph, const QString &outputFile);
+		void buildList(QVector<QString> &buffer);
 	};
 }}
 

@@ -9,21 +9,35 @@
 
 namespace vc { namespace mocker
 {
-	void Mocker::mock(const graph::Graph &graph)
+	bool Mocker::mock(const graph::Graph &graph, const QString &outputFile)
 	{
 		this->graph = &graph;
+		QVector<QString> buffer;
+		buildList(buffer);
+
+		QFile file(outputFile);
+		if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+		{
+			qDebug() << "Error writing mock file " << outputFile;
+			return false;
+		}
+
+		QTextStream outStream(&file);
+		for (const QString &line : buffer)
+		{
+			outStream << line << "\n";
+		}
+
+		return true;
 	}
 
-	QVector<QString> Mocker::buildList()
+	void Mocker::buildList(QVector<QString> &buffer)
 	{
 		const graph::Block &root = graph->block();
-		QVector<QString> program;
 
 		QListIterator<graph::Statement*> iter(root.statements());
 
-		processBlock(program, iter);
-
-		return program;
+		processBlock(buffer, iter);
 	}
 
 
@@ -40,9 +54,8 @@ namespace vc { namespace mocker
 	}
 
 
-	void Mocker::processBlock(QVector<QString>& program, QListIterator<graph::Statement*>& iter)
+	void Mocker::processBlock(QVector<QString> &program, QListIterator<graph::Statement*> &iter)
 	{
-
 		while (iter.hasNext())
 		{
 			types.statement = iter.next();
@@ -62,5 +75,4 @@ namespace vc { namespace mocker
 			}
 		}
 	}
-
 }}

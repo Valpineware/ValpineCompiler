@@ -22,5 +22,5 @@ private slots:
 private:
 	void keyPressEvent(QKeyEvent *ev) override;
 	
-	QObject *mTextField;
+	QObject *mTextField_parseFilepath, *mTextField_mockFilepath, *mTextField_outputFilepath;
 };

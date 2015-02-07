@@ -17,7 +17,7 @@ namespace vc { namespace compiler
 		Q_OBJECT
 
 	public:
-		void compile(const QString &filepath);
+		void compile(const QString &mockFilepath, const QString &outputFilepath);
 
 
 	private slots:
