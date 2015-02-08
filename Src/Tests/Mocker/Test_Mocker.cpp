@@ -57,7 +57,11 @@ TEST_CASE(FunctionTest)
 	QVector<std::string> lines;
 	readLines("FunctionTest.val", lines);
 
-	ASSERT_EQ(7, lines.size());
+	ASSERT_EQ(11, lines.size());
 	ASSERT_EQ("int * access(bool opened, int count)", lines[0]);
+	ASSERT_EQ("{", lines[1]);
+	ASSERT_EQ("return new int;", lines[2]);
+	ASSERT_EQ("}", lines[3]);
 
+	ASSERT_EQ("int add(int a, int b=5, int c=4)", lines[4]);
 }

@@ -39,6 +39,12 @@ namespace vc { namespace mocker
 		{
 			functionDef += param[i].type.fullType() + " " + param[i].id;
 
+			//check if default value is needed, if so, add it
+			if (param[i].defaultValue != "")
+			{
+				functionDef += "=" + param[i].defaultValue;
+			}
+
 			if ((i + 1) != param.size())
 			{
 				functionDef += ", ";
