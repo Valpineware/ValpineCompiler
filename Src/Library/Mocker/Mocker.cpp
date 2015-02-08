@@ -6,6 +6,7 @@
 //==================================================================================================================|
 
 #include "Mocker.h"
+#include "Function.h"
 
 namespace vc { namespace mocker
 {
@@ -24,47 +25,18 @@ namespace vc { namespace mocker
 
 	void Mocker::buildList(QVector<QString> &buffer, const graph::Block &rootBlock)
 	{
-		buildBlock(buffer, rootBlock);
+		buildBlock(buffer, rootBlock, false);
 	}
 
 
-	void Mocker::buildFunction(QVector<QString> &program, graph::Function &function)
-	{
-		//build opening experssion
-		QString functionDef = function.returnType().fullType() + " " + function.id() + "(";
-		
-		//add in the parameters
-		const QVector<graph::Parameter> &param = function.parameters();
-		for (int i = 0; i < param.size(); i++)
-		{
-			functionDef += param[i].type.fullType() + " " + param[i].id;
-
-			//check if default value is needed, if so, add it
-			if (param[i].defaultValue != "")
-			{
-				functionDef += "=" + param[i].defaultValue;
-			}
-
-			if ((i + 1) != param.size())
-			{
-				functionDef += ", ";
-			}
-		}
-
-		functionDef += ")";
-		program.append(functionDef);
-
-		program.append("{");
-
-		buildBlock(program, function.block());
-
-		program.append("}");
-	}
-
-
-	void Mocker::buildBlock(QVector<QString> &program, const graph::Block &block)
+	void Mocker::buildBlock(QVector<QString> &buffer, const graph::Block &block, bool writeBraces)
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
+
+		if (writeBraces)
+		{
+			buffer.append("{");
+		}
 
 		while (iter.hasNext())
 		{
@@ -72,16 +44,25 @@ namespace vc { namespace mocker
 
 			if (graph::Preprocessor *preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
-				program.append(preprocessor->verbatim());
+				buffer.append(preprocessor->verbatim());
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				buildFunction(program, *function);
+				Function* newFunction = new Function(*function);
+				buffer.append(newFunction->declartion());
+				delete newFunction;
+
+				buildBlock(buffer, function->block());
 			}
 			else
 			{
-				program.append(statement->verbatim());
+				buffer.append(statement->verbatim());
 			}
+		}
+
+		if (writeBraces)
+		{
+			buffer.append("}");
 		}
 	}
 }}

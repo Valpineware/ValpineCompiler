@@ -20,8 +20,7 @@ namespace vc { namespace mocker
 	{
 	private:
 		void buildList(QVector<QString> &buffer, const graph::Block &rootBlock);
-		void buildFunction(QVector<QString> &program, graph::Function &function);
-		void buildBlock(QVector<QString> &program, const graph::Block &block);
+		void buildBlock(QVector<QString> &buffer, const graph::Block &block, bool writeBraces = true);
 
 	public:
 		Mocker() {};
