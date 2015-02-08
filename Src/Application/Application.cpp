@@ -49,13 +49,19 @@ void Application::onButtonCompileClicked()
 	
 	// 2. Mock to C++
 	mocker::Mocker mocker;
-	QString mockFilepath = mTextField_mockFilepath->property("text").toString();
-	if (!mocker.mock(sourceParser.graph(), mockFilepath))
+	QFile mockFile(mTextField_mockFilepath->property("text").toString());
+
+	if (!mockFile.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		qDebug() << "Error writing mock file for " << parseFilepath;
 		return;
+	}
+
+	mocker.mock(sourceParser.graph(), mockFile);
 	
 	// 3. Compile to Executable
 	compiler::Compiler compiler;
-	compiler.compile(mockFilepath, mTextField_outputFilepath->property("text").toString());
+	compiler.compile(QFileInfo(mockFile).absoluteFilePath(), mTextField_outputFilepath->property("text").toString());
 }
 
 

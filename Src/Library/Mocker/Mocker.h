@@ -25,7 +25,7 @@ namespace vc { namespace mocker
 
 	public:
 		Mocker() {};
-		bool mock(const graph::Graph &graph, const QString &outputFile);
+		void mock(const graph::Graph &graph, QIODevice& outputDevice);
 	};
 }}
 

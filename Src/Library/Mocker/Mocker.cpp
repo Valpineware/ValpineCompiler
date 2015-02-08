@@ -9,26 +9,18 @@
 
 namespace vc { namespace mocker
 {
-	bool Mocker::mock(const graph::Graph &graph, const QString &outputFile)
+	void Mocker::mock(const graph::Graph &graph, QIODevice& outputDevice)
 	{
 		QVector<QString> buffer;
-		buildList(buffer, graph.block());
+		buildList(buffer, graph.block());		
 
-		QFile file(outputFile);
-		if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-		{
-			qDebug() << "Error writing mock file " << outputFile;
-			return false;
-		}
-
-		QTextStream outStream(&file);
+		QTextStream outStream(&outputDevice);
 		for (const QString &line : buffer)
 		{
 			outStream << line << "\n";
 		}
-
-		return true;
 	}
+
 
 	void Mocker::buildList(QVector<QString> &buffer, const graph::Block &rootBlock)
 	{
