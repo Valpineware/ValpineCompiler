@@ -7,6 +7,8 @@
 
 #include <Library.h>
 
+#include "Utility.h"
+
 #ifndef _vc_graph_Statement_h
 #define _vc_graph_Statement_h
 

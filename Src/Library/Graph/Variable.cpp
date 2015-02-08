@@ -15,47 +15,20 @@ namespace vc { namespace graph
 		filtered.replace(";", "");
 		filtered.replace("=", " = ");
 
-		QStringList list = filtered.split(QRegExp("\\s"));
-
-		//TODO this is duplicated in Function.cpp preProcessFunctionSignature
-		QMutableStringListIterator mi(list);
-		while (mi.hasNext())
-		{
-			if (QRegExp("\\s*").exactMatch(mi.next()))
-				mi.remove();
-		}
+		QStringList list;
+		Utility::breakUpByWhitespace(filtered, list);
 
 		if (list.count() < 2)
 			return nullptr;
 
 		QStringListIterator i(list);
 		Variable *variable = new Variable(signature);
-		{
-			QString type;
-			bool foundBaseType = false;
 
-			//TODO the following loop is redundant. It's used in Function, ControlStructure, and here
-			while (i.hasNext())
-			{
-				const QString &cmp = i.next();
+		TypeExpression te;
+		if (!Utility::parseTypeExpression(i,te))
+			return nullptr;
 
-				if (gRegExp_typeMod.exactMatch(cmp))
-					type.append(" "+cmp);
-				else if (!foundBaseType && gRegExp_typeId.exactMatch(cmp))
-				{
-					foundBaseType = true;
-					type.append(" "+cmp);
-				}
-				else if (type.isEmpty())
-					return nullptr;								//Error: No valid return type
-				else
-				{
-					i.previous();
-					variable->setTypeExpression(graph::TypeExpression(type));
-					break;
-				}
-			}
-		}
+		variable->setTypeExpression(te);
 
 		//identifier
 		if (i.hasNext())

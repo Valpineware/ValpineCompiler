@@ -75,6 +75,9 @@
     <ClCompile Include="..\..\Src\Library\Graph\Variable.cpp">
       <Filter>Src\Graph</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Library\Graph\Utility.cpp">
+      <Filter>Src\Graph</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Library\Library.h">
@@ -114,6 +117,12 @@
       <Filter>Src\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Library\Graph\Variable.h">
+      <Filter>Src\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="FileGenerator.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Library\Graph\Utility.h">
       <Filter>Src\Graph</Filter>
     </ClInclude>
   </ItemGroup>

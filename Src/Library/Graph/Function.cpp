@@ -22,51 +22,13 @@ namespace vc { namespace graph
 	}
 
 
-	void preProcessFunctionSignature(QString &signature, QStringList &list)
-	{
-		signature.replace("(", " ( ");
-		signature.replace(")", " ) ");
-		signature.replace(",", " , ");
-		signature.replace("=", " = ");
-
-		//3) Split into a list deliminated by " "
-		list = signature.split(QRegExp("\\s"));
-
-		//remove all remaining whitespace strings
-		QMutableStringListIterator mi(list);
-		while (mi.hasNext())
-		{
-			if (QRegExp("\\s*").exactMatch(mi.next()))
-				mi.remove();
-		}
-	}
-
-
 	graph::Function* parseType(QStringListIterator &i, graph::Function *function)
 	{
-		QString returnType;
-		bool foundBaseType = false;
-			
-		while (i.hasNext())
-		{
-			const QString &cmp = i.next();
+		TypeExpression te;
+		if (!Utility::parseTypeExpression(i,te))
+			return nullptr;
 
-			if (gRegExp_typeMod.exactMatch(cmp))
-				returnType.append(" "+cmp);
-			else if (!foundBaseType && gRegExp_typeId.exactMatch(cmp))
-			{
-				foundBaseType = true;
-				returnType.append(" "+cmp);
-			}
-			else if (returnType.isEmpty())
-				return nullptr;								//Error: No valid return type
-			else
-			{
-				i.previous();
-				function->setReturnType(graph::TypeExpression(returnType));
-				break;
-			}
-		}
+		function->setReturnType(te);
 
 		//	c) Identifier
 		if (i.hasNext())
@@ -177,11 +139,19 @@ namespace vc { namespace graph
 		if (!couldThisPossiblyBeAFunction(signature))
 			return nullptr;
 
-		graph::Function *function = new graph::Function(signature);
+		
 		QString filtered = signature;
+		
+		filtered.replace("(", " ( ");
+		filtered.replace(")", " ) ");
+		filtered.replace(",", " , ");
+		filtered.replace("=", " = ");
+
 		QStringList list;
-		preProcessFunctionSignature(filtered, list);
+		Utility::breakUpByWhitespace(filtered, list);
 		QStringListIterator i(list);
+
+		graph::Function *function = new graph::Function(signature);
 
 		//Return type
 		if (! parseType(i, function))
