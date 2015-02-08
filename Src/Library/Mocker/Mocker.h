@@ -20,6 +20,8 @@ namespace vc { namespace mocker
 	{
 	private:
 		void buildBlock(const graph::Block &block, bool writeBraces = true);
+		void createFunction(graph::Function &funtion);
+		void createVar(graph::Variable &var);
 
 		QVector<QString> includes;
 		QVector<QString> forwardDeclartions;

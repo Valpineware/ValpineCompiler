@@ -48,7 +48,7 @@ TEST_CASE(HelloWorld)
 	EXPECT_EQ_STR("int main()", lines[1]);
 	EXPECT_EQ_STR("{", lines[2]);
 	EXPECT_EQ_STR("std::cout << \"HelloWorld\" << std::endl;", lines[3]);
-	EXPECT_EQ_STR("return  0;", lines[4]);
+	EXPECT_EQ_STR("return 0;", lines[4]);
 	EXPECT_EQ_STR("}", lines[5]);
 }
 
@@ -66,4 +66,17 @@ TEST_CASE(FunctionTest)
 	EXPECT_EQ_STR("return new int;", lines[4]);
 	EXPECT_EQ_STR("}", lines[5]);
 	EXPECT_EQ_STR("int add(int a, int b=5, int c=4)", lines[6]);
+}
+
+TEST_CASE(VariableTest)
+{
+	QVector<QString> lines;
+	readLines("VariableTest.val", lines);
+
+	ASSERT_EQ(8, lines.size());
+	EXPECT_EQ_STR("int x;", lines[2]);
+	EXPECT_EQ_STR("x = 5;", lines[3]);
+	EXPECT_EQ_STR("int *y;", lines[4]);
+	EXPECT_EQ_STR("int z = x;", lines[5]);
+	EXPECT_EQ_STR("y = &x;", lines[6]);
 }

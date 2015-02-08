@@ -51,17 +51,12 @@ namespace vc { namespace mocker
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				Function* newFunction = new Function(*function);
-
-				if (function->id() != "main")
-				{
-					forwardDeclartions.append(newFunction->declartion() + ";");
-				}
-				
-				body.append(newFunction->declartion());
-				delete newFunction;
-
+				createFunction(*function);
 				buildBlock(function->block());
+			}
+			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
+			{
+				createVar(*variable);
 			}
 			else
 			{
@@ -73,5 +68,30 @@ namespace vc { namespace mocker
 		{
 			body.append("}");
 		}
+	}
+
+	void Mocker::createVar(graph::Variable &var)
+	{
+		QString cppVar = var.typeExpression().fullType() + " " + var.id();
+
+		if (var.initExpression() != "")
+		{
+			cppVar += " = " + var.initExpression();
+		}
+
+		cppVar += ";";
+		body.append(cppVar);
+	}
+
+	void Mocker::createFunction(graph::Function &function)
+	{
+		Function newFunction(function);
+
+		if (function.id() != "main")
+		{
+			forwardDeclartions.append(newFunction.declartion() + ";");
+		}
+
+		body.append(newFunction.declartion());
 	}
 }}

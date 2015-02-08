@@ -3,7 +3,8 @@
 int someOp(int a, int b)
 {
 	int x = sub(a, b);
-	x = add(a, b);
+	x += add(a, b);
+	return x;
 }
 
 int sub(int a, int b)
@@ -23,4 +24,5 @@ int main()
 	int c = someOp(a, b);
 	
 	std::cout << c;
+	std::cin >> b;
 }
