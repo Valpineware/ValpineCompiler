@@ -6,65 +6,40 @@
 //==================================================================================================================|
 
 #include "Mocker.h"
+#include "Function.h"
 
 namespace vc { namespace mocker
 {
 	void Mocker::mock(const graph::Graph &graph, QIODevice &outputDevice)
 	{
-		QVector<QString> buffer;
-		buildList(buffer, graph.block());		
+		buildBlock(graph.block(), false);		
 
 		QTextStream outStream(&outputDevice);
-		for (const QString &line : buffer)
+		for (const QString &line : includes)
+		{
+			outStream << line << "\n";
+		}
+
+		for (const QString &line : forwardDeclartions)
+		{
+			outStream << line << "\n";
+		}
+
+		for (const QString &line : body)
 		{
 			outStream << line << "\n";
 		}
 	}
 
 
-	void Mocker::buildList(QVector<QString> &buffer, const graph::Block &rootBlock)
-	{
-		buildBlock(buffer, rootBlock);
-	}
-
-
-	void Mocker::buildFunction(QVector<QString> &program, graph::Function &function)
-	{
-		//build opening experssion
-		QString functionDef = function.returnType().fullType() + " " + function.id() + "(";
-		
-		//add in the parameters
-		const QVector<graph::Parameter> &param = function.parameters();
-		for (int i = 0; i < param.size(); i++)
-		{
-			functionDef += param[i].type.fullType() + " " + param[i].id;
-
-			//check if default value is needed, if so, add it
-			if (param[i].defaultValue != "")
-			{
-				functionDef += "=" + param[i].defaultValue;
-			}
-
-			if ((i + 1) != param.size())
-			{
-				functionDef += ", ";
-			}
-		}
-
-		functionDef += ")";
-		program.append(functionDef);
-
-		program.append("{");
-
-		buildBlock(program, function.block());
-
-		program.append("}");
-	}
-
-
-	void Mocker::buildBlock(QVector<QString> &program, const graph::Block &block)
+	void Mocker::buildBlock(const graph::Block &block, bool writeBraces)
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
+
+		if (writeBraces)
+		{
+			body.append("{");
+		}
 
 		while (iter.hasNext())
 		{
@@ -72,16 +47,51 @@ namespace vc { namespace mocker
 
 			if (graph::Preprocessor *preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
-				program.append(preprocessor->verbatim());
+				includes.append(preprocessor->verbatim());
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				buildFunction(program, *function);
+				createFunction(*function);
+				buildBlock(function->block());
+			}
+			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
+			{
+				createVar(*variable);
 			}
 			else
 			{
-				program.append(statement->verbatim());
+				body.append(statement->verbatim());
 			}
 		}
+
+		if (writeBraces)
+		{
+			body.append("}");
+		}
+	}
+
+	void Mocker::createVar(graph::Variable &var)
+	{
+		QString cppVar = var.typeExpression().fullType() + " " + var.id();
+
+		if (var.initExpression() != "")
+		{
+			cppVar += " = " + var.initExpression();
+		}
+
+		cppVar += ";";
+		body.append(cppVar);
+	}
+
+	void Mocker::createFunction(graph::Function &function)
+	{
+		Function newFunction(function);
+
+		if (function.id() != "main")
+		{
+			forwardDeclartions.append(newFunction.declartion() + ";");
+		}
+
+		body.append(newFunction.declartion());
 	}
 }}

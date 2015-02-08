@@ -2,14 +2,6 @@
 
 int main()
 {
-	// A simple comment which should be removed before parsing
-	
-	/*
-		std::cout << "HelloWorld" << std::endl;
-	*/
-	
-	// /*
 	std::cout << "HelloWorld" << std::endl;
-	return /* Cool Text Here */ 0;
-	// */
+	return 0;
 }

@@ -22,6 +22,7 @@
     <ClInclude Include="..\..\src\library\graph\TypeExpression.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Utility.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Variable.h" />
+    <ClInclude Include="..\..\Src\Library\Mocker\Function.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\Mocker.h" />
     <ClInclude Include="..\..\Src\Library\Parser\Parser.h" />
     <ClInclude Include="FileGenerator.h" />
@@ -49,6 +50,7 @@
     <ClCompile Include="..\..\Src\Library\Graph\Utility.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Variable.cpp" />
     <ClCompile Include="..\..\Src\Library\Library.cpp" />
+    <ClCompile Include="..\..\Src\Library\Mocker\Function.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Mocker.cpp" />
     <ClCompile Include="..\..\Src\Library\Parser\Parser.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_Compiler.cpp">
