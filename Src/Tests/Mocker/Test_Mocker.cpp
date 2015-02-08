@@ -51,3 +51,17 @@ TEST_CASE(HelloWorld)
 	EXPECT_EQ_STR("return  0;", lines[4]);
 	EXPECT_EQ_STR("}", lines[5]);
 }
+
+TEST_CASE(FunctionTest)
+{
+	QVector<QString> lines;
+	readLines("FunctionTest.val", lines);
+
+	ASSERT_EQ(11, lines.size());
+
+	EXPECT_EQ_STR("int * access(bool opened, int count)", lines[0]);
+	EXPECT_EQ_STR("{", lines[1]);
+	EXPECT_EQ_STR("return new int;", lines[2]);
+	EXPECT_EQ_STR("}", lines[3]);
+	EXPECT_EQ_STR("int add(int a, int b=5, int c=4)", lines[4]);
+}
