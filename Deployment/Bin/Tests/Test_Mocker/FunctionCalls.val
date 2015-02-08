@@ -1,0 +1,26 @@
+#include <iostream>
+
+int someOp(int a, int b)
+{
+	int x = sub(a, b);
+	x = add(a, b);
+}
+
+int sub(int a, int b)
+{
+	return a - b;
+}
+
+int add(int a, int b)
+{
+	return a + b;
+}
+
+int main()
+{
+	int a = 5;
+	int b = 2;
+	int c = someOp(a, b);
+	
+	std::cout << c;
+}

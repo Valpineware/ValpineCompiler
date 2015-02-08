@@ -57,11 +57,13 @@ TEST_CASE(FunctionTest)
 	QVector<QString> lines;
 	readLines("FunctionTest.val", lines);
 
-	ASSERT_EQ(11, lines.size());
+	ASSERT_EQ(13, lines.size());
 
-	EXPECT_EQ_STR("int * access(bool opened, int count)", lines[0]);
-	EXPECT_EQ_STR("{", lines[1]);
-	EXPECT_EQ_STR("return new int;", lines[2]);
-	EXPECT_EQ_STR("}", lines[3]);
-	EXPECT_EQ_STR("int add(int a, int b=5, int c=4)", lines[4]);
+	EXPECT_EQ_STR("int * access(bool opened, int count);", lines[0]);
+	EXPECT_EQ_STR("int add(int a, int b=5, int c=4);", lines[1]);
+	EXPECT_EQ_STR("int * access(bool opened, int count)", lines[2]);
+	EXPECT_EQ_STR("{", lines[3]);
+	EXPECT_EQ_STR("return new int;", lines[4]);
+	EXPECT_EQ_STR("}", lines[5]);
+	EXPECT_EQ_STR("int add(int a, int b=5, int c=4)", lines[6]);
 }

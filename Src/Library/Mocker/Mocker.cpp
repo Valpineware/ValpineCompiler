@@ -12,30 +12,33 @@ namespace vc { namespace mocker
 {
 	void Mocker::mock(const graph::Graph &graph, QIODevice &outputDevice)
 	{
-		QVector<QString> buffer;
-		buildList(buffer, graph.block());		
+		buildBlock(graph.block(), false);		
 
 		QTextStream outStream(&outputDevice);
-		for (const QString &line : buffer)
+		for (const QString &line : includes)
+		{
+			outStream << line << "\n";
+		}
+
+		for (const QString &line : forwardDeclartions)
+		{
+			outStream << line << "\n";
+		}
+
+		for (const QString &line : body)
 		{
 			outStream << line << "\n";
 		}
 	}
 
 
-	void Mocker::buildList(QVector<QString> &buffer, const graph::Block &rootBlock)
-	{
-		buildBlock(buffer, rootBlock, false);
-	}
-
-
-	void Mocker::buildBlock(QVector<QString> &buffer, const graph::Block &block, bool writeBraces)
+	void Mocker::buildBlock(const graph::Block &block, bool writeBraces)
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
 
 		if (writeBraces)
 		{
-			buffer.append("{");
+			body.append("{");
 		}
 
 		while (iter.hasNext())
@@ -44,25 +47,31 @@ namespace vc { namespace mocker
 
 			if (graph::Preprocessor *preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
-				buffer.append(preprocessor->verbatim());
+				includes.append(preprocessor->verbatim());
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
 				Function* newFunction = new Function(*function);
-				buffer.append(newFunction->declartion());
+
+				if (function->id() != "main")
+				{
+					forwardDeclartions.append(newFunction->declartion() + ";");
+				}
+				
+				body.append(newFunction->declartion());
 				delete newFunction;
 
-				buildBlock(buffer, function->block());
+				buildBlock(function->block());
 			}
 			else
 			{
-				buffer.append(statement->verbatim());
+				body.append(statement->verbatim());
 			}
 		}
 
 		if (writeBraces)
 		{
-			buffer.append("}");
+			body.append("}");
 		}
 	}
 }}
