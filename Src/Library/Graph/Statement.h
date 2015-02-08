@@ -21,7 +21,7 @@ namespace vc { namespace graph
 		virtual ~Statement() {}
 
 		Statement() = delete;
-		Statement(const QString &verbatim) : mVerbatim(verbatim) { removeLeadingTrailingWhiteSpace(mVerbatim); }
+		Statement(const QString &verbatim) : mVerbatim(verbatim.trimmed()) { }
 
 		/**
 		 * @returns the statement as a string as it appeared in the Valpine source file.
@@ -30,7 +30,6 @@ namespace vc { namespace graph
 
 	private:
 		QString mVerbatim;
-		static void removeLeadingTrailingWhiteSpace(QString &line);
 	};
 }}
 

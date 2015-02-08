@@ -32,7 +32,7 @@ namespace vc { namespace graph
 		Function() = delete;
 		Function(const QString &verbatim) : SubBlock(verbatim) {}
 
-		static Function* createFromVerbatimSignature(const QString signature);
+		static Function* createFromVerbatimSignature(const QString &signature);
 
 		void setReturnType(const TypeExpression &returnType) { mReturnType = returnType; }
 		TypeExpression returnType() const { return mReturnType; }

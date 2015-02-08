@@ -20,7 +20,7 @@ protected:
 		parser.parseFile(gTestDir_Mocker + filename);
 
 		QBuffer buffer;
-		bool success = buffer.open(QIODevice::ReadWrite | QIODevice::Text);
+		ASSERT_TRUE(buffer.open(QIODevice::ReadWrite | QIODevice::Text));
 		mocker::Mocker().mock(parser.graph(), buffer);
 
 		QTextStream stream(&buffer.buffer());
@@ -44,10 +44,10 @@ TEST_CASE(HelloWorld)
 
 	ASSERT_EQ(6, lines.size());
 
-	ASSERT_EQ("#include <iostream>", lines[0]);
-	ASSERT_EQ("int main()", lines[1]);
-	ASSERT_EQ("{", lines[2]);
-	ASSERT_EQ("std::cout << \"HelloWorld\" << std::endl;", lines[3]);
-	ASSERT_EQ("return  0;", lines[4]);
-	ASSERT_EQ("}", lines[5]);
+	EXPECT_EQ_STR("#include <iostream>", lines[0]);
+	EXPECT_EQ_STR("int main()", lines[1]);
+	EXPECT_EQ_STR("{", lines[2]);
+	EXPECT_EQ_STR("std::cout << \"HelloWorld\" << std::endl;", lines[3]);
+	EXPECT_EQ_STR("return  0;", lines[4]);
+	EXPECT_EQ_STR("}", lines[5]);
 }

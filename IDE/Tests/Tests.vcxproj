@@ -19,9 +19,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\DanWatkins\Terrain3D\Src\Tests\Tests.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\Src\Tests\Graph\Test_ControlStructure.cpp" />
     <ClCompile Include="..\..\Src\Tests\Graph\Test_Function.cpp" />
     <ClCompile Include="..\..\Src\Tests\Graph\Test_TypeExpression.cpp" />
@@ -29,6 +26,9 @@
     <ClCompile Include="..\..\Src\Tests\Mocker\Test_Mocker.cpp" />
     <ClCompile Include="..\..\Src\Tests\Parser\Test_Parser.cpp" />
     <ClCompile Include="..\..\Src\Tests\Tests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Src\Tests\Tests.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{271266B0-26EE-4DEC-932B-16085893185C}</ProjectGuid>

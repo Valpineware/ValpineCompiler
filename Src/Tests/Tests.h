@@ -1,8 +1,9 @@
-#ifndef _t3d_TEST_MAIN_H
-#define _t3d_TEST_MAIN_H
+#ifndef _vc_Tests_H
+#define _vc_Tests_H
 
 #include <gtest/gtest.h>
 
+#include <QtCore/QDebug>
 #include <QtCore/QString>
 
 const QString gTestDir = "./Tests/";
@@ -28,5 +29,8 @@ const QString gTestDir = "./Tests/";
 
 #define ASSERT_NULL(what) ASSERT_TRUE(what == nullptr)
 #define ASSERT_NOT_NULL(what) ASSERT_FALSE(what == nullptr)
+
+void assertEqStr(const QString &exp, const QString &actual);
+#define EXPECT_EQ_STR(expected, actual) assertEqStr(expected, actual);
 
 #endif

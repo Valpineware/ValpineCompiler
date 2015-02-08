@@ -172,7 +172,7 @@ namespace vc { namespace graph
 	}
 
 
-	Function* Function::createFromVerbatimSignature(const QString signature)
+	Function* Function::createFromVerbatimSignature(const QString &signature)
 	{
 		if (!couldThisPossiblyBeAFunction(signature))
 			return nullptr;
@@ -184,7 +184,7 @@ namespace vc { namespace graph
 		QStringListIterator i(list);
 
 		//Return type
-		if (! (function = parseType(i, function)))
+		if (! parseType(i, function))
 			return nullptr;
 
 		//is it time for arguments yet?
@@ -195,7 +195,7 @@ namespace vc { namespace graph
 		}
 
 		//Parameters
-		if (! (function = parseParameters(i, function)))
+		if (!parseParameters(i, function))
 			return nullptr;
 
 		return function;
