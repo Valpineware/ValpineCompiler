@@ -142,6 +142,11 @@ namespace vc { namespace parser
 				index = parseStatement_classBlock(index, *cls);
 			}
 
+			else if (graph::Variable *variable = graph::Variable::createFromVerbatimSignature(line))
+			{
+				host->appendStatement(variable);
+			}
+
 			// Blank line
 			else if (isBlankLine(line))
 			{

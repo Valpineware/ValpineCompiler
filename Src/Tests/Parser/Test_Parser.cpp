@@ -179,8 +179,22 @@ TEST_CASE(ControlStructure)
 				EXPECT_EQ_STR("qDebug() << i;", csFor->block().statements().first()->verbatim());
 			}
 
-			EXPECT_EQ_STR("bool quit = false;", f1Iter.next()->verbatim());
-			EXPECT_EQ_STR("int n = 0;", f1Iter.next()->verbatim());
+			{
+				Variable *varQuit = dynamic_cast<Variable*>(f1Iter.next());
+				ASSERT_NOT_NULL(varQuit);
+				EXPECT_EQ_STR("bool", varQuit->typeExpression().fullType());
+				EXPECT_EQ_STR("quit", varQuit->id());
+				EXPECT_EQ_STR("false", varQuit->initExpression());
+			}
+
+
+			{
+				Variable *varN = dynamic_cast<Variable*>(f1Iter.next());
+				ASSERT_NOT_NULL(varN);
+				EXPECT_EQ_STR("int", varN->typeExpression().fullType());
+				EXPECT_EQ_STR("n", varN->id());
+				EXPECT_EQ_STR("0", varN->initExpression());
+			}
 
 			ControlStructure *csWhile = dynamic_cast<ControlStructure*>(f1Iter.next());
 			ASSERT_NOT_NULL(csWhile);

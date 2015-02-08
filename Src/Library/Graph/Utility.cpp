@@ -29,7 +29,6 @@ namespace vc { namespace graph
 		QString type;
 		bool foundBaseType = false;
 
-		//TODO the following loop is redundant. It's used in Function, ControlStructure, and here
 		while (i.hasNext())
 		{
 			const QString &cmp = i.next();
