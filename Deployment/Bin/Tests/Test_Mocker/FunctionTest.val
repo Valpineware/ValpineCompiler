@@ -1,0 +1,10 @@
+int * access(bool opened, int count)
+{
+	return new int;
+}
+
+
+int main()
+{
+
+}

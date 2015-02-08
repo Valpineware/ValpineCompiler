@@ -9,7 +9,7 @@
 
 namespace vc { namespace mocker
 {
-	void Mocker::mock(const graph::Graph &graph, QIODevice& outputDevice)
+	void Mocker::mock(const graph::Graph &graph, QIODevice &outputDevice)
 	{
 		QVector<QString> buffer;
 		buildList(buffer, graph.block());		
@@ -28,9 +28,26 @@ namespace vc { namespace mocker
 	}
 
 
-	void Mocker::buildFunction(QVector<QString>& program, graph::Function& function)
+	void Mocker::buildFunction(QVector<QString> &program, graph::Function &function)
 	{
-		program.append(function.verbatim());
+		//build opening experssion
+		QString functionDef = function.returnType().fullType() + " " + function.id() + "(";
+		
+		//add in the parameters
+		const QVector<graph::Parameter> &param = function.parameters();
+		for (int i = 0; i < param.size(); i++)
+		{
+			functionDef += param[i].type.fullType() + " " + param[i].id;
+
+			if ((i + 1) != param.size())
+			{
+				functionDef += ", ";
+			}
+		}
+
+		functionDef += ")";
+		program.append(functionDef);
+
 		program.append("{");
 
 		buildBlock(program, function.block());
