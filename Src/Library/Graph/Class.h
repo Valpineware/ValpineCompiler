@@ -51,6 +51,13 @@ namespace vc { namespace graph
 		};
 
 
+		struct AccessIdPair
+		{
+			AccessType accessType = Private;
+			QString id;
+		};
+
+
 	public:
 		Class(const QString &verbatim) : Statement(verbatim) {}
 
@@ -58,15 +65,19 @@ namespace vc { namespace graph
 		 * @returns nullptr if \p signature does not represent a valid class header. Otherwise
 		 * a new Class instance is returned with the id value set according to \p signature.
 		 */
-		static Class* createFromVerbatimSignature(const QString &signature);
+		static Class* createFromVerbatimSignature(const QString &signature);	//TODO extract this into a common template interface
 
 		QString id() const { return mId; }
 		const QList<Member*>& members() const { return mMembers; }
 		void addMember(Member *member) { mMembers.append(member); }
 
+		const QList<AccessIdPair>& superClasses() { return mSuperClasses; }
+		const QList<AccessIdPair>& interfaces() { return mInterfaces; }
+
 	private:
 		QString mId;
 		QList<Member*> mMembers;
+		QList<AccessIdPair> mSuperClasses, mInterfaces;
 	};
 }}
 
