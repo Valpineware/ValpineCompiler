@@ -19,7 +19,37 @@ TEST_CASE(FunctionHeader_WhatIs)
 		ASSERT_EQ(1, c->superClasses().count());
 		EXPECT_EQ_STR("Animal", c->superClasses().first().id);
 		EXPECT_EQ(Class::Public, c->superClasses().first().accessType);
-	}	
+	}
+
+	IF ("class Door : public Entity, protected Openable")
+		EXPECT_EQ_STR("Door", c->id());
+
+		ASSERT_EQ(2, c->superClasses().count());
+		EXPECT_EQ_STR("Entity", c->superClasses().first().id);
+		EXPECT_EQ(Class::Public, c->superClasses().first().accessType);
+		EXPECT_EQ_STR("Openable", c->superClasses().last().id);
+		EXPECT_EQ(Class::Protected, c->superClasses().last().accessType);
+	}
+
+	IF ("class Door : public Entity <private Openable>")
+		EXPECT_EQ_STR("Door", c->id());
+
+		ASSERT_EQ(1, c->superClasses().count());
+		EXPECT_EQ_STR("Entity", c->superClasses().first().id);
+		EXPECT_EQ(Class::Public, c->superClasses().first().accessType);
+
+		ASSERT_EQ(1, c->interfaces().count());
+		EXPECT_EQ_STR("Openable", c->interfaces().last().id);
+		EXPECT_EQ(Class::Private, c->interfaces().last().accessType);
+	}
+
+	IF ("class Book <public Readable>")
+		EXPECT_EQ_STR("Book", c->id());
+		ASSERT_EQ(0, c->superClasses().count());
+		ASSERT_EQ(1, c->interfaces().count());
+		EXPECT_EQ_STR("Readable", c->interfaces().last().id);
+		EXPECT_EQ(Class::Public, c->interfaces().last().accessType);
+	}
 
 	#undef IF
 }

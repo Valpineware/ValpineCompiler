@@ -22,22 +22,18 @@ namespace vc { namespace graph
 		}
 
 		QString filtered = signature;
-		Utility::breakUpOperators(filtered, QStringList() << ":" << "<" << ">");
+		Utility::breakUpOperators(filtered, QStringList() << ":" << "," << "<" << ">");
 		QStringList list;
 		Utility::breakUpByWhitespace(filtered, list);
 
 		if (list.count() < 2)
 			return nullptr;
 
-
-		
-
 		QStringListIterator iter(list);
 
 		if (iter.next() != "class")
 			return nullptr;
 
-		
 		Class *newClass = nullptr;
 
 		//get the class id
@@ -65,14 +61,23 @@ namespace vc { namespace graph
 					{
 						break;
 					}
-					if (cmp == "public")
+					else if (cmp == "public")	//TODO cleanup this redundancy all over the place
 					{
 						currentSuper.accessType = AccessType::Public;
+					}
+					else if (cmp == "protected")
+					{
+						currentSuper.accessType = AccessType::Protected;
 					}
 					else if (Utility::couldBeIdentifier(cmp))
 					{
 						currentSuper.id = cmp;
 						newClass->mSuperClasses.append(currentSuper);
+					}
+					else if (cmp == ",")
+					{
+						//TODO for now, having commas or not doesn't matter. Later this
+						//will be flagged as ill-formed
 					}
 				}
 
@@ -80,10 +85,38 @@ namespace vc { namespace graph
 					return newClass;
 			}
 			else
-				return nullptr;
+			{
+				//well, there might be some interfaces
+				iter.previous();
+			}
 		}
 		else
 			return newClass;
+
+
+		//at this pointer, if there are any more string components, they must be for interfaces
+		AccessIdPair currentInterface;
+
+		while (iter.hasNext())
+		{
+			const QString &cmp = iter.next();
+
+			if (cmp == ">")
+				return newClass;
+			else if (cmp == "public")
+			{
+				currentInterface.accessType = AccessType::Public;
+			}
+			else if (cmp == "protected")
+			{
+				currentInterface.accessType = AccessType::Protected;
+			}
+			else if (Utility::couldBeIdentifier(cmp))
+			{
+				currentInterface.id = cmp;
+				newClass->mInterfaces.append(currentInterface);
+			}
+		}
 
 		return nullptr;
 	}
