@@ -14,6 +14,8 @@ namespace vc { namespace graph
 		QString filtered = signature;
 		filtered.replace(";", "");
 		filtered.replace("=", " = ");
+		filtered.replace("*", " * ");
+		filtered.replace("&", " & ");	//TODO this is redundantly performed in many other locations
 
 		QStringList list;
 		Utility::breakUpByWhitespace(filtered, list);

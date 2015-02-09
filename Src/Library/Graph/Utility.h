@@ -23,6 +23,35 @@ namespace vc { namespace graph
 		static void breakUpByWhitespace(const QString &what, QStringList &list);
 
 		static bool parseTypeExpression(QStringListIterator &i, TypeExpression &typeExpression);
+
+		/**
+		 * @returns true if \what looks like an id and is not a reserved id.
+		 */
+		static bool couldBeIdentifier(const QString &what);
+
+		/**
+		 * @returns true if \p what looks like an id and is not a reserved id (except for reserved types).
+		 */
+		static bool couldBeTypeIdentifier(const QString &what);
+
+	private:
+		struct ReservedIds
+		{
+			QStringList general, types, control, typeDeclarators, access, casting;
+
+			bool anyContain(const QString &str)
+			{
+				return	(general.contains(str) ||
+						types.contains(str) ||
+						control.contains(str) ||
+						typeDeclarators.contains(str) ||
+						access.contains(str) ||
+						casting.contains(str));
+			}
+		};
+
+		static ReservedIds mReservedIds;
+		static ReservedIds buildReservedIds();
 	};
 }}
 

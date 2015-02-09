@@ -76,7 +76,7 @@ TEST_CASE(VariableTest)
 	ASSERT_EQ(8, lines.size());
 	EXPECT_EQ_STR("int x;", lines[2]);
 	EXPECT_EQ_STR("x = 5;", lines[3]);
-	EXPECT_EQ_STR("int *y;", lines[4]);
+	EXPECT_EQ_STR("int * y;", lines[4]);
 	EXPECT_EQ_STR("int z = x;", lines[5]);
 	EXPECT_EQ_STR("y = &x;", lines[6]);
 }

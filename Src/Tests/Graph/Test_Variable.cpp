@@ -51,5 +51,7 @@ TEST_CASE(Variable_WhatIsNot)
 
 	tst("int bool a=10;");
 
+	tst("return 0");
+
 	#undef tst
 }

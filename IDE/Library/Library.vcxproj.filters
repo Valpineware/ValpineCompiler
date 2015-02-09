@@ -77,7 +77,7 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Library\Graph\Utility.cpp">
       <Filter>Src\Graph</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\Src\Library\Mocker\Function.cpp">
       <Filter>Src\Mocker</Filter>
     </ClCompile>
@@ -127,7 +127,7 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Library\Graph\Utility.h">
       <Filter>Src\Graph</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\Src\Library\Mocker\Function.h">
       <Filter>Src\Mocker</Filter>
     </ClInclude>

@@ -146,6 +146,8 @@ namespace vc { namespace graph
 		filtered.replace(")", " ) ");
 		filtered.replace(",", " , ");
 		filtered.replace("=", " = ");
+		filtered.replace("*", " * ");
+		filtered.replace("&", " & ");
 
 		QStringList list;
 		Utility::breakUpByWhitespace(filtered, list);
