@@ -12,12 +12,11 @@ namespace vc { namespace graph
 	Variable* Variable::createFromVerbatimSignature(const QString signature)
 	{
 		QString filtered = signature;
-		filtered.replace(";", "");
-		filtered.replace("=", " = ");
-		filtered.replace("*", " * ");
-		filtered.replace("&", " & ");	//TODO this is redundantly performed in many other locations
+		filtered.remove(";");
+		Utility::breakUpOperators(filtered, QStringList() << "=" << "*" << "&");
 
 		QStringList list;
+		
 		Utility::breakUpByWhitespace(filtered, list);
 
 		if (list.count() < 2)

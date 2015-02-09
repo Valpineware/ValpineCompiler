@@ -30,7 +30,7 @@ const QString gTestDir = "./Tests/";
 #define ASSERT_NULL(what) ASSERT_TRUE(what == nullptr)
 #define ASSERT_NOT_NULL(what) ASSERT_FALSE(what == nullptr)
 
-void assertEqStr(const QString &exp, const QString &actual);
-#define EXPECT_EQ_STR(expected, actual) assertEqStr(expected, actual);
+void assertEqStr(const QString &exp, const QString &actual, const char *file, int line);
+#define EXPECT_EQ_STR(expected, actual) assertEqStr(expected, actual, __FILE__, __LINE__);
 
 #endif

@@ -95,4 +95,11 @@ namespace vc { namespace graph
 
 		return true;
 	}
+
+
+	void Utility::breakUpOperators(QString &what, const QStringList &operators)
+	{
+		for (const QString &op : operators)
+			what.replace(op, " "+op+" ");
+	}
 }}

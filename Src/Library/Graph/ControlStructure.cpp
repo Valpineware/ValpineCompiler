@@ -50,31 +50,14 @@ namespace vc { namespace graph
 	} QRegExp gRegisteredNamesRegExp = registeredNamesRegExp();
 
 
-	void preProcessControlStructureSignature(QString &signature, QStringList &list)
-	{
-		signature.replace("(", " ( ");
-		signature.replace(")", " ) ");
-
-		//3) Split into a list deliminated by " "
-		list = signature.split(QRegExp("\\s"));
-
-		//remove all remaining whitespace strings
-		QMutableStringListIterator mi(list);
-		while (mi.hasNext())
-		{
-			if (QRegExp("\\s*").exactMatch(mi.next()))
-				mi.remove();
-		}
-	}
-
-
 	ControlStructure* ControlStructure::createFromVerbatimSignature(const QString signature)
 	{
 		QStringList list;
 		QString filtered = signature;
-		preProcessControlStructureSignature(filtered, list);
-		QStringListIterator i(list);
+		Utility::breakUpOperators(filtered, QStringList() << "(" << ")");
+		Utility::breakUpByWhitespace(filtered, list);
 
+		QStringListIterator i(list);
 		ControlStructure *cs = new ControlStructure(signature);
 
 		//get the name
