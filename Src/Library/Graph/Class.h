@@ -14,7 +14,7 @@
 namespace vc { namespace graph
 {
 	/**
-	 * @brief 
+	 * @brief
 	 */
 	class Class : public Statement
 	{
@@ -51,6 +51,9 @@ namespace vc { namespace graph
 		};
 
 
+		/**
+		 * @brief Associates an AccessType with a string. Used for listing super classes and interfaces.
+		 */
 		struct AccessIdPair
 		{
 			AccessType accessType = Private;
@@ -71,7 +74,14 @@ namespace vc { namespace graph
 		const QList<Member*>& members() const { return mMembers; }
 		void addMember(Member *member) { mMembers.append(member); }
 
+		/*
+		 * @returns the super classes this class inherits.
+		 */
 		const QList<AccessIdPair>& superClasses() { return mSuperClasses; }
+
+		/*
+		 * @returns the interfaces this class implements.
+		 */
 		const QList<AccessIdPair>& interfaces() { return mInterfaces; }
 
 	private:

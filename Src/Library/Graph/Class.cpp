@@ -9,6 +9,40 @@
 
 namespace vc { namespace graph
 {
+	void parseComponents(QList<Class::AccessIdPair> &list, QStringListIterator &iter, const QString &endString)
+	{
+		Class::AccessIdPair currentSuper;
+
+		while (iter.hasNext())
+		{
+			const QString &cmp = iter.next();
+
+			if (cmp == endString)
+			{
+				break;
+			}
+			else if (cmp == "public")	//TODO cleanup this redundancy all over the place
+			{
+				currentSuper.accessType = Class::AccessType::Public;
+			}
+			else if (cmp == "protected")
+			{
+				currentSuper.accessType = Class::AccessType::Protected;
+			}
+			else if (Utility::couldBeIdentifier(cmp))
+			{
+				currentSuper.id = cmp;
+				list.append(currentSuper);
+			}
+			else if (cmp == ",")
+			{
+				//TODO for now, having commas or not doesn't matter. Later this
+				//will be flagged as ill-formed
+			}
+		}
+	}
+
+
 	Class* Class::createFromVerbatimSignature(const QString &signature)
 	{
 		//can this possibly be a class declaration?
@@ -51,35 +85,7 @@ namespace vc { namespace graph
 		{
 			if (iter.next() == ":")
 			{
-				AccessIdPair currentSuper;
-
-				while (iter.hasNext())
-				{
-					const QString &cmp = iter.next();
-
-					if (cmp == "<")
-					{
-						break;
-					}
-					else if (cmp == "public")	//TODO cleanup this redundancy all over the place
-					{
-						currentSuper.accessType = AccessType::Public;
-					}
-					else if (cmp == "protected")
-					{
-						currentSuper.accessType = AccessType::Protected;
-					}
-					else if (Utility::couldBeIdentifier(cmp))
-					{
-						currentSuper.id = cmp;
-						newClass->mSuperClasses.append(currentSuper);
-					}
-					else if (cmp == ",")
-					{
-						//TODO for now, having commas or not doesn't matter. Later this
-						//will be flagged as ill-formed
-					}
-				}
+				parseComponents(newClass->mSuperClasses, iter, "<");
 
 				if (!iter.hasNext())
 					return newClass;
@@ -95,29 +101,8 @@ namespace vc { namespace graph
 
 
 		//at this pointer, if there are any more string components, they must be for interfaces
-		AccessIdPair currentInterface;
+		parseComponents(newClass->mInterfaces, iter, ">");
 
-		while (iter.hasNext())
-		{
-			const QString &cmp = iter.next();
-
-			if (cmp == ">")
-				return newClass;
-			else if (cmp == "public")
-			{
-				currentInterface.accessType = AccessType::Public;
-			}
-			else if (cmp == "protected")
-			{
-				currentInterface.accessType = AccessType::Protected;
-			}
-			else if (Utility::couldBeIdentifier(cmp))
-			{
-				currentInterface.id = cmp;
-				newClass->mInterfaces.append(currentInterface);
-			}
-		}
-
-		return nullptr;
+		return newClass;
 	}
 }}
