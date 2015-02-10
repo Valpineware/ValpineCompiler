@@ -10,6 +10,8 @@
 
 #include <Library.h>
 
+#include "Class.h"
+
 namespace vc { namespace graph
 {
 	class TypeExpression;
@@ -36,6 +38,9 @@ namespace vc { namespace graph
 
 
 		static void breakUpOperators(QString &what, const QStringList &operators);
+
+
+		static Class::AccessType accessTypeForString(const QString what);
 
 	private:
 		struct ReservedIds

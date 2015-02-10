@@ -6,6 +6,7 @@
 //==================================================================================================================|
 
 #include "Parser.h"
+#include <Graph/Utility.h>
 
 namespace vc { namespace parser
 {
@@ -63,15 +64,14 @@ namespace vc { namespace parser
 		while (++index < mLineBuffer.count()  &&  !QRegExp("\\s*\\}\\s*").exactMatch(mLineBuffer[index]))
 		{
 			QString &line = mLineBuffer[index];
+			graph::Class::Member *member = new graph::Class::Member();
 			
 			//look for access modifiers
-			if (QRegExp("\\s*public\\s*:\\s*").exactMatch(line))
-				currentAccessType = graph::Class::Public;
-			else if (QRegExp("\\s*protected\\s*:\\s*").exactMatch(line))
-				currentAccessType = graph::Class::Protected;
-			else if (QRegExp("\\s*private\\s*:\\s*").exactMatch(line))
-				currentAccessType = graph::Class::Private;
-			
+			graph::Class::AccessType at = graph::Utility::accessTypeForString(line);
+			if (at != graph::Class::None)
+			{
+				currentAccessType = at;
+			}
 			//otherwise look for statements
 			else
 			{

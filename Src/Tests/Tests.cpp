@@ -12,6 +12,7 @@ void assertEqStr(const QString &exp, const QString &actual, const char *file, in
 	}
 }
 
+
 int main(int argc, char **argv)
 {
 	::testing::InitGoogleTest(&argc, argv);

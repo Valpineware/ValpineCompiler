@@ -102,4 +102,17 @@ namespace vc { namespace graph
 		for (const QString &op : operators)
 			what.replace(op, " "+op+" ");
 	}
+
+
+	Class::AccessType Utility::accessTypeForString(const QString what)
+	{
+		if (QRegExp("\\s*public\\s*:?\\s*").exactMatch(what))
+			return Class::Public;
+		else if (QRegExp("\\s*protected\\s*:?\\s*").exactMatch(what))
+			return Class::Protected;
+		else if (QRegExp("\\s*private\\s*:?\\s*").exactMatch(what))
+			return Class::Private;
+
+		return Class::None;
+	}
 }}

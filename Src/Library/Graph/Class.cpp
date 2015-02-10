@@ -6,6 +6,7 @@
 //==================================================================================================================|
 
 #include "Class.h"
+#include "Utility.h"
 
 namespace vc { namespace graph
 {
@@ -16,18 +17,15 @@ namespace vc { namespace graph
 		while (iter.hasNext())
 		{
 			const QString &cmp = iter.next();
+			graph::Class::AccessType at = graph::Utility::accessTypeForString(cmp);
 
-			if (cmp == endString)
+			if (at != graph::Class::None)
+			{
+				currentSuper.accessType = at;
+			}
+			else if (cmp == endString)
 			{
 				break;
-			}
-			else if (cmp == "public")	//TODO cleanup this redundancy all over the place
-			{
-				currentSuper.accessType = Class::AccessType::Public;
-			}
-			else if (cmp == "protected")
-			{
-				currentSuper.accessType = Class::AccessType::Protected;
 			}
 			else if (Utility::couldBeIdentifier(cmp))
 			{
@@ -100,7 +98,7 @@ namespace vc { namespace graph
 			return newClass;
 
 
-		//at this pointer, if there are any more string components, they must be for interfaces
+		//at this point, if there are any more string components, they must be for interfaces
 		parseComponents(newClass->mInterfaces, iter, ">");
 
 		return newClass;

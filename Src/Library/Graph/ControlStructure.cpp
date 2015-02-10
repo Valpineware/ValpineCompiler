@@ -6,6 +6,7 @@
 //==================================================================================================================|
 
 #include "ControlStructure.h"
+#include "Utility.h"
 
 namespace vc { namespace graph
 {

@@ -24,6 +24,7 @@ namespace vc { namespace graph
 		 */
 		enum AccessType
 		{
+			None,
 			Private,
 			Protected,
 			Public
