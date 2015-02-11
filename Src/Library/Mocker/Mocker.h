@@ -26,6 +26,7 @@ namespace vc { namespace mocker
 		QVector<QString> includes;
 		QVector<QString> forwardDeclartions;
 		QVector<QString> body;
+
 	public:
 		Mocker() {};
 		void mock(const graph::Graph &graph, QIODevice& outputDevice);

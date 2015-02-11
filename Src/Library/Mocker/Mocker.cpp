@@ -7,6 +7,7 @@
 
 #include "Mocker.h"
 #include "Function.h"
+#include "Variable.h"
 
 namespace vc { namespace mocker
 {
@@ -36,11 +37,6 @@ namespace vc { namespace mocker
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
 
-		if (writeBraces)
-		{
-			body.append("{");
-		}
-
 		while (iter.hasNext())
 		{
 			graph::Statement *statement = iter.next();
@@ -52,40 +48,22 @@ namespace vc { namespace mocker
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
 				createFunction(*function);
-				buildBlock(function->block());
+				//buildBlock(function->block());
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
 			{
-				createVar(*variable);
+				Variable::createVar(body, *variable);
 			}
 			else
 			{
 				body.append(statement->verbatim());
 			}
 		}
-
-		if (writeBraces)
-		{
-			body.append("}");
-		}
-	}
-
-	void Mocker::createVar(graph::Variable &var)
-	{
-		QString cppVar = var.typeExpression().fullType() + " " + var.id();
-
-		if (var.initExpression() != "")
-		{
-			cppVar += " = " + var.initExpression();
-		}
-
-		cppVar += ";";
-		body.append(cppVar);
 	}
 
 	void Mocker::createFunction(graph::Function &function)
 	{
-		Function newFunction(function);
+		Function newFunction(body, function);
 
 		if (function.id() != "main")
 		{
