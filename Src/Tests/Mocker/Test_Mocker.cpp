@@ -34,6 +34,18 @@ protected:
 		if (!lineBuffer.isEmpty() && lineBuffer.last().isNull())
 			lineBuffer.removeLast();
 	}
+
+	void readFile(const QString& filename, QVector<QString>& lines)
+	{
+		QFile file(gTestDir_Mocker + filename);
+		ASSERT_TRUE(file.open(QFile::ReadOnly | QFile::Text));
+		QTextStream in(&file);
+		
+		while (!in.atEnd())
+		{
+			lines.append(in.readLine());
+		}
+	}
 };
 
 
@@ -79,4 +91,18 @@ TEST_CASE(VariableTest)
 	EXPECT_EQ_STR("int * y;", lines[4]);
 	EXPECT_EQ_STR("int z = x;", lines[5]);
 	EXPECT_EQ_STR("y = &x;", lines[6]);
+}
+
+
+TEST_CASE(NestedFunctionBasic)
+{
+	QVector<QString> lines;
+	readLines("NestedFunctionBasic.val", lines);
+
+	QVector<QString> expected;
+	readFile("NestedFunctionBasic.cpp", expected);
+
+	ASSERT_EQ(expected.size(), lines.size());
+	EXPECT_EQ_STR(expected[0], "fail");
+
 }
