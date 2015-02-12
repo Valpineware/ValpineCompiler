@@ -34,12 +34,12 @@ namespace vc {	namespace mocker
 		}
 
 		mDeclartion += ")";
+		body.append(mDeclartion);
 	}
 
-	//TODO, body.append(MDeclartion) MOVE OUT OF FUNCTION
 	void Function::buildBody(QVector<QString> &body, graph::Block &block)
 	{
-		body.append(mDeclartion);
+
 		QListIterator<graph::Statement*> iter(block.statements());
 
 		body.append("{");
@@ -50,8 +50,7 @@ namespace vc {	namespace mocker
 
 			if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				//createFunction(*function);
-				//buildBlock(function->block());
+				//TODO, store a array of functions and then skip the body
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
 			{

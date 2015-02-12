@@ -48,7 +48,6 @@ namespace vc { namespace mocker
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
 				createFunction(*function);
-				//buildBlock(function->block());
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
 			{
@@ -69,7 +68,5 @@ namespace vc { namespace mocker
 		{
 			forwardDeclartions.append(newFunction.declartion() + ";");
 		}
-
-		body.append(newFunction.declartion());
 	}
 }}
