@@ -10,7 +10,13 @@
 
 namespace vc {	namespace mocker
 {
-	void Function::buildDeclartion(QVector<QString> &body, graph::Function &function)
+	Function::Function(QVector<QString> &body, QVector<QString> &forwardDecs, graph::Function &function)
+	{
+		buildDeclartion(body, forwardDecs, function);
+		buildBody(body, function);
+	}
+
+	void Function::buildDeclartion(QVector<QString> &body, QVector<QString> &forwardDecs, graph::Function &function)
 	{
 		//build opening experssion
 		mDeclartion = function.returnType().fullType() + " " + function.id() + "(";
@@ -35,12 +41,17 @@ namespace vc {	namespace mocker
 
 		mDeclartion += ")";
 		body.append(mDeclartion);
+		
+		if (function.id() != "main")
+		{
+			forwardDecs.append(mDeclartion + ";");
+		}
 	}
 
-	void Function::buildBody(QVector<QString> &body, graph::Block &block)
+	void Function::buildBody(QVector<QString> &body, graph::Function &function)
 	{
 
-		QListIterator<graph::Statement*> iter(block.statements());
+		QListIterator<graph::Statement*> iter(function.block().statements());
 
 		body.append("{");
 
@@ -50,7 +61,8 @@ namespace vc {	namespace mocker
 
 			if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				//TODO, store a array of functions and then skip the body
+				//hey, we have a nested function, store the knowledge and move on
+				mNestedFunctions.append(*function);
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
 			{

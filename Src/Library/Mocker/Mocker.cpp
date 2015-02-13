@@ -13,7 +13,7 @@ namespace vc { namespace mocker
 {
 	void Mocker::mock(const graph::Graph &graph, QIODevice &outputDevice)
 	{
-		buildBlock(graph.block(), false);		
+		buildBlock(graph.block());		
 
 		QTextStream outStream(&outputDevice);
 		for (const QString &line : includes)
@@ -33,7 +33,7 @@ namespace vc { namespace mocker
 	}
 
 
-	void Mocker::buildBlock(const graph::Block &block, bool writeBraces)
+	void Mocker::buildBlock(const graph::Block &block)
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
 
@@ -47,7 +47,7 @@ namespace vc { namespace mocker
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				createFunction(*function);
+				Function newFunction(body, forwardDeclartions, *function);
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
 			{
@@ -60,13 +60,4 @@ namespace vc { namespace mocker
 		}
 	}
 
-	void Mocker::createFunction(graph::Function &function)
-	{
-		Function newFunction(body, function);
-
-		if (function.id() != "main")
-		{
-			forwardDeclartions.append(newFunction.declartion() + ";");
-		}
-	}
 }}

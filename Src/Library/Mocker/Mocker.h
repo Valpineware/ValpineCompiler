@@ -19,7 +19,7 @@ namespace vc { namespace mocker
 	class Mocker
 	{
 	private:
-		void buildBlock(const graph::Block &block, bool writeBraces = true);
+		void buildBlock(const graph::Block &block);
 		void createFunction(graph::Function &funtion);
 		void createVar(graph::Variable &var);
 
