@@ -103,6 +103,10 @@ TEST_CASE(NestedFunctionBasic)
 	readFile("NestedFunctionBasic.cpp", expected);
 
 	ASSERT_EQ(expected.size(), lines.size());
-	EXPECT_EQ_STR(expected[0], "fail");
+	
+	for (int i = 0; i < expected.size(); i++)
+	{
+		EXPECT_EQ_STR(expected[i], lines[i]);
+	}
 
 }

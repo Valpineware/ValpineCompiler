@@ -62,7 +62,7 @@ namespace vc {	namespace mocker
 			if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
 				//hey, we have a nested function, store the knowledge and move on
-				mNestedFunctions.append(*function);
+				mNestedFunctions.enqueue(function);
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
 			{

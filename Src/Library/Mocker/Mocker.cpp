@@ -47,7 +47,7 @@ namespace vc { namespace mocker
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				Function newFunction(body, forwardDeclartions, *function);
+				createFunction(*function);
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
 			{
@@ -57,6 +57,24 @@ namespace vc { namespace mocker
 			{
 				body.append(statement->verbatim());
 			}
+		}
+	}
+
+	void Mocker::createFunction(graph::Function &function)
+	{
+		Function *newFunction = new Function(body, forwardDeclartions, function);
+
+		//get nested functions and build them
+		QQueue<graph::Function*> nestedFunctions = newFunction->nestedFunctions();
+		delete(newFunction);
+
+		while (!nestedFunctions.isEmpty())
+		{
+			//build the nested function and add any new nested functions to the end of the queue
+			newFunction = new Function(body, forwardDeclartions, *nestedFunctions.dequeue());
+			nestedFunctions.append(newFunction->nestedFunctions());
+
+			delete(newFunction);
 		}
 	}
 

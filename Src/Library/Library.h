@@ -8,6 +8,7 @@
 	#include <QtCore/QDir>
 
 	#include <QtCore/QProcess>
+	#include <QtCore/QQueue>
 #pragma warning(pop)
 
 #include <memory>
