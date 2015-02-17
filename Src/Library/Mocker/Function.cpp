@@ -70,7 +70,7 @@ namespace vc {	namespace mocker
 			}
 			else
 			{
-				body.append(statement->verbatim());
+				body.append("\t" + statement->verbatim());
 			}
 		}
 

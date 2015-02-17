@@ -19,6 +19,6 @@ namespace vc { namespace mocker
 		}
 
 		cppVar += ";";
-		body.append(cppVar);
+		body.append("\t" + cppVar);
 	}
 }}
