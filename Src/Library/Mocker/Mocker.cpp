@@ -49,7 +49,7 @@ namespace vc { namespace mocker
 			{
 				createFunction(*function);
 			}
-			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
+			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement)) // --happens with only global variables
 			{
 				Variable::createVar(body, *variable);
 			}
