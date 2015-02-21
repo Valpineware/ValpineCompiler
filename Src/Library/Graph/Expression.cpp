@@ -9,11 +9,18 @@
 
 namespace vc { namespace graph
 {
+	Expression::~Expression()
+	{
+		for (Component *cmp : mComponents)
+			delete cmp;
+	}
+
+
 	Expression* Expression::createFromVerbatimSignature(const QString signature)
 	{
 		Expression *expression = new Expression(signature);
 
-		expression->mComponents.append(new Component);
+		expression->mComponents.append(new Identifier(signature));
 
 		return expression;
 	}
