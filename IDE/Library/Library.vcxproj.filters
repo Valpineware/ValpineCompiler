@@ -83,7 +83,7 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Library\Graph\Expression.cpp">
       <Filter>Src\Graph</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\Src\Library\Mocker\Variable.cpp">
       <Filter>Src\Mocker</Filter>
     </ClCompile>
@@ -93,7 +93,7 @@
     <ClCompile Include="..\..\Src\Library\Mocker\Utility.cpp">
       <Filter>Src\Mocker</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Library\Mocker\DecelerationBlock.cpp">
+    <ClCompile Include="..\..\Src\Library\Mocker\DeclarationBlock.cpp">
       <Filter>Src\Mocker</Filter>
     </ClCompile>
   </ItemGroup>
@@ -148,7 +148,7 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Library\Graph\Expression.h">
       <Filter>Src\Graph</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\Src\Library\Mocker\Variable.h">
       <Filter>Src\Mocker</Filter>
     </ClInclude>
@@ -158,7 +158,7 @@
     <ClInclude Include="..\..\Src\Library\Mocker\Utility.h">
       <Filter>Src\Mocker</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Library\Mocker\DecelerationBlock.h">
+    <ClInclude Include="..\..\Src\Library\Mocker\DeclarationBlock.h">
       <Filter>Src\Mocker</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,7 +6,7 @@
 //==================================================================================================================|
 
 #include "Mocker.h"
-#include "DecelerationBlock.h"
+#include "DeclarationBlock.h"
 #include "Variable.h"
 #include "Utility.h"
 
@@ -49,7 +49,7 @@ namespace vc { namespace mocker
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
 				//go into deceleration block
-				DecelerationBlock decBlock(mBody, mForwardDecs, *function, mScope);
+				DeclarationBlock decBlock(mBody, mForwardDecs, *function, mScope);
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement)) // --happens with only global variables
 			{

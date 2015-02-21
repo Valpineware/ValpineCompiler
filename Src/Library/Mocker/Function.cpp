@@ -6,7 +6,7 @@
 //==================================================================================================================|
 
 #include "Function.h"
-#include "DecelerationBlock.h"
+#include "DeclarationBlock.h"
 #include "Utility.h"
 
 namespace vc {	namespace mocker
@@ -20,7 +20,7 @@ namespace vc {	namespace mocker
 
 		buildDeclartion(function);
 
-		DecelerationBlock::buildBlock(function.block(), mData);
+		DeclarationBlock::buildBlock(function.block(), mData);
 	}
 
 	void Function::buildDeclartion(const graph::Function &function)

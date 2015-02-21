@@ -24,7 +24,7 @@
     <ClInclude Include="..\..\Src\Library\Graph\Utility.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Variable.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\ControlStructure.h" />
-    <ClInclude Include="..\..\Src\Library\Mocker\DecelerationBlock.h" />
+    <ClInclude Include="..\..\Src\Library\Mocker\DeclarationBlock.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\Function.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\Mocker.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\Utility.h" />
@@ -57,7 +57,7 @@
     <ClCompile Include="..\..\Src\Library\Graph\Variable.cpp" />
     <ClCompile Include="..\..\Src\Library\Library.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\ControlStructure.cpp" />
-    <ClCompile Include="..\..\Src\Library\Mocker\DecelerationBlock.cpp" />
+    <ClCompile Include="..\..\Src\Library\Mocker\DeclarationBlock.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Function.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Mocker.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Utility.cpp" />

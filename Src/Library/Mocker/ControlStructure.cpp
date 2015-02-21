@@ -7,7 +7,7 @@
 
 #include "ControlStructure.h"
 #include "Function.h"
-#include "DecelerationBlock.h"
+#include "DeclarationBlock.h"
 #include "Utility.h"
 
 namespace vc { namespace mocker
@@ -16,7 +16,7 @@ namespace vc { namespace mocker
 	ControlStructure::ControlStructure(graph::ControlStructure &controlStructure, Data &data)
 	{
 		buildStatement(controlStructure, data);
-		DecelerationBlock::buildBlock(controlStructure.block(), data);
+		DeclarationBlock::buildBlock(controlStructure.block(), data);
 	}
 
 

@@ -9,11 +9,11 @@
 #include "Variable.h"
 #include "ControlStructure.h"
 #include "Function.h"
-#include "DecelerationBlock.h"
+#include "DeclarationBlock.h"
 
 namespace vc { namespace mocker
 {
-	DecelerationBlock::DecelerationBlock(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope)
+	DeclarationBlock::DeclarationBlock(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope)
 	{
 		mBody = &body;
 		mForwardDecs = &forwardDecs;
@@ -23,7 +23,7 @@ namespace vc { namespace mocker
 	}
 
 
-	void DecelerationBlock::buildBlock(const graph::Block &block, Data &data)
+	void DeclarationBlock::buildBlock(const graph::Block &block, Data &data)
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
 		data.body->append(Utility::createTabs(data.scope) + "{");
@@ -61,7 +61,7 @@ namespace vc { namespace mocker
 		data.body->append(Utility::createTabs(data.scope) + "}");
 	}
 
-	void DecelerationBlock::createFunction(const graph::Function &function, QVector<QString> &body, QVector<QString> &forwardDecs, int scope)
+	void DeclarationBlock::createFunction(const graph::Function &function, QVector<QString> &body, QVector<QString> &forwardDecs, int scope)
 	{
 		Function newFunction(body, forwardDecs, function, scope);
 
