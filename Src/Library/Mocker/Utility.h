@@ -16,6 +16,7 @@ namespace vc { namespace mocker
 		class Utility
 		{
 		public:
+			static QString createTabs(int scopeLevel);
 		};
 
 }}

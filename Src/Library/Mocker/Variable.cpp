@@ -6,12 +6,14 @@
 //==================================================================================================================|
 
 #include "Variable.h"
+#include "Utility.h"
 
 namespace vc { namespace mocker
 {
-	void Variable::createVar(QVector<QString> &body, graph::Variable &var)
+	void Variable::createVar(QVector<QString> &body, graph::Variable &var, int scope)
 	{
-		QString cppVar = var.typeExpression().fullType() + " " + var.id();
+		QString cppVar = Utility::createTabs(scope);
+		cppVar += var.typeExpression().fullType() + " " + var.id();
 
 		if (var.initExpression() != "")
 		{
@@ -19,6 +21,6 @@ namespace vc { namespace mocker
 		}
 
 		cppVar += ";";
-		body.append("\t" + cppVar);
+		body.append(cppVar);
 	}
 }}

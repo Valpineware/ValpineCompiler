@@ -6,9 +6,9 @@
 //==================================================================================================================|
 
 #include "ControlStructure.h"
-#include "Variable.h"
 #include "Function.h"
 #include "DecelerationBlock.h"
+#include "Utility.h"
 
 namespace vc { namespace mocker
 {
@@ -22,7 +22,8 @@ namespace vc { namespace mocker
 
 	void ControlStructure::buildStatement(graph::ControlStructure &controlStructure, Data &data)
 	{
-		QString statement = controlStructure.name() + "(" + controlStructure.expression() + ")";
+		QString statement = Utility::createTabs(data.scope);
+		statement += controlStructure.name() + "(" + controlStructure.expression() + ")";
 		data.body->append(statement);
 	}
 }}

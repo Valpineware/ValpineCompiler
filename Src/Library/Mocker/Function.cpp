@@ -7,6 +7,7 @@
 
 #include "Function.h"
 #include "DecelerationBlock.h"
+#include "Utility.h"
 
 namespace vc {	namespace mocker
 {
@@ -25,7 +26,8 @@ namespace vc {	namespace mocker
 	void Function::buildDeclartion(const graph::Function &function)
 	{
 		//build opening experssion
-		QString declartion = function.returnType().fullType() + " " + function.id() + "(";
+		QString declartion = Utility::createTabs(mData.scope);
+		declartion = function.returnType().fullType() + " " + function.id() + "(";
 
 		//add in the parameters
 		const QVector<graph::Parameter> &param = function.parameters();

@@ -36,7 +36,7 @@ namespace vc { namespace mocker
 
 			if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
 			{
-				Variable::createVar(*(data.body), *variable);
+				Variable::createVar(*(data.body), *variable, data.scope);
 			}
 			else if (graph::ControlStructure *control = dynamic_cast<graph::ControlStructure*>(statement))
 			{
@@ -46,9 +46,13 @@ namespace vc { namespace mocker
 			{
 				data.nestedFunctions->enqueue(function);
 			}
-			else
+			else if (graph::Preprocessor *preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
-				data.body->append("\t" + statement->verbatim());
+				data.body->append(Utility::createTabs(data.scope) + preprocessor->verbatim());
+			}
+			else
+			{ 
+				data.body->append(Utility::createTabs(data.scope) + statement->verbatim());
 			}
 		}
 

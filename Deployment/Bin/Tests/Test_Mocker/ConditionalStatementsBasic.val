@@ -8,6 +8,13 @@ int main()
 		if(z == 4)
 		{
 			y = 1;
+			while(y < 100)
+			{
+				y++;
+			}
+		}
+		for(int i = 0; i < x; i++)
+		{
 		}
 	}
 	else

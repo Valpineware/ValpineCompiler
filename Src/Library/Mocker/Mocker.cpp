@@ -8,6 +8,7 @@
 #include "Mocker.h"
 #include "DecelerationBlock.h"
 #include "Variable.h"
+#include "Utility.h"
 
 namespace vc { namespace mocker
 {
@@ -48,15 +49,15 @@ namespace vc { namespace mocker
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
 				//go into deceleration block
-				DecelerationBlock decBlock(mBody, mForwardDecs, *function, 0);
+				DecelerationBlock decBlock(mBody, mForwardDecs, *function, mScope);
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement)) // --happens with only global variables
 			{
-				Variable::createVar(mBody, *variable);
+				Variable::createVar(mBody, *variable, mScope);
 			}
 			else
 			{
-				mBody.append(statement->verbatim());
+				mBody.append(Utility::createTabs(mScope) + statement->verbatim());
 			}
 		}
 	}

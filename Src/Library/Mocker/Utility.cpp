@@ -12,4 +12,14 @@
 
 namespace vc { namespace mocker
 {
+	QString Utility::createTabs(int scopeLevel)
+	{
+		QString line;
+		for (int i = 0; i < scopeLevel; i++)
+		{
+			line += "\t";
+		}
+
+		return line;
+	}
 }}

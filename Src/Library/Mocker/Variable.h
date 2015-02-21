@@ -19,7 +19,7 @@ namespace vc { namespace mocker
 	class Variable
 	{
 	public:
-		static void createVar(QVector<QString> &body, graph::Variable &var);
+		static void createVar(QVector<QString> &body, graph::Variable &var, int scope);
 	};
 
 
