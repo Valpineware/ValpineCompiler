@@ -10,6 +10,7 @@
 
 #include <Graph/Graph.h>
 #include <Library.h>
+#include "Function.h"
 
 namespace vc {	namespace mocker {
 
@@ -19,14 +20,10 @@ namespace vc {	namespace mocker {
 	class ControlStructure
 	{
 	private:
-		QVector<QString> *mBody;
-		graph::ControlStructure *mControlStructure;
-
-		void buildStatement();
-		void buildBody();
+		void buildStatement(graph::ControlStructure &controlStructure, Data &data);
 
 	public:
-		ControlStructure(QVector<QString> &body, graph::ControlStructure &controlStatement);
+		ControlStructure(graph::ControlStructure &controlStructure, Data &data);
 	};
 
 

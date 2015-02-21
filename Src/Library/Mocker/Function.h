@@ -13,19 +13,28 @@
 
 namespace vc { namespace mocker 
 {
+	struct Data
+	{
+		QVector<QString> *body;
+		QVector<QString> *forwardDecs;
+		int scope; 
+		QQueue<graph::Function*> *nestedFunctions;
+	};
+
 	/**
 	* @breif Contains information on cpp function conversion
 	*/
 	class Function
 	{
 	private:
-		QQueue<graph::Function*> mNestedFunctions;
-		void buildDeclartion(const graph::Function &function, QVector<QString> &forwardDecs, QVector<QString> &body);
+		Data mData;
+		void buildDeclartion(const graph::Function &function);
 
 
 	public:
 		Function(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope);
-		QQueue<graph::Function*>& nestedFunctions() { return mNestedFunctions; }
+		QQueue<graph::Function*> &nestedFunctions() { return *(mData.nestedFunctions); }
+		Data &data() { return mData; }
 	};
 
 

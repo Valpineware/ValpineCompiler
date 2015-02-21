@@ -10,6 +10,7 @@
 
 #include <Graph/Graph.h>
 #include <Library.h>
+#include "Function.h"
 
 namespace vc { namespace mocker
 {
@@ -23,7 +24,7 @@ namespace vc { namespace mocker
 		void static createFunction(const graph::Function &function, QVector<QString> &body, QVector<QString> &forwardDecs, int scope);
 	public:
 		DecelerationBlock(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope);
-		void static buildBlock(const graph::Block &block, QVector<QString> &body, QVector<QString> &forwardDecs, QQueue<graph::Function*> &nestedFunctions, int scope);
+		void static buildBlock(const graph::Block &block, Data &data);
 	};
 
 }}

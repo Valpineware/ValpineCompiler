@@ -12,12 +12,17 @@ namespace vc {	namespace mocker
 {
 	Function::Function(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope)
 	{
-		buildDeclartion(function, forwardDecs, body);
+		mData.body = &body;
+		mData.forwardDecs = &forwardDecs;
+		mData.scope = scope;
+		mData.nestedFunctions = new QQueue<graph::Function*>;
 
-		DecelerationBlock::buildBlock(function.block(), body, forwardDecs, mNestedFunctions, scope);
+		buildDeclartion(function);
+
+		DecelerationBlock::buildBlock(function.block(), mData);
 	}
 
-	void Function::buildDeclartion(const graph::Function &function, QVector<QString> &forwardDecs, QVector<QString> &body)
+	void Function::buildDeclartion(const graph::Function &function)
 	{
 		//build opening experssion
 		QString declartion = function.returnType().fullType() + " " + function.id() + "(";
@@ -41,11 +46,11 @@ namespace vc {	namespace mocker
 		}
 
 		declartion += ")";
-		body.append(declartion);
+		mData.body->append(declartion);
 		
 		if (function.id() != "main")
 		{
-			forwardDecs.append(declartion + ";");
+			mData.forwardDecs->append(declartion + ";");
 		}
 	}
 

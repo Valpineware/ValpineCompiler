@@ -22,13 +22,13 @@ namespace vc { namespace mocker
 		createFunction(function, *mBody, *mForwardDecs, mScope);
 	}
 
-	void DecelerationBlock::buildBlock(const graph::Block &block, QVector<QString> &body, QVector<QString> &forwardDecs, QQueue<graph::Function*> &nestedFunctions, int scope)
+	void DecelerationBlock::buildBlock(const graph::Block &block, Data &data)
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
-		body.append("{");
+		data.body->append("{");
 
 		//increase scope level
-		scope += 1;
+		data.scope += 1;
 
 		while (iter.hasNext())
 		{
@@ -36,24 +36,24 @@ namespace vc { namespace mocker
 
 			if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
 			{
-				Variable::createVar(body, *variable);
+				Variable::createVar(*(data.body), *variable);
 			}
 			else if (graph::ControlStructure *control = dynamic_cast<graph::ControlStructure*>(statement))
 			{
-				ControlStructure structure(body, *control);
+				ControlStructure structure(*control, data);
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				nestedFunctions.enqueue(function);
+				data.nestedFunctions->enqueue(function);
 			}
 			else
 			{
-				body.append("\t" + statement->verbatim());
+				data.body->append("\t" + statement->verbatim());
 			}
 		}
 
 
-		body.append("}");
+		data.body->append("}");
 	}
 
 	void DecelerationBlock::createFunction(const graph::Function &function, QVector<QString> &body, QVector<QString> &forwardDecs, int scope)
