@@ -40,6 +40,8 @@ namespace vc { namespace graph
 
 			AccessType accessType = AccessType::Private;
 			Statement *statement = nullptr;
+			
+			
 
 			~Member()
 			{
