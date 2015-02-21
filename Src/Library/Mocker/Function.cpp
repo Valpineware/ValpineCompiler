@@ -12,17 +12,21 @@ namespace vc {	namespace mocker
 {
 	Function::Function(QVector<QString> &body, QVector<QString> &forwardDecs, graph::Function &function)
 	{
-		buildDeclartion(body, forwardDecs, function);
-		buildBody(body, function);
+		mBody = &body;
+		mForwardDecs = &forwardDecs;
+		mFunction = &function;
+
+		buildDeclartion();
+		buildBody();
 	}
 
-	void Function::buildDeclartion(QVector<QString> &body, QVector<QString> &forwardDecs, graph::Function &function)
+	void Function::buildDeclartion()
 	{
 		//build opening experssion
-		mDeclartion = function.returnType().fullType() + " " + function.id() + "(";
+		mDeclartion = mFunction->returnType().fullType() + " " + mFunction->id() + "(";
 
 		//add in the parameters
-		const QVector<graph::Parameter> &param = function.parameters();
+		const QVector<graph::Parameter> &param = mFunction->parameters();
 		for (int i = 0; i < param.size(); i++)
 		{
 			mDeclartion += param[i].type.fullType() + " " + param[i].id;
@@ -40,20 +44,20 @@ namespace vc {	namespace mocker
 		}
 
 		mDeclartion += ")";
-		body.append(mDeclartion);
+		mBody->append(mDeclartion);
 		
-		if (function.id() != "main")
+		if (mFunction->id() != "main")
 		{
-			forwardDecs.append(mDeclartion + ";");
+			mForwardDecs->append(mDeclartion + ";");
 		}
 	}
 
-	void Function::buildBody(QVector<QString> &body, graph::Function &function)
+	void Function::buildBody()
 	{
 
-		QListIterator<graph::Statement*> iter(function.block().statements());
+		QListIterator<graph::Statement*> iter(mFunction->block().statements());
 
-		body.append("{");
+		mBody->append("{");
 
 		while (iter.hasNext())
 		{
@@ -66,16 +70,16 @@ namespace vc {	namespace mocker
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
 			{
-				Variable::createVar(body, *variable);
+				Variable::createVar(*mBody, *variable);
 			}
 			else
 			{
-				body.append("\t" + statement->verbatim());
+				mBody->append("\t" + statement->verbatim());
 			}
 		}
 
 
-		body.append("}");
+		mBody->append("}");
 	}
 
 

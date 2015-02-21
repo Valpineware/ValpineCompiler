@@ -8,26 +8,31 @@
 #include "ControlStructure.h"
 #include "Variable.h"
 
-namespace vc { namespace mocker {
-
+namespace vc { namespace mocker
+{
 	//TODO ADD DEPTH LEVEL FOR INTERNAL TABBING
-	ControlStructure::ControlStructure(QVector<QString> &body, graph::ControlStructure &controlStatement)
+	ControlStructure::ControlStructure(QVector<QString> &body, graph::ControlStructure &controlStructure)
 	{
-		buildStatement(body, controlStatement);
-		buildBody(body, controlStatement);
+		mBody = &body;
+		mControlStructure = &controlStructure;
+
+		buildStatement();
+		buildBody();
 	}
 
-	void ControlStructure::buildStatement(QVector<QString> &body, graph::ControlStructure &controlStatement)
+
+	void ControlStructure::buildStatement()
 	{
-		QString statement = controlStatement.name() + "(" + controlStatement.expression() + ")";
-		body.append(statement);
+		QString statement = mControlStructure->name() + "(" + mControlStructure->expression() + ")";
+		mBody->append(statement);
 	}
 
-	void ControlStructure::buildBody(QVector<QString> &body, graph::ControlStructure & controlStatement)
-	{
-		QListIterator<graph::Statement*> iter(controlStatement.block().statements());
 
-		body.append("{");
+	void ControlStructure::buildBody()
+	{
+		QListIterator<graph::Statement*> iter(mControlStructure->block().statements());
+
+		mBody->append("{");
 
 		while (iter.hasNext())
 		{
@@ -35,21 +40,19 @@ namespace vc { namespace mocker {
 
 			if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
 			{
-				Variable::createVar(body, *variable);
+				Variable::createVar(*mBody, *variable);
 			}
 			else if (graph::ControlStructure *control = dynamic_cast<graph::ControlStructure*>(statement))
 			{
-				ControlStructure(body, *control);
+				ControlStructure(*mBody, *control);
 			}
 			else
 			{
-				body.append("\t" + statement->verbatim());
+				mBody->append("\t" + statement->verbatim());
 			}
 		}
 
 
-		body.append("}");
+		mBody->append("}");
 	}
-	
-
 }}

@@ -20,9 +20,13 @@ namespace vc { namespace mocker
 	{
 	private:
 		QString mDeclartion;
+		QVector<QString> *mBody;
+		QVector<QString> *mForwardDecs;
+		graph::Function *mFunction;
+
 		QQueue<graph::Function*> mNestedFunctions;
-		void buildDeclartion(QVector<QString> &body, QVector<QString> &forwardDecs, graph::Function &function);
-		void buildBody(QVector<QString> &body, graph::Function &function);
+		void buildDeclartion();
+		void buildBody();
 
 
 	public:

@@ -19,8 +19,11 @@ namespace vc {	namespace mocker {
 	class ControlStructure
 	{
 	private:
-		void buildStatement(QVector<QString> &body, graph::ControlStructure &controlStatement);
-		void buildBody(QVector<QString> &body, graph::ControlStructure &controlStatement);
+		QVector<QString> *mBody;
+		graph::ControlStructure *mControlStructure;
+
+		void buildStatement();
+		void buildBody();
 
 	public:
 		ControlStructure(QVector<QString> &body, graph::ControlStructure &controlStatement);
