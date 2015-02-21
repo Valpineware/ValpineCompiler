@@ -23,7 +23,12 @@ namespace vc { namespace mocker
 	void ControlStructure::buildStatement(graph::ControlStructure &controlStructure, Data &data)
 	{
 		QString statement = Utility::createTabs(data.scope);
-		statement += controlStructure.name() + "(" + controlStructure.expression() + ")";
+		statement += controlStructure.name();
+
+		if (controlStructure.name() != "else")
+		{
+			statement += "(" + controlStructure.expression() + ")";
+		}
 		data.body->append(statement);
 	}
 }}

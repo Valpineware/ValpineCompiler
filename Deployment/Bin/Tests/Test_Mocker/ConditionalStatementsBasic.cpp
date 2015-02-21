@@ -21,12 +21,11 @@ int main()
 	{
 		x = 5;
 	}
-	
 	if(x < t)
 	{
 		x = 2;
 	}
-	else if(y == x)
+	elseif(y == x)
 	{
 		y = 1;
 	}

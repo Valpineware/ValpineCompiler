@@ -22,10 +22,11 @@ namespace vc { namespace mocker
 		createFunction(function, *mBody, *mForwardDecs, mScope);
 	}
 
+
 	void DecelerationBlock::buildBlock(const graph::Block &block, Data &data)
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
-		data.body->append("{");
+		data.body->append(Utility::createTabs(data.scope) + "{");
 
 		//increase scope level
 		data.scope += 1;
@@ -56,8 +57,8 @@ namespace vc { namespace mocker
 			}
 		}
 
-
-		data.body->append("}");
+		data.scope -= 1;
+		data.body->append(Utility::createTabs(data.scope) + "}");
 	}
 
 	void DecelerationBlock::createFunction(const graph::Function &function, QVector<QString> &body, QVector<QString> &forwardDecs, int scope)

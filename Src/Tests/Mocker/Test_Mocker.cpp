@@ -114,3 +114,20 @@ TEST_CASE(NestedFunctionBasic)
 	}
 
 }
+
+TEST_CASE(ConditionalStatements)
+{
+	QVector<QString> lines;
+	readLines("ConditionalStatementsBasic.val", lines);
+
+	QVector<QString> expected;
+	readFile("ConditionalStatementsBasic.cpp", expected);
+
+	ASSERT_EQ(expected.size(), lines.size());
+
+	for (int i = 0; i < expected.size(); i++)
+	{
+		EXPECT_EQ_STR(expected[i], lines[i]);
+	}
+
+}
