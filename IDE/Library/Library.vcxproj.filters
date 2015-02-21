@@ -90,6 +90,9 @@
     <ClCompile Include="..\..\Src\Library\Mocker\Utility.cpp">
       <Filter>Src\Mocker</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Library\Mocker\DecelerationBlock.cpp">
+      <Filter>Src\Mocker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Library\Library.h">

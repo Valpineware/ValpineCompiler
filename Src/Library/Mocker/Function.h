@@ -19,18 +19,12 @@ namespace vc { namespace mocker
 	class Function
 	{
 	private:
-		QString mDeclartion;
-		QVector<QString> *mBody;
-		QVector<QString> *mForwardDecs;
-		graph::Function *mFunction;
-
 		QQueue<graph::Function*> mNestedFunctions;
-		void buildDeclartion();
-		void buildBody();
+		void buildDeclartion(const graph::Function &function, QVector<QString> &forwardDecs, QVector<QString> &body);
 
 
 	public:
-		Function(QVector<QString> &body, QVector<QString> &forwardDecs, graph::Function &function);
+		Function(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope);
 		QQueue<graph::Function*>& nestedFunctions() { return mNestedFunctions; }
 	};
 

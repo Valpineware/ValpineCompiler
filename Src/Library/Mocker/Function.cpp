@@ -6,82 +6,48 @@
 //==================================================================================================================|
 
 #include "Function.h"
-#include "Variable.h"
+#include "DecelerationBlock.h"
 
 namespace vc {	namespace mocker
 {
-	Function::Function(QVector<QString> &body, QVector<QString> &forwardDecs, graph::Function &function)
+	Function::Function(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope)
 	{
-		mBody = &body;
-		mForwardDecs = &forwardDecs;
-		mFunction = &function;
+		buildDeclartion(function, forwardDecs, body);
 
-		buildDeclartion();
-		buildBody();
+		DecelerationBlock::buildBlock(function.block(), body, forwardDecs, mNestedFunctions, scope);
 	}
 
-	void Function::buildDeclartion()
+	void Function::buildDeclartion(const graph::Function &function, QVector<QString> &forwardDecs, QVector<QString> &body)
 	{
 		//build opening experssion
-		mDeclartion = mFunction->returnType().fullType() + " " + mFunction->id() + "(";
+		QString declartion = function.returnType().fullType() + " " + function.id() + "(";
 
 		//add in the parameters
-		const QVector<graph::Parameter> &param = mFunction->parameters();
+		const QVector<graph::Parameter> &param = function.parameters();
 		for (int i = 0; i < param.size(); i++)
 		{
-			mDeclartion += param[i].type.fullType() + " " + param[i].id;
+			declartion += param[i].type.fullType() + " " + param[i].id;
 
 			//check if default value is needed, if so, add it
 			if (param[i].defaultValue != "")
 			{
-				mDeclartion += "=" + param[i].defaultValue;
+				declartion += "=" + param[i].defaultValue;
 			}
 
 			if ((i + 1) != param.size())
 			{
-				mDeclartion += ", ";
+				declartion += ", ";
 			}
 		}
 
-		mDeclartion += ")";
-		mBody->append(mDeclartion);
+		declartion += ")";
+		body.append(declartion);
 		
-		if (mFunction->id() != "main")
+		if (function.id() != "main")
 		{
-			mForwardDecs->append(mDeclartion + ";");
+			forwardDecs.append(declartion + ";");
 		}
 	}
-
-	void Function::buildBody()
-	{
-
-		QListIterator<graph::Statement*> iter(mFunction->block().statements());
-
-		mBody->append("{");
-
-		while (iter.hasNext())
-		{
-			graph::Statement *statement = iter.next();
-
-			if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
-			{
-				//hey, we have a nested function, store the knowledge and move on
-				mNestedFunctions.enqueue(function);
-			}
-			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
-			{
-				Variable::createVar(*mBody, *variable);
-			}
-			else
-			{
-				mBody->append("\t" + statement->verbatim());
-			}
-		}
-
-
-		mBody->append("}");
-	}
-
 
 
 }}

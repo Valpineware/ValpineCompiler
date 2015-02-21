@@ -6,7 +6,7 @@
 //==================================================================================================================|
 
 #include "Mocker.h"
-#include "Function.h"
+#include "DecelerationBlock.h"
 #include "Variable.h"
 
 namespace vc { namespace mocker
@@ -16,17 +16,17 @@ namespace vc { namespace mocker
 		buildBlock(graph.block());		
 
 		QTextStream outStream(&outputDevice);
-		for (const QString &line : includes)
+		for (const QString &line : mIncludes)
 		{
 			outStream << line << "\n";
 		}
 
-		for (const QString &line : forwardDeclartions)
+		for (const QString &line : mForwardDecs)
 		{
 			outStream << line << "\n";
 		}
 
-		for (const QString &line : body)
+		for (const QString &line : mBody)
 		{
 			outStream << line << "\n";
 		}
@@ -43,36 +43,24 @@ namespace vc { namespace mocker
 
 			if (graph::Preprocessor *preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
-				includes.append(preprocessor->verbatim());
+				mIncludes.append(preprocessor->verbatim());
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				createFunction(*function);
+				//go into deceleration block
+				DecelerationBlock decBlock(mBody, mForwardDecs, *function, 0);
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement)) // --happens with only global variables
 			{
-				Variable::createVar(body, *variable);
+				Variable::createVar(mBody, *variable);
 			}
 			else
 			{
-				body.append(statement->verbatim());
+				mBody.append(statement->verbatim());
 			}
 		}
 	}
 
-	void Mocker::createFunction(graph::Function &function)
-	{
-		Function newFunction(body, forwardDeclartions, function);
 
-		//get nested functions and build them
-		QQueue<graph::Function*> &nestedFunctions = newFunction.nestedFunctions();
-
-		while (!nestedFunctions.isEmpty())
-		{
-			//build the nested function and add any new nested functions to the end of the queue
-			Function nestedFunction(body, forwardDeclartions, *nestedFunctions.dequeue());
-			nestedFunctions.append(nestedFunction.nestedFunctions());
-		}
-	}
 
 }}

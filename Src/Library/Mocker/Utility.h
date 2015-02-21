@@ -16,7 +16,6 @@ namespace vc { namespace mocker
 		class Utility
 		{
 		public:
-			void static buildBlock(const graph::Block &block, QVector<QString> &body);
 		};
 
 }}

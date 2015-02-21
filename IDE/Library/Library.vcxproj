@@ -55,6 +55,7 @@
     <ClCompile Include="..\..\Src\Library\Graph\Variable.cpp" />
     <ClCompile Include="..\..\Src\Library\Library.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\ControlStructure.cpp" />
+    <ClCompile Include="..\..\Src\Library\Mocker\DecelerationBlock.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Function.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Mocker.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Utility.cpp" />
