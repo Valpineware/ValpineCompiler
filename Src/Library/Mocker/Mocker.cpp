@@ -62,19 +62,16 @@ namespace vc { namespace mocker
 
 	void Mocker::createFunction(graph::Function &function)
 	{
-		Function *newFunction = new Function(body, forwardDeclartions, function);
+		Function newFunction(body, forwardDeclartions, function);
 
 		//get nested functions and build them
-		QQueue<graph::Function*> nestedFunctions = newFunction->nestedFunctions();
-		delete(newFunction);
+		QQueue<graph::Function*> &nestedFunctions = newFunction.nestedFunctions();
 
 		while (!nestedFunctions.isEmpty())
 		{
 			//build the nested function and add any new nested functions to the end of the queue
-			newFunction = new Function(body, forwardDeclartions, *nestedFunctions.dequeue());
-			nestedFunctions.append(newFunction->nestedFunctions());
-
-			delete(newFunction);
+			Function nestedFunction(body, forwardDeclartions, *nestedFunctions.dequeue());
+			nestedFunctions.append(nestedFunction.nestedFunctions());
 		}
 	}
 

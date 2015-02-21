@@ -32,7 +32,7 @@ namespace vc { namespace mocker
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				Function function(body, *function);
+				//Function function(*body, *function);
 			}
 			else
 			{

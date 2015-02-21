@@ -5,18 +5,17 @@
 // This file is licensed under the MIT License.
 //==================================================================================================================|
 
-#ifndef _vc_mocker_Utility_h
-#define _vc_mocker_Utility_h
+#ifndef _vc_mocker_DecelerationBlock_h
+#define _vc_mocker_DecelerationBlock_h
 
 #include <Graph/Graph.h>
 #include <Library.h>
 
 namespace vc { namespace mocker
 {
-		class Utility
+		class DelecerationBlock
 		{
 		public:
-			void static buildBlock(const graph::Block &block, QVector<QString> &body);
 		};
 
 }}
