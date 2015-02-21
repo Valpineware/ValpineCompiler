@@ -64,7 +64,6 @@ namespace vc { namespace parser
 		while (++index < mLineBuffer.count()  &&  !QRegExp("\\s*\\}\\s*").exactMatch(mLineBuffer[index]))
 		{
 			QString &line = mLineBuffer[index];
-			graph::Class::Member *member = new graph::Class::Member();
 			
 			//look for access modifiers
 			graph::Class::AccessType at = graph::Utility::accessTypeForString(line);

@@ -6,22 +6,62 @@
 //==================================================================================================================|
 
 #include "Expression.h"
+#include "Utility.h"
+
 
 namespace vc { namespace graph
 {
-	Expression::~Expression()
+	Expression::Expression(const QString &verbatim) :
+		Statement(verbatim),
+		mRoot(verbatim)
 	{
-		for (Component *cmp : mComponents)
-			delete cmp;
 	}
 
 
-	Expression* Expression::createFromVerbatimSignature(const QString signature)
+	QString flatten(const QVector<QString> &list)
 	{
-		Expression *expression = new Expression(signature);
+		QString buffer;
+		buffer.reserve(3 * list.count());
 
-		expression->mComponents.append(new Identifier(signature));
+		for (const QString &str : list)
+			buffer.append(str);
 
-		return expression;
+		return buffer;
+	}
+	
+
+	Expression::Result::Result(const QString &verbatim) : Component(verbatim)
+	{
+		QString filtered = verbatim;
+		Utility::breakUpOperators(filtered, QStringList() << "++");
+		QStringList strList;
+		Utility::breakUpByWhitespace(filtered, strList);
+
+		QVector<QString> components = strList.toVector();
+
+		for (int i=0; i<components.count(); i++)
+		{
+			const QString &str = components[i];
+			
+			if (str == "(")
+			{
+				int last = components.lastIndexOf(")");
+				if (last != -1)
+					mComponents.append(new Result(flatten(components.mid(i+1, last-i-1))));
+			}
+			else if (Utility::couldBeIdentifier(str) || Utility::couldBeNumericConstant(str))
+				mComponents.append(new Value(str));
+			else if (str == "++")
+				mComponents.append(new Operator(str));
+		}
+	}
+
+
+	Expression::Result::~Result()
+	{
+		for (Component *cmp : mComponents)
+		{
+			if (cmp) delete cmp;
+		}
 	}
 }}

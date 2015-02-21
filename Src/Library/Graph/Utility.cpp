@@ -97,6 +97,12 @@ namespace vc { namespace graph
 	}
 
 
+	bool Utility::couldBeNumericConstant(const QString &what)
+	{
+		return gRegExp_numericConstant.exactMatch(what);
+	}
+
+
 	void Utility::breakUpOperators(QString &what, const QStringList &operators)
 	{
 		for (const QString &op : operators)

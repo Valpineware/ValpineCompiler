@@ -37,6 +37,9 @@ namespace vc { namespace graph
 		static bool couldBeTypeIdentifier(const QString &what);
 
 
+		static bool couldBeNumericConstant(const QString &what);
+
+
 		static void breakUpOperators(QString &what, const QStringList &operators);
 
 

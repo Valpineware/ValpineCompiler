@@ -18,11 +18,6 @@ namespace vc { namespace graph
 	class Expression : public Statement
 	{
 	public:
-		Expression(const QString &verbatim) : Statement(verbatim) {}
-		~Expression();
-
-		static Expression* createFromVerbatimSignature(const QString signature);
-
 		class Component
 		{
 		public:
@@ -36,20 +31,48 @@ namespace vc { namespace graph
 			QString mVerbatim;
 		};
 
-
-		class Identifier : public Component
-		{
-		public:
-			Identifier(const QString &verbatim) : Component(verbatim) {}
-		};
-
-		
 		typedef QList<Component*> ComponentList;
 		typedef QListIterator<Component*> ComponentListIterator;
-		const ComponentList& components() const { return mComponents; }
+
+		/**
+		 * The result of a sub-expression (a+10), identifier (foo), or constant (42.0). 
+		 */
+		class Result : public Component
+		{
+		public:
+			Result(const QString &verbatim);
+			~Result();
+			
+			ComponentList& components() { return mComponents; }
+			const ComponentList& components() const { return mComponents; }
+
+		private:
+			QList<Component*> mComponents;
+		};
+
+
+		class Operator : public Component
+		{
+		public:
+			Operator(const QString &verbatim) : Component(verbatim) {}
+		};
+
+
+		class Value : public Component
+		{
+		public:
+			Value(const QString &verbatim) : Component(verbatim) {}
+		};
+
+
+	public:
+		Expression() = delete;
+		Expression(const QString &verbatim);
+
+		const Result& result() const { return mRoot; }
 
 	private:
-		QList<Component*> mComponents;
+		Result mRoot;
 	};
 }}
 
