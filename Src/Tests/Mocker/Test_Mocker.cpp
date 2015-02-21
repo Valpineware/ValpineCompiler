@@ -34,6 +34,18 @@ protected:
 		if (!lineBuffer.isEmpty() && lineBuffer.last().isNull())
 			lineBuffer.removeLast();
 	}
+
+	void readFile(const QString& filename, QVector<QString>& lines)
+	{
+		QFile file(gTestDir_Mocker + filename);
+		ASSERT_TRUE(file.open(QFile::ReadOnly | QFile::Text));
+		QTextStream in(&file);
+		
+		while (!in.atEnd())
+		{
+			lines.append(in.readLine());
+		}
+	}
 };
 
 
@@ -42,14 +54,15 @@ TEST_CASE(HelloWorld)
 	QVector<QString> lines;
 	readLines("HelloWorld.val", lines);
 
-	ASSERT_EQ(6, lines.size());
+	QVector<QString> expected;
+	readFile("HelloWorld.cpp", expected);
 
-	EXPECT_EQ_STR("#include <iostream>", lines[0]);
-	EXPECT_EQ_STR("int main()", lines[1]);
-	EXPECT_EQ_STR("{", lines[2]);
-	EXPECT_EQ_STR("std::cout << \"HelloWorld\" << std::endl;", lines[3]);
-	EXPECT_EQ_STR("return 0;", lines[4]);
-	EXPECT_EQ_STR("}", lines[5]);
+	ASSERT_EQ(expected.size(), lines.size());
+
+	for (int i = 0; i < expected.size(); i++)
+	{
+		EXPECT_EQ_STR(expected[i], lines[i]);
+	}
 }
 
 TEST_CASE(FunctionTest)
@@ -57,15 +70,15 @@ TEST_CASE(FunctionTest)
 	QVector<QString> lines;
 	readLines("FunctionTest.val", lines);
 
-	ASSERT_EQ(13, lines.size());
+	QVector<QString> expected;
+	readFile("FunctionTest.cpp", expected);
 
-	EXPECT_EQ_STR("int * access(bool opened, int count);", lines[0]);
-	EXPECT_EQ_STR("int add(int a, int b=5, int c=4);", lines[1]);
-	EXPECT_EQ_STR("int * access(bool opened, int count)", lines[2]);
-	EXPECT_EQ_STR("{", lines[3]);
-	EXPECT_EQ_STR("return new int;", lines[4]);
-	EXPECT_EQ_STR("}", lines[5]);
-	EXPECT_EQ_STR("int add(int a, int b=5, int c=4)", lines[6]);
+	ASSERT_EQ(expected.size(), lines.size());
+
+	for (int i = 0; i < expected.size(); i++)
+	{
+		EXPECT_EQ_STR(expected[i], lines[i]);
+	}
 }
 
 TEST_CASE(VariableTest)
@@ -73,10 +86,48 @@ TEST_CASE(VariableTest)
 	QVector<QString> lines;
 	readLines("VariableTest.val", lines);
 
-	ASSERT_EQ(8, lines.size());
-	EXPECT_EQ_STR("int x;", lines[2]);
-	EXPECT_EQ_STR("x = 5;", lines[3]);
-	EXPECT_EQ_STR("int * y;", lines[4]);
-	EXPECT_EQ_STR("int z = x;", lines[5]);
-	EXPECT_EQ_STR("y = &x;", lines[6]);
+	QVector<QString> expected;
+	readFile("VariableTest.cpp", expected);
+
+	ASSERT_EQ(expected.size(), lines.size());
+
+	for (int i = 0; i < expected.size(); i++)
+	{
+		EXPECT_EQ_STR(expected[i], lines[i]);
+	}
+}
+
+
+TEST_CASE(NestedFunctionBasic)
+{
+	QVector<QString> lines;
+	readLines("NestedFunctionBasic.val", lines);
+
+	QVector<QString> expected;
+	readFile("NestedFunctionBasic.cpp", expected);
+
+	ASSERT_EQ(expected.size(), lines.size());
+	
+	for (int i = 0; i < expected.size(); i++)
+	{
+		EXPECT_EQ_STR(expected[i], lines[i]);
+	}
+
+}
+
+TEST_CASE(ConditionalStatements)
+{
+	QVector<QString> lines;
+	readLines("ConditionalStatementsBasic.val", lines);
+
+	QVector<QString> expected;
+	readFile("ConditionalStatementsBasic.cpp", expected);
+
+	ASSERT_EQ(expected.size(), lines.size());
+
+	for (int i = 0; i < expected.size(); i++)
+	{
+		EXPECT_EQ_STR(expected[i], lines[i]);
+	}
+
 }

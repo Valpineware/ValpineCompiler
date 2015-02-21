@@ -1,0 +1,8 @@
+int main()
+{
+	int x;
+	x = 5;
+	int * y;
+	int z = x;
+	y = &x;
+}

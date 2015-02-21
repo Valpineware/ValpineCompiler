@@ -6,40 +6,37 @@
 //==================================================================================================================|
 
 #include "Mocker.h"
-#include "Function.h"
+#include "DecelerationBlock.h"
+#include "Variable.h"
+#include "Utility.h"
 
 namespace vc { namespace mocker
 {
 	void Mocker::mock(const graph::Graph &graph, QIODevice &outputDevice)
 	{
-		buildBlock(graph.block(), false);		
+		buildBlock(graph.block());		
 
 		QTextStream outStream(&outputDevice);
-		for (const QString &line : includes)
+		for (const QString &line : mIncludes)
 		{
 			outStream << line << "\n";
 		}
 
-		for (const QString &line : forwardDeclartions)
+		for (const QString &line : mForwardDecs)
 		{
 			outStream << line << "\n";
 		}
 
-		for (const QString &line : body)
+		for (const QString &line : mBody)
 		{
 			outStream << line << "\n";
 		}
 	}
 
 
-	void Mocker::buildBlock(const graph::Block &block, bool writeBraces)
+	void Mocker::buildBlock(const graph::Block &block)
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
-
-		if (writeBraces)
-		{
-			body.append("{");
-		}
 
 		while (iter.hasNext())
 		{
@@ -47,51 +44,24 @@ namespace vc { namespace mocker
 
 			if (graph::Preprocessor *preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
-				includes.append(preprocessor->verbatim());
+				mIncludes.append(preprocessor->verbatim());
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				createFunction(*function);
-				buildBlock(function->block());
+				//go into deceleration block
+				DecelerationBlock decBlock(mBody, mForwardDecs, *function, mScope);
 			}
-			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
+			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement)) // --happens with only global variables
 			{
-				createVar(*variable);
+				Variable::createVar(mBody, *variable, mScope);
 			}
 			else
 			{
-				body.append(statement->verbatim());
+				mBody.append(Utility::createTabs(mScope) + statement->verbatim());
 			}
 		}
-
-		if (writeBraces)
-		{
-			body.append("}");
-		}
 	}
 
-	void Mocker::createVar(graph::Variable &var)
-	{
-		QString cppVar = var.typeExpression().fullType() + " " + var.id();
 
-		if (var.initExpression() != "")
-		{
-			cppVar += " = " + var.initExpression();
-		}
 
-		cppVar += ";";
-		body.append(cppVar);
-	}
-
-	void Mocker::createFunction(graph::Function &function)
-	{
-		Function newFunction(function);
-
-		if (function.id() != "main")
-		{
-			forwardDeclartions.append(newFunction.declartion() + ";");
-		}
-
-		body.append(newFunction.declartion());
-	}
 }}

@@ -23,8 +23,12 @@
     <ClInclude Include="..\..\src\library\graph\TypeExpression.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Utility.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Variable.h" />
+    <ClInclude Include="..\..\Src\Library\Mocker\ControlStructure.h" />
+    <ClInclude Include="..\..\Src\Library\Mocker\DecelerationBlock.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\Function.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\Mocker.h" />
+    <ClInclude Include="..\..\Src\Library\Mocker\Utility.h" />
+    <ClInclude Include="..\..\Src\Library\Mocker\Variable.h" />
     <ClInclude Include="..\..\Src\Library\Parser\Parser.h" />
     <ClInclude Include="FileGenerator.h" />
     <CustomBuild Include="..\..\Src\Library\Compiler\Compiler.h">
@@ -52,8 +56,12 @@
     <ClCompile Include="..\..\Src\Library\Graph\Utility.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Variable.cpp" />
     <ClCompile Include="..\..\Src\Library\Library.cpp" />
+    <ClCompile Include="..\..\Src\Library\Mocker\ControlStructure.cpp" />
+    <ClCompile Include="..\..\Src\Library\Mocker\DecelerationBlock.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Function.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Mocker.cpp" />
+    <ClCompile Include="..\..\Src\Library\Mocker\Utility.cpp" />
+    <ClCompile Include="..\..\Src\Library\Mocker\Variable.cpp" />
     <ClCompile Include="..\..\Src\Library\Parser\Parser.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_Compiler.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

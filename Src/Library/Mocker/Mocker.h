@@ -19,13 +19,15 @@ namespace vc { namespace mocker
 	class Mocker
 	{
 	private:
-		void buildBlock(const graph::Block &block, bool writeBraces = true);
-		void createFunction(graph::Function &funtion);
+		void buildBlock(const graph::Block &block);
 		void createVar(graph::Variable &var);
 
-		QVector<QString> includes;
-		QVector<QString> forwardDeclartions;
-		QVector<QString> body;
+		QVector<QString> mIncludes;
+		QVector<QString> mForwardDecs;
+		QVector<QString> mBody;
+
+		int mScope = 0;
+
 	public:
 		Mocker() {};
 		void mock(const graph::Graph &graph, QIODevice& outputDevice);

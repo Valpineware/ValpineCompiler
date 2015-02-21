@@ -6,36 +6,55 @@
 //==================================================================================================================|
 
 #include "Function.h"
+#include "DecelerationBlock.h"
+#include "Utility.h"
 
 namespace vc {	namespace mocker
 {
-	void Function::buildDeclartion(graph::Function &function)
+	Function::Function(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope)
+	{
+		mData.body = &body;
+		mData.forwardDecs = &forwardDecs;
+		mData.scope = scope;
+		mData.nestedFunctions = new QQueue<graph::Function*>;
+
+		buildDeclartion(function);
+
+		DecelerationBlock::buildBlock(function.block(), mData);
+	}
+
+	void Function::buildDeclartion(const graph::Function &function)
 	{
 		//build opening experssion
-		mDeclartion = function.returnType().fullType() + " " + function.id() + "(";
+		QString declartion = Utility::createTabs(mData.scope);
+		declartion = function.returnType().fullType() + " " + function.id() + "(";
 
 		//add in the parameters
 		const QVector<graph::Parameter> &param = function.parameters();
 		for (int i = 0; i < param.size(); i++)
 		{
-			mDeclartion += param[i].type.fullType() + " " + param[i].id;
+			declartion += param[i].type.fullType() + " " + param[i].id;
 
 			//check if default value is needed, if so, add it
 			if (param[i].defaultValue != "")
 			{
-				mDeclartion += "=" + param[i].defaultValue;
+				declartion += "=" + param[i].defaultValue;
 			}
 
 			if ((i + 1) != param.size())
 			{
-				mDeclartion += ", ";
+				declartion += ", ";
 			}
 		}
 
-		mDeclartion += ")";
+		declartion += ")";
+		mData.body->append(declartion);
+		
+		if (function.id() != "main")
+		{
+			mData.forwardDecs->append(declartion + ";");
+		}
 	}
-
-
 
 
 }}
