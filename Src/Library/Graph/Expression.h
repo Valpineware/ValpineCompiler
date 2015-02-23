@@ -58,10 +58,20 @@ namespace vc { namespace graph
 		};
 
 
-		class Value : public Component
+		class Id : public Component
 		{
 		public:
-			Value(const QString &verbatim) : Component(verbatim) {}
+			Id(const QString &verbatim) : Component(verbatim), mType(Type::Function) {}
+
+			enum Type
+			{
+				Function
+			};
+
+			Type type() const { return mType; }
+
+		private:
+			Type mType;
 		};
 
 
@@ -69,7 +79,7 @@ namespace vc { namespace graph
 		Expression() = delete;
 		Expression(const QString &verbatim);
 
-		const Result& result() const { return mRoot; }
+		const ComponentList& components() const { return mRoot.components(); }
 
 	private:
 		Result mRoot;

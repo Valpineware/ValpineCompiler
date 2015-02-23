@@ -33,24 +33,37 @@ namespace vc { namespace graph
 	Expression::Result::Result(const QString &verbatim) : Component(verbatim)
 	{
 		QString filtered = verbatim;
-		Utility::breakUpOperators(filtered, QStringList() << "++");
+		Utility::breakUpOperators(filtered, QStringList() << "++" << "(" << ")");
 		QStringList strList;
 		Utility::breakUpByWhitespace(filtered, strList);
 
 		QVector<QString> components = strList.toVector();
-
+		
 		for (int i=0; i<components.count(); i++)
 		{
 			const QString &str = components[i];
+
+			bool couldBeArgumentList = false;
+			if (!mComponents.isEmpty())
+			{
+				couldBeArgumentList = dynamic_cast<Id*>(mComponents.last());
+			}
 			
 			if (str == "(")
 			{
 				int last = components.lastIndexOf(")");
-				if (last != -1)
-					mComponents.append(new Result(flatten(components.mid(i+1, last-i-1))));
+				if (last == -1)
+					continue;
+
+				QString body = flatten(components.mid(i+1, last-i-1));
+
+				if (couldBeArgumentList)
+					mComponents.append(new Result(body));
+				else
+					mComponents.append(new Result(body));
 			}
 			else if (Utility::couldBeIdentifier(str) || Utility::couldBeNumericConstant(str))
-				mComponents.append(new Value(str));
+				mComponents.append(new Id(str));
 			else if (str == "++")
 				mComponents.append(new Operator(str));
 		}
