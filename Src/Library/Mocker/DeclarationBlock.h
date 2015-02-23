@@ -21,7 +21,7 @@ namespace vc { namespace mocker
 		QVector<QString> *mBody;
 		QVector<QString> *mForwardDecs;
 
-		void static createFunction(const graph::Function &function, QVector<QString> &body, QVector<QString> &forwardDecs, int scope);
+		void createFunction(const graph::Function &function, QVector<QString> &body, QVector<QString> &forwardDecs, int scope);
 	public:
 		DeclarationBlock(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope);
 		void static buildBlock(const graph::Block &block, Data &data);
