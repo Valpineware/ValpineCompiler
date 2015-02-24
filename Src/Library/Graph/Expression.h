@@ -63,8 +63,9 @@ namespace vc { namespace graph
 		public:
 			Id(const QString &verbatim) : Component(verbatim), mType(Type::Function) {}
 
-			enum Type
+			enum class Type
 			{
+				Basic,	//TODO not sure if this naming is good enough
 				Function
 			};
 

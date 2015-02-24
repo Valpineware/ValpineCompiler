@@ -14,7 +14,7 @@ namespace vc { namespace graph
 	{
 		QString filtered = signature;
 		filtered.remove(";");
-		Utility::breakUpOperators(filtered, QStringList() << "=" << "*" << "&");
+		Utility::breakUpOperators(filtered);
 
 		QStringList list;
 		

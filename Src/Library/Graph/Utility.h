@@ -40,10 +40,25 @@ namespace vc { namespace graph
 		static bool couldBeNumericConstant(const QString &what);
 
 
-		static void breakUpOperators(QString &what, const QStringList &operators);
+		/**
+		 * Puts a space before and after every occurrence of an operator. Compound operators contain multiple 
+		 */
+		static void breakUpOperators(QString &what);
 
 
 		static Class::AccessType accessTypeForString(const QString what);
+
+		template <template<typename> class T>
+		static QString flatten(const T<QString> &list, const QString &spacer="")
+		{
+			QString buffer;
+			buffer.reserve(3 * list.count());
+
+			for (const QString &str : list)
+				buffer.append(str+spacer);
+
+			return buffer;
+		}
 
 	private:
 		struct ReservedIds

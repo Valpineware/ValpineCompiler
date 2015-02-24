@@ -8,7 +8,6 @@
 #include "Expression.h"
 #include "Utility.h"
 
-
 namespace vc { namespace graph
 {
 	Expression::Expression(const QString &verbatim) :
@@ -16,25 +15,13 @@ namespace vc { namespace graph
 		mRoot(verbatim)
 	{
 	}
-
-
-	QString flatten(const QVector<QString> &list)
-	{
-		QString buffer;
-		buffer.reserve(3 * list.count());
-
-		for (const QString &str : list)
-			buffer.append(str);
-
-		return buffer;
-	}
 	
 
 	Expression::Result::Result(const QString &verbatim) :
 		Component(verbatim)
 	{
 		QString filtered = verbatim;
-		Utility::breakUpOperators(filtered, QStringList() << "++" << "(" << ")" << "+");
+		Utility::breakUpOperators(filtered);
 		QStringList strList;
 		Utility::breakUpByWhitespace(filtered, strList);
 
@@ -50,7 +37,7 @@ namespace vc { namespace graph
 				if (last == -1)
 					continue;
 
-				QString body = flatten(components.mid(i+1, last-i-1));
+				QString body = Utility::flatten(components.mid(i+1, last-i-1));
 
 				bool couldBeArgumentList = false;
 				if (!mComponents.isEmpty())

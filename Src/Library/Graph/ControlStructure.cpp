@@ -17,6 +17,7 @@ namespace vc { namespace graph
 		bool needsStartExp = false;
 	};
 
+
 	QList<Type> registeredNames()
 	{
 		QList<Type> list;
@@ -55,7 +56,7 @@ namespace vc { namespace graph
 	{
 		QStringList list;
 		QString filtered = signature;
-		Utility::breakUpOperators(filtered, QStringList() << "(" << ")");
+		Utility::breakUpOperators(filtered);
 		Utility::breakUpByWhitespace(filtered, list);
 
 		QStringListIterator i(list);

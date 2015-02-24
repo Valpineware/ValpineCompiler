@@ -54,8 +54,8 @@ namespace vc { namespace graph
 		}
 
 		QString filtered = signature;
-		Utility::breakUpOperators(filtered, QStringList() << ":" << "," << "<" << ">");
 		QStringList list;
+		Utility::breakUpOperators(filtered);
 		Utility::breakUpByWhitespace(filtered, list);
 
 		if (list.count() < 2)

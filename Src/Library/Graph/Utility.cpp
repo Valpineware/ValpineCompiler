@@ -103,10 +103,58 @@ namespace vc { namespace graph
 	}
 
 
-	void Utility::breakUpOperators(QString &what, const QStringList &operators)
+	void Utility::breakUpOperators(QString &what)
 	{
-		for (const QString &op : operators)
-			what.replace(op, " "+op+" ");
+		//for example, escape ->* before -> before -. Or ++ before +
+			
+		QVector<QStringList> tiers(3);
+#define m(what) << #what
+		tiers[2] m(->*) m(<<=) m(>>=);
+		tiers[1] m(++) m(--) m(->) m(<<) m(>>) m(::) m(<=) m(>=) m(!=) m(==) m(&&) m(||) m(+=) m(-=) m(/=) m(*=) m(%=) m(&=) m(^=) m(|=) m(.*);
+		tiers[0] m(+) m(-) m(*) m(/) m(.) m(!) m(~) m(&) m(|) m(^) m(%) m(=) m(<) m(>) m(?) m(:) m(,) << "(" << ")";
+#undef m
+
+		QStringList chunks;
+		QRegExp opChars("[!%()\\^&*|:\\-+=<>?./]");
+		const int reach = tiers.count();
+				
+		for (int i=0; i<what.count(); i++)
+		{
+			//could this character even be part of an operator?
+			if (opChars.exactMatch(what.at(i)))
+			{
+				bool matched = false;
+
+				for (int reduction=0; reduction<reach && !matched; reduction++)
+				{
+					int actualReach = reach-reduction;
+					QStringRef chunk = what.midRef(i, actualReach);
+
+					for (const QString &str : tiers[chunk.count()-1])
+					{
+						if (chunk == str)
+						{
+							chunks.append(chunk.toString());
+							matched = true;
+							int delta = chunks.last().count()-1; //one less since the for loop will increment it anyways
+							i += delta;
+							chunks.append(""); //append blank so this operator is isolated
+							break;
+						}
+					}
+				}
+			}
+			else if (chunks.isEmpty())
+			{
+				chunks.append(what.at(i));
+			}
+			else
+			{
+				chunks.last().append(what.at(i));
+			}
+		}
+
+		what = flatten(chunks, " ");
 	}
 
 

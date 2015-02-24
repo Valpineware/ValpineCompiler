@@ -142,7 +142,7 @@ namespace vc { namespace graph
 
 		
 		QString filtered = signature;
-		Utility::breakUpOperators(filtered, QStringList() << "(" << ")" << "," << "=" << "*" << "&");
+		Utility::breakUpOperators(filtered);
 
 		QStringList list;
 		Utility::breakUpByWhitespace(filtered, list);

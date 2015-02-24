@@ -59,10 +59,7 @@ TEST_CASE(IdentifierAndOperator)
 	ASSERT_EQ(2, cmps.count());
 
 	Expression::ComponentListIterator iter(cmps);
-
-	auto id = dynamic_cast<Expression::Id*>(iter.next());
-	ASSERT_NOT_NULL(id);
-	EXPECT_EQ_STR("bar", id->verbatim());
+	assertId(iter.next(), "bar", Expression::Id::Type::Basic);
 
 	auto op = dynamic_cast<Expression::Operator*>(iter.next());
 	ASSERT_NOT_NULL(op);
@@ -77,7 +74,7 @@ TEST_CASE(FunctionExpressionNoArguments)
 	ASSERT_EQ(2, cmps.count());
 
 	Expression::ComponentListIterator iter(cmps);
-	assertId(iter.next(), "foo", Expression::Id::Function);
+	assertId(iter.next(), "foo", Expression::Id::Type::Function);
 	assertArguments(iter.next(), "", 0);
 }
 
@@ -89,6 +86,6 @@ TEST_CASE(FunctionExpressionSingleArgument)
 	ASSERT_EQ(2, cmps.count());
 
 	Expression::ComponentListIterator iter(cmps);
-	assertId(iter.next(), "barFoo", Expression::Id::Function);
+	assertId(iter.next(), "barFoo", Expression::Id::Type::Function);
 	assertArguments(iter.next(), "size+3", 1);
 }
