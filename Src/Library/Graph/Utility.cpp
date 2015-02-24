@@ -44,7 +44,7 @@ namespace vc { namespace graph
 
 
 	bool Utility::parseTypeExpression(QStringListIterator &i, TypeExpression &typeExpression)
-	{
+	{	//TODO move into TypeExpression constructor
 		QString type;
 		bool foundBaseType = false;
 

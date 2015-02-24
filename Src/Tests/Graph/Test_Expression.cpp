@@ -9,15 +9,33 @@ TEST_CLASS
 protected:
 	void assertSingleIdentifier(const QString &expression)
 	{
-		Expression exp = Expression(expression);
-		const Expression::ComponentList &cmps = exp.components();
+		Expression exp(expression);
+		const auto &cmps = exp.components();
 		ASSERT_EQ(1, cmps.count());
 		
 		Expression::ComponentListIterator iter(cmps);
-		Expression::Id *result = dynamic_cast<Expression::Id*>(iter.next());
+		auto *result = dynamic_cast<Expression::Id*>(iter.next());
 		ASSERT_NOT_NULL(result);
 
 		EXPECT_EQ_STR(expression, result->verbatim());
+	}
+
+
+	void assertId(Expression::Component *component, const QString &expectedVerbatim, Expression::Id::Type type)
+	{
+		auto id = dynamic_cast<Expression::Id*>(component);
+		ASSERT_NOT_NULL(id);
+		EXPECT_EQ_STR(expectedVerbatim, id->verbatim());
+		EXPECT_EQ(type, id->type());
+	}
+
+
+	void assertArguments(Expression::Component *component, const QString &expectedArg, int argCount)
+	{
+		auto args = dynamic_cast<Expression::Arguments*>(component);
+		ASSERT_NOT_NULL(args);
+		EXPECT_EQ_STR(expectedArg, args->verbatim());
+		EXPECT_EQ(argCount, args->list().count());
 	}
 };
 
@@ -37,31 +55,40 @@ TEST_CASE(SingleResult2)
 TEST_CASE(IdentifierAndOperator)
 {
 	Expression exp("bar++");
-	const Expression::ComponentList &cmps = exp.components();
+	const auto &cmps = exp.components();
 	ASSERT_EQ(2, cmps.count());
 
 	Expression::ComponentListIterator iter(cmps);
 
-	Expression::Id *id = dynamic_cast<Expression::Id*>(iter.next());
+	auto id = dynamic_cast<Expression::Id*>(iter.next());
 	ASSERT_NOT_NULL(id);
 	EXPECT_EQ_STR("bar", id->verbatim());
 
-	Expression::Operator *op = dynamic_cast<Expression::Operator*>(iter.next());
+	auto op = dynamic_cast<Expression::Operator*>(iter.next());
 	ASSERT_NOT_NULL(op);
 	EXPECT_EQ_STR("++", op->verbatim());
 }
 
 
-TEST_CASE(FunctionExpression)
+TEST_CASE(FunctionExpressionNoArguments)
 {
 	Expression exp("foo ()");
+	const auto &cmps = exp.components();
+	ASSERT_EQ(2, cmps.count());
+
+	Expression::ComponentListIterator iter(cmps);
+	assertId(iter.next(), "foo", Expression::Id::Function);
+	assertArguments(iter.next(), "", 0);
+}
+
+
+TEST_CASE(FunctionExpressionSingleArgument)
+{
+	Expression exp("barFoo(size+3)");
 	const Expression::ComponentList &cmps = exp.components();
 	ASSERT_EQ(2, cmps.count());
 
 	Expression::ComponentListIterator iter(cmps);
-
-	Expression::Id *id = dynamic_cast<Expression::Id*>(iter.next());
-	ASSERT_NOT_NULL(id);
-	EXPECT_EQ_STR("foo", id->verbatim());
-	EXPECT_EQ(id->type(), Expression::Id::Function);
+	assertId(iter.next(), "barFoo", Expression::Id::Function);
+	assertArguments(iter.next(), "size+3", 1);
 }

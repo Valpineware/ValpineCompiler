@@ -75,6 +75,18 @@ namespace vc { namespace graph
 		};
 
 
+		class Arguments : public Component
+		{
+		public:
+			Arguments(const QString &verbatim);
+
+			const QList<Component*>& list() const { return mList; }
+
+		private:
+			QList<Component*> mList;
+		};
+
+
 	public:
 		Expression() = delete;
 		Expression(const QString &verbatim);

@@ -30,10 +30,11 @@ namespace vc { namespace graph
 	}
 	
 
-	Expression::Result::Result(const QString &verbatim) : Component(verbatim)
+	Expression::Result::Result(const QString &verbatim) :
+		Component(verbatim)
 	{
 		QString filtered = verbatim;
-		Utility::breakUpOperators(filtered, QStringList() << "++" << "(" << ")");
+		Utility::breakUpOperators(filtered, QStringList() << "++" << "(" << ")" << "+");
 		QStringList strList;
 		Utility::breakUpByWhitespace(filtered, strList);
 
@@ -42,12 +43,6 @@ namespace vc { namespace graph
 		for (int i=0; i<components.count(); i++)
 		{
 			const QString &str = components[i];
-
-			bool couldBeArgumentList = false;
-			if (!mComponents.isEmpty())
-			{
-				couldBeArgumentList = dynamic_cast<Id*>(mComponents.last());
-			}
 			
 			if (str == "(")
 			{
@@ -57,10 +52,16 @@ namespace vc { namespace graph
 
 				QString body = flatten(components.mid(i+1, last-i-1));
 
+				bool couldBeArgumentList = false;
+				if (!mComponents.isEmpty())
+					couldBeArgumentList = dynamic_cast<Id*>(mComponents.last()) != nullptr;
+
 				if (couldBeArgumentList)
-					mComponents.append(new Result(body));
+					mComponents.append(new Arguments(body));
 				else
 					mComponents.append(new Result(body));
+
+				i = last;
 			}
 			else if (Utility::couldBeIdentifier(str) || Utility::couldBeNumericConstant(str))
 				mComponents.append(new Id(str));
@@ -76,5 +77,13 @@ namespace vc { namespace graph
 		{
 			if (cmp) delete cmp;
 		}
+	}
+
+
+	Expression::Arguments::Arguments(const QString &verbatim) :
+		Component(verbatim)
+	{
+		if (!verbatim.isEmpty())
+			mList.append(new Result(verbatim));
 	}
 }}
