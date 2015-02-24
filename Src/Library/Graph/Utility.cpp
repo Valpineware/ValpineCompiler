@@ -81,6 +81,13 @@ namespace vc { namespace graph
 		if (mReservedIds.anyContain(what))
 			return false;
 
+		//are any of the character operators?
+		for (int i=0; i<what.count(); i++)
+		{
+			if (gRegExp_operatorChar.exactMatch(what.at(i)))
+				return false;
+		}
+
 		return true;
 	}
 
@@ -105,23 +112,20 @@ namespace vc { namespace graph
 
 	void Utility::breakUpOperators(QString &what)
 	{
-		//for example, escape ->* before -> before -. Or ++ before +
-			
 		QVector<QStringList> tiers(3);
 #define m(what) << #what
 		tiers[2] m(->*) m(<<=) m(>>=);
 		tiers[1] m(++) m(--) m(->) m(<<) m(>>) m(::) m(<=) m(>=) m(!=) m(==) m(&&) m(||) m(+=) m(-=) m(/=) m(*=) m(%=) m(&=) m(^=) m(|=) m(.*);
-		tiers[0] m(+) m(-) m(*) m(/) m(.) m(!) m(~) m(&) m(|) m(^) m(%) m(=) m(<) m(>) m(?) m(:) m(,) << "(" << ")";
+		tiers[0] m(+) m(-) m(*) m(/) m(!) m(~) m(&) m(|) m(^) m(%) m(=) m(<) m(>) m(?) m(:) << "," << "(" << ")";
 #undef m
 
 		QStringList chunks;
-		QRegExp opChars("[!%()\\^&*|:\\-+=<>?./]");
 		const int reach = tiers.count();
 				
 		for (int i=0; i<what.count(); i++)
 		{
 			//could this character even be part of an operator?
-			if (opChars.exactMatch(what.at(i)))
+			if (gRegExp_operatorChar.exactMatch(what.at(i)))
 			{
 				bool matched = false;
 

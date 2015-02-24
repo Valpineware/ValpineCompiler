@@ -25,5 +25,6 @@ const QRegExp gRegExp_numericConstant = QRegExp("[0-9]+");
 const QRegExp gRegExp_identifier = QRegExp("([A-Za-z_]\\w*)");
 const QRegExp gRegExp_typeMod = QRegExp("(const|&|\\*|\\s)*");
 const QRegExp gRegExp_typeId = QRegExp("(const|&|\\*|\\s|([A-Za-z_]\\w*))*");
+const QRegExp gRegExp_operatorChar = QRegExp("[!%()\\^&*|:\\-+=<>?/,]");
 
 #endif

@@ -45,17 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Library\Compiler\Compiler.cpp" />
-    <ClCompile Include="..\..\Src\Library\Graph\Block.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Class.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\ControlStructure.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Expression.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Function.cpp" />
-    <ClCompile Include="..\..\Src\Library\Graph\Graph.cpp" />
-    <ClCompile Include="..\..\src\library\graph\Preprocessor.cpp" />
-    <ClCompile Include="..\..\Src\Library\Graph\Statement.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Utility.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Variable.cpp" />
-    <ClCompile Include="..\..\Src\Library\Library.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\ControlStructure.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\DeclarationBlock.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Function.cpp" />

@@ -33,9 +33,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\Library\Library.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Library\Compiler\Compiler.cpp">
       <Filter>Src\Compiler</Filter>
     </ClCompile>
@@ -48,22 +45,10 @@
     <ClCompile Include="..\..\Src\Library\Mocker\Mocker.cpp">
       <Filter>Src\Mocker</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Library\Graph\Graph.cpp">
-      <Filter>Src\Graph</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Library\Parser\Parser.cpp">
       <Filter>Src\Parser</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Library\Graph\Statement.cpp">
-      <Filter>Src\Graph</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Library\Graph\Function.cpp">
-      <Filter>Src\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\library\graph\Preprocessor.cpp">
-      <Filter>Src\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Library\Graph\Block.cpp">
       <Filter>Src\Graph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Library\Graph\ControlStructure.cpp">

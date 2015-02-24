@@ -1,7 +1,7 @@
 #include <QtCore/QBuffer>
 
-#include <Parser\Parser.h>
-#include <Mocker\Mocker.h>
+#include <Parser/Parser.h>
+#include <Mocker/Mocker.h>
 
 #include "Tests.h"
 
@@ -35,6 +35,7 @@ protected:
 			lineBuffer.removeLast();
 	}
 
+
 	void readFile(const QString& filename, QVector<QString>& lines)
 	{
 		QFile file(gTestDir_Mocker + filename);
@@ -49,6 +50,7 @@ protected:
 };
 
 
+//TODO Hey John. All these test cases duplicate a lot of code. Bi.
 TEST_CASE(HelloWorld)
 {
 	QVector<QString> lines;
@@ -129,5 +131,4 @@ TEST_CASE(ConditionalStatements)
 	{
 		EXPECT_EQ_STR(expected[i], lines[i]);
 	}
-
 }

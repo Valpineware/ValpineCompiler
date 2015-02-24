@@ -37,8 +37,10 @@ namespace vc { namespace graph
 		{
 			const QString &cmp = i.next();
 
-			if (gRegExp_identifier.exactMatch(cmp))
+			if (Utility::couldBeIdentifier(cmp))
 				variable->setId(cmp);
+			else
+				return nullptr;
 		}
 		else
 			return nullptr;
