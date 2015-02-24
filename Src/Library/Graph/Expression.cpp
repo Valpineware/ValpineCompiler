@@ -44,7 +44,12 @@ namespace vc { namespace graph
 					couldBeArgumentList = dynamic_cast<Id*>(mComponents.last()) != nullptr;
 
 				if (couldBeArgumentList)
+				{
+					if (auto prev = dynamic_cast<Id*>(mComponents.last()))
+						prev->setType(Id::Type::Function);
+
 					mComponents.append(new Arguments(body));
+				}
 				else
 					mComponents.append(new Result(body));
 

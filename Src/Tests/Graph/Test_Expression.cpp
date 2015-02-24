@@ -82,7 +82,7 @@ TEST_CASE(FunctionExpressionNoArguments)
 TEST_CASE(FunctionExpressionSingleArgument)
 {
 	Expression exp("barFoo(size+3)");
-	const Expression::ComponentList &cmps = exp.components();
+	const auto &cmps = exp.components();
 	ASSERT_EQ(2, cmps.count());
 
 	Expression::ComponentListIterator iter(cmps);

@@ -61,7 +61,7 @@ namespace vc { namespace graph
 		class Id : public Component
 		{
 		public:
-			Id(const QString &verbatim) : Component(verbatim), mType(Type::Function) {}
+			Id(const QString &verbatim) : Component(verbatim) {}
 
 			enum class Type
 			{
@@ -69,10 +69,11 @@ namespace vc { namespace graph
 				Function
 			};
 
+			void setType(Type type) { mType = type; }
 			Type type() const { return mType; }
 
 		private:
-			Type mType;
+			Type mType = Type::Basic;
 		};
 
 
