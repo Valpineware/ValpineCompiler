@@ -46,7 +46,7 @@ namespace vc { namespace graph
 				if (couldBeArgumentList)
 				{
 					if (auto prev = dynamic_cast<Id*>(mComponents.last()))
-						prev->setType(Id::Type::Function);
+						prev->setType(Id::Type::FunctionCall);
 
 					mComponents.append(new Arguments(body));
 				}
@@ -57,7 +57,7 @@ namespace vc { namespace graph
 			}
 			else if (Utility::couldBeIdentifier(str) || Utility::couldBeNumericConstant(str))
 				mComponents.append(new Id(str));
-			else if (str == "++")
+			else
 				mComponents.append(new Operator(str));
 		}
 	}

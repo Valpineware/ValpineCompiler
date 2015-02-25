@@ -18,6 +18,9 @@ namespace vc { namespace graph
 	class Expression : public Statement
 	{
 	public:
+		/**
+		 * Base type for the various types of components in an expression.
+		 */
 		class Component
 		{
 		public:
@@ -34,8 +37,9 @@ namespace vc { namespace graph
 		typedef QList<Component*> ComponentList;
 		typedef QListIterator<Component*> ComponentListIterator;
 
+
 		/**
-		 * The result of a sub-expression (a+10), identifier (foo), or constant (42.0). 
+		 * The contains a list of all components in a sub-expression.
 		 */
 		class Result : public Component
 		{
@@ -51,22 +55,37 @@ namespace vc { namespace graph
 		};
 
 
+		/**
+		 * An operator
+		 */
 		class Operator : public Component
 		{
 		public:
+			/**
+			 * Simply sets the verbatim to \p verbatim.
+			 */
 			Operator(const QString &verbatim) : Component(verbatim) {}
 		};
 
 
+		/**
+		 * An identifier that refers to a variable, numeric constant, or function call.
+		 */
 		class Id : public Component
 		{
 		public:
+			/**
+			 * Simply sets the verbatim to \p verbatim.
+			 */
 			Id(const QString &verbatim) : Component(verbatim) {}
 
+			/**
+			 * The type of identifier.
+			 */
 			enum class Type
 			{
-				Basic,	//TODO not sure if this naming is good enough
-				Function
+				Basic,			/*! A variable or numeric constant */
+				FunctionCall	/*! A call to a function*/
 			};
 
 			void setType(Type type) { mType = type; }
@@ -77,22 +96,30 @@ namespace vc { namespace graph
 		};
 
 
+		/**
+		 * Holds a list components each representing an argument to a particular function call.
+		 */
 		class Arguments : public Component
 		{
 		public:
 			Arguments(const QString &verbatim);
-
 			const QList<Component*>& list() const { return mList; }
 
 		private:
 			QList<Component*> mList;
 		};
 
-
 	public:
 		Expression() = delete;
+
+		/**
+		 * Parses \p verbatim and builds an in-memory representation of the expression.
+		 */
 		Expression(const QString &verbatim);
 
+		/**
+		 * @returns 
+		 */
 		const ComponentList& components() const { return mRoot.components(); }
 
 	private:
