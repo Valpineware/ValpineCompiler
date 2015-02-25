@@ -102,7 +102,6 @@ namespace vc { namespace graph
 		class Arguments : public Component
 		{
 		public:
-
 			Arguments(const QString &verbatim);
 			const ComponentList& list() const { return mList; }
 			ComponentList& list() { return mList; }

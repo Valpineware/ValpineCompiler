@@ -76,6 +76,11 @@ namespace vc { namespace graph
 		Component(verbatim)
 	{
 		if (!verbatim.isEmpty())
-			mList.append(new Result(verbatim));
+		{
+			QStringList chunks = verbatim.split(",");
+
+			for (QString &str : chunks)
+				mList.append(new Result(str));
+		}
 	}
 }}

@@ -79,3 +79,36 @@ TEST_CASE(FunctionExpressionSingleArgument2)
 
 	assertEqualExpression(exp, Expression("calculate (99 /(size + 3))"));
 }
+
+
+TEST_CASE(FunctionExpressionMultipleArguments)
+{
+	Expression exp("");
+		addId(exp.components(), "get_total_amount", Expression::Id::Type::FunctionCall);
+		auto args = addArguments(exp.components());
+			auto arg1 = addArgument(args);
+				addId(arg1->components(), "65", Expression::Id::Type::Basic);
+			auto arg2 = addArgument(args);
+				addId(arg2->components(), "value", Expression::Id::Type::Basic);
+
+	assertEqualExpression(exp, Expression("get_total_amount(65, value)"));
+}
+
+
+TEST_CASE(FunctionExpressionMultipleArgumentsNested)
+{
+	Expression exp("");
+		addId(exp.components(), "turnOn", Expression::Id::Type::FunctionCall);
+		auto args = addArguments(exp.components());
+			auto arg1 = addArgument(args);
+				addId(arg1->components(), "true", Expression::Id::Type::Basic);
+			auto arg2 = addArgument(args);
+				addId(arg2->components(), "foo", Expression::Id::Type::FunctionCall);
+				auto args2 = addArguments(arg2->components());
+					auto arg2_1 = addArgument(args2);
+						addId(arg2_1->components(), "44", Expression::Id::Type::Basic);
+					auto arg2_2 = addArgument(args2);
+						addId(arg2_2->components(), "alpha", Expression::Id::Type::Basic);
+
+	assertEqualExpression(exp, Expression("turnOn(true, foo(44, alpha))"));
+}
