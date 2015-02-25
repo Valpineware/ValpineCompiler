@@ -4,47 +4,47 @@ using namespace vc::graph::expression;
 
 namespace ext
 {
-	Id* addId(ComponentList &list, const QString &idName, Id::Type idType)
+	Id* addId(ComponentListUser *clu, const QString &idName, Id::Type idType)
 	{
 		auto id = new Id(idName);
 		id->setType(idType);
-		list.append(id);
+		clu->components().append(id);
 		
 		return id;
 	}
 
 
-	Operator* addOperator(ComponentList &list, const QString &operatorVerbatim)
+	Operator* addOperator(ComponentListUser *clu, const QString &operatorVerbatim)
 	{
 		auto op = new Operator(operatorVerbatim);
-		list.append(op);
+		clu->components().append(op);
 
 		return op;
 	}
 
 
-	Expression* addResult(ComponentList &list)
+	Expression* addResult(ComponentListUser *clu)
 	{
 		auto result = new Expression("");
-		list.append(result);
+		clu->components().append(result);
 
 		return result;
 	}
 
 
-	Arguments* addArguments(ComponentList &list)
+	Arguments* addArguments(ComponentListUser *clu)
 	{
 		auto args = new Arguments("");
-		list.append(args);
+		clu->components().append(args);
 
 		return args;
 	}
 
 
-	Expression* addArgument(Arguments *arguments)
+	Expression* addExpression(ComponentListUser *clu)
 	{
 		auto arg = new Expression("");
-		arguments->components().append(arg);
+		clu->components().append(arg);
 
 		return arg;
 	}
@@ -123,6 +123,9 @@ namespace ext
 		{
 			auto expectedComponent = expectedIter.next();
 			auto actualComponent = actualIter.next();
+
+			if (typeid(*expectedComponent) != typeid(*actualComponent))
+				qFatal("POOP HEAD");
 
 			ASSERT_EQ(typeid(*expectedComponent), typeid(*actualComponent)) << "Components not of same type";
 

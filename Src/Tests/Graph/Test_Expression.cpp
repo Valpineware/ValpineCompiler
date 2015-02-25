@@ -11,7 +11,7 @@ protected:
 	void assertSingleIdentifier(const QString &expression)
 	{
 		Expression exp("");
-			addId(exp.components(), expression, Id::Type::Basic);
+			addId(&exp, expression, Id::Type::Basic);
 
 		assertEqualExpression(exp, Expression(expression));
 	}
@@ -33,8 +33,8 @@ TEST_CASE(SingleResult2)
 TEST_CASE(IdentifierAndOperator)
 {
 	Expression exp("");
-		addId(exp.components(), "bar", Id::Type::Basic);
-		addOperator(exp.components(), "++");
+		addId(&exp, "bar", Id::Type::Basic);
+		addOperator(&exp, "++");
 
 	assertEqualExpression(exp, Expression("bar++"));
 }
@@ -43,8 +43,8 @@ TEST_CASE(IdentifierAndOperator)
 TEST_CASE(FunctionExpressionNoArguments)
 {
 	Expression exp("");
-		addId(exp.components(), "foo", Id::Type::FunctionCall);
-		addArguments(exp.components());
+		addId(&exp, "foo", Id::Type::FunctionCall);
+		addArguments(&exp);
 
 	assertEqualExpression(exp, Expression("foo ()"));
 }
@@ -53,12 +53,12 @@ TEST_CASE(FunctionExpressionNoArguments)
 TEST_CASE(FunctionExpressionSingleArgument1)
 {
 	Expression exp("");
-		addId(exp.components(), "barFoo", Id::Type::FunctionCall);
-		auto args = addArguments(exp.components());
-			auto arg1 = addArgument(args);
-				addId(arg1->components(), "size", Id::Type::Basic);
-				addOperator(arg1->components(), "+");
-				addId(arg1->components(), "3", Id::Type::Basic);
+		addId(&exp, "barFoo", Id::Type::FunctionCall);
+		auto args = addArguments(&exp);
+			auto arg1 = addExpression(args);
+				addId(arg1, "size", Id::Type::Basic);
+				addOperator(arg1, "+");
+				addId(arg1, "3", Id::Type::Basic);
 
 	assertEqualExpression(exp, Expression("barFoo(size+3)"));
 }
@@ -67,15 +67,15 @@ TEST_CASE(FunctionExpressionSingleArgument1)
 TEST_CASE(FunctionExpressionSingleArgument2)
 {
 	Expression exp("");
-		addId(exp.components(), "calculate", Id::Type::FunctionCall);
-		auto args = addArguments(exp.components());
-			auto arg1 = addArgument(args);
-				addId(arg1->components(), "99", Id::Type::Basic);
-				addOperator(arg1->components(), "/");
-				auto res = addResult(arg1->components());
-					addId(res->components(), "size", Id::Type::Basic);
-					addOperator(res->components(), "+");
-					addId(res->components(), "3", Id::Type::Basic);
+		addId(&exp, "calculate", Id::Type::FunctionCall);
+		auto args = addArguments(&exp);
+			auto arg1 = addExpression(args);
+				addId(arg1, "99", Id::Type::Basic);
+				addOperator(arg1, "/");
+				auto res = addResult(arg1);
+					addId(res, "size", Id::Type::Basic);
+					addOperator(res, "+");
+					addId(res, "3", Id::Type::Basic);
 
 	assertEqualExpression(exp, Expression("calculate (99 /(size + 3))"));
 }
@@ -84,12 +84,12 @@ TEST_CASE(FunctionExpressionSingleArgument2)
 TEST_CASE(FunctionExpressionMultipleArguments)
 {
 	Expression exp("");
-		addId(exp.components(), "get_total_amount", Id::Type::FunctionCall);
-		auto args = addArguments(exp.components());
-			auto arg1 = addArgument(args);
-				addId(arg1->components(), "65", Id::Type::Basic);
-			auto arg2 = addArgument(args);
-				addId(arg2->components(), "value", Id::Type::Basic);
+		addId(&exp, "get_total_amount", Id::Type::FunctionCall);
+		auto args = addArguments(&exp);
+			auto arg1 = addExpression(args);
+				addId(arg1, "65", Id::Type::Basic);
+			auto arg2 = addExpression(args);
+				addId(arg2, "value", Id::Type::Basic);
 
 	assertEqualExpression(exp, Expression("get_total_amount(65, value)"));
 }
@@ -100,17 +100,17 @@ TEST_CASE(FunctionExpressionMultipleArgumentsNested)
 	Expression("foo(a,b,c)");
 
 	Expression exp("");
-		addId(exp.components(), "turnOn", Id::Type::FunctionCall);
-		auto args = addArguments(exp.components());
-			auto arg1 = addArgument(args);
-				addId(arg1->components(), "true", Id::Type::Basic);
-			auto arg2 = addArgument(args);
-				addId(arg2->components(), "foo", Id::Type::FunctionCall);
-				auto args2 = addArguments(arg2->components());
-					auto arg2_1 = addArgument(args2);
-						addId(arg2_1->components(), "44", Id::Type::Basic);
-					auto arg2_2 = addArgument(args2);
-						addId(arg2_2->components(), "alpha", Id::Type::Basic);
+		addId(&exp, "turnOn", Id::Type::FunctionCall);
+		auto args = addArguments(&exp);
+			auto arg1 = addExpression(args);
+				addId(arg1, "true", Id::Type::Basic);
+			auto arg2 = addExpression(args);
+				addId(arg2, "foo", Id::Type::FunctionCall);
+				auto args2 = addArguments(arg2);
+					auto arg2_1 = addExpression(args2);
+						addId(arg2_1, "44", Id::Type::Basic);
+					auto arg2_2 = addExpression(args2);
+						addId(arg2_2, "alpha", Id::Type::Basic);
 
 	assertEqualExpression(exp, Expression("turnOn(true, foo(44, alpha))"));
 }

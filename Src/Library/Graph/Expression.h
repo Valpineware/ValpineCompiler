@@ -28,6 +28,7 @@ namespace vc { namespace graph { namespace expression
 		QString mVerbatim;
 	};
 
+
 	typedef QList<Component*> ComponentList;
 	typedef QListIterator<Component*> ComponentListIterator;
 
