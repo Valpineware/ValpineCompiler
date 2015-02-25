@@ -4,9 +4,12 @@
 #pragma warning(push, 0)
 	#include <QtCore/QDebug>
 	#include <QtCore/QDir>
-	#include <QtCore/QQueue>
+	
 	#include <QtCore/QProcess>
+
+	#include <QtCore/QQueue>
 	#include <QtCore/QList>
+	#include <QtCore/QVector>
 #pragma warning(pop)
 
 #include <memory>
@@ -41,6 +44,16 @@ namespace vc
 	QListIterator<T> makeIter(const QList<T> &list)
 	{
 		return QListIterator<T>(list);
+	}
+
+	/**
+	 * Convenience QVectorIterator factory. Allows for use with the auto keyword. For example:
+	 * auto myIter = vc::makeIter(myVector);
+	 */
+	template<typename T>
+	QVectorIterator<T> makeIter(const QVector<T> &list)
+	{
+		return QVectorIterator<T>(list);
 	}
 }
 

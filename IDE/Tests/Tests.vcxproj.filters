@@ -15,6 +15,9 @@
     <Filter Include="Src\Mocker">
       <UniqueIdentifier>{0ce82d0b-374f-4840-9258-42f0750d0b2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Graph\Ext">
+      <UniqueIdentifier>{a3ed88be-04ba-4590-b51e-89e591359ed9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Tests\Parser\Test_Parser.cpp">
@@ -48,6 +51,9 @@
   <ItemGroup>
     <ClInclude Include="..\..\Src\Tests\Tests.h">
       <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Tests\Graph\Ext\Expression.h">
+      <Filter>Src\Graph\Ext</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
