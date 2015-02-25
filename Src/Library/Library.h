@@ -27,4 +27,10 @@ const QRegExp gRegExp_typeMod = QRegExp("(const|&|\\*|\\s)*");
 const QRegExp gRegExp_typeId = QRegExp("(const|&|\\*|\\s|([A-Za-z_]\\w*))*");
 const QRegExp gRegExp_operatorChar = QRegExp("[!%()\\^&*|:\\-+=<>?/,]");
 
+/**
+ * Use at your own risk. The valpine lanuge will have this built in a safe.
+ */
+#define STATIC_BLOCK_UNSAFE(name, body) struct Init##name { Init##name() { body } }; static Init##name _staticBlock_##name
+
+
 #endif

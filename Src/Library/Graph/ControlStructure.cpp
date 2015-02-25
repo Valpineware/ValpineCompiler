@@ -18,25 +18,20 @@ namespace vc { namespace graph
 	};
 
 
-	QList<Type> registeredNames()
-	{
-		QList<Type> list;
+	QList<Type> gRegisteredNames;
+	QRegExp gRegisteredNamesRegExp;
 
-		#define A(start, need) {Type t; t.startKeyword = start; t.needsStartExp = need; list.append( t );}
-
+	#define A(start, need) {Type t; t.startKeyword = start; t.needsStartExp = need; gRegisteredNames.append( t );}
+	STATIC_BLOCK_UNSAFE(RegisteredNames,
 		A("for", true)
 		A("while", true)
 		A("if", true)
 		A("elseif", true)
 		A("else", false)
+	);
+	#undef A
 
-		#undef A
-		return list;
-	} QList<Type> gRegisteredNames = registeredNames();
-
-
-	QRegExp registeredNamesRegExp()
-	{
+	STATIC_BLOCK_UNSAFE(RegisteredNamesRegExp,
 		QString buffer;
 		buffer.reserve(gRegisteredNames.count() * 4);
 
@@ -48,8 +43,8 @@ namespace vc { namespace graph
 		if (buffer.at(buffer.count()-1) == "|")
 			buffer.chop(1);
 
-		return QRegExp(buffer);
-	} QRegExp gRegisteredNamesRegExp = registeredNamesRegExp();
+		gRegisteredNamesRegExp = QRegExp(buffer);
+	);
 
 
 	ControlStructure* ControlStructure::createFromVerbatimSignature(const QString signature)

@@ -112,12 +112,13 @@ namespace vc { namespace graph
 
 	void Utility::breakUpOperators(QString &what)
 	{
-		QVector<QStringList> tiers(3);
-#define m(what) << #what
-		tiers[2] m(->*) m(<<=) m(>>=);
-		tiers[1] m(++) m(--) m(->) m(<<) m(>>) m(::) m(<=) m(>=) m(!=) m(==) m(&&) m(||) m(+=) m(-=) m(/=) m(*=) m(%=) m(&=) m(^=) m(|=) m(.*);
-		tiers[0] m(+) m(-) m(*) m(/) m(!) m(~) m(&) m(|) m(^) m(%) m(=) m(<) m(>) m(?) m(:) << "," << "(" << ")";
-#undef m
+		static QVector<QStringList> tiers(3);
+
+		STATIC_BLOCK_UNSAFE(Tiers,
+			tiers[2] << "->*" << "<<=" << ">>=";
+			tiers[1] << "++" << "--" << "->" << "<<" << ">>" << "::" << "<=" << ">=" << "!=" << "==" << "&&" << "||" << "+=" << "-=" << "/=" << "*=" << "%=" << "&=" << "^=" << "|=" << ".*";
+			tiers[0] << "+" << "-" << "*" << "/" << "!" << "~" << "&" << "|" << "^" << "%" << "=" << "<" << ">" << "?" << ":" << "," << "(" << ")";
+		);
 
 		QStringList chunks;
 		const int reach = tiers.count();
