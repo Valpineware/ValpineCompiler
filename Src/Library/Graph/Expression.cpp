@@ -8,16 +8,9 @@
 #include "Expression.h"
 #include "Utility.h"
 
-namespace vc { namespace graph
+namespace vc { namespace graph { namespace expression
 {
 	Expression::Expression(const QString &verbatim) :
-		Statement(verbatim),
-		mRoot(verbatim)
-	{
-	}
-	
-
-	Expression::Result::Result(const QString &verbatim) :
 		Component(verbatim)
 	{
 		QString filtered = verbatim;
@@ -25,62 +18,98 @@ namespace vc { namespace graph
 		QStringList strList;
 		Utility::breakUpByWhitespace(filtered, strList);
 
-		QVector<QString> components = strList.toVector();
+		QVector<QString> cmps = strList.toVector();
 		
-		for (int i=0; i<components.count(); i++)
+		for (int i=0; i<cmps.count(); i++)
 		{
-			const QString &str = components[i];
+			const QString &str = cmps[i];
 			
 			if (str == "(")
 			{
-				int last = components.lastIndexOf(")");
+				int last = cmps.lastIndexOf(")");
 				if (last == -1)
 					continue;
 
-				QString body = Utility::flatten(components.mid(i+1, last-i-1));
+				QString body = Utility::flatten(cmps.mid(i+1, last-i-1));
 
 				bool couldBeArgumentList = false;
-				if (!mComponents.isEmpty())
-					couldBeArgumentList = dynamic_cast<Id*>(mComponents.last()) != nullptr;
+				if (!components().isEmpty())
+					couldBeArgumentList = dynamic_cast<Id*>(components().last()) != nullptr;
 
 				if (couldBeArgumentList)
 				{
-					if (auto prev = dynamic_cast<Id*>(mComponents.last()))
+					if (auto prev = dynamic_cast<Id*>(components().last()))
 						prev->setType(Id::Type::FunctionCall);
 
-					mComponents.append(new Arguments(body));
+					components().append(new Arguments(body));
 				}
 				else
-					mComponents.append(new Result(body));
+					components().append(new Expression(body));
 
 				i = last;
 			}
 			else if (Utility::couldBeIdentifier(str) || Utility::couldBeNumericConstant(str))
-				mComponents.append(new Id(str));
+				components().append(new Id(str));
 			else
-				mComponents.append(new Operator(str));
+				components().append(new Operator(str));
 		}
 	}
 
 
-	Expression::Result::~Result()
+	Expression::~Expression()
 	{
-		for (Component *cmp : mComponents)
+		for (Component *cmp : components())
 		{
 			if (cmp) delete cmp;
 		}
 	}
 
 
-	Expression::Arguments::Arguments(const QString &verbatim) :
-		Component(verbatim)
+	Arguments::Arguments(const QString &verbatim) :
+		Component("")
 	{
 		if (!verbatim.isEmpty())
 		{
-			QStringList chunks = verbatim.split(",");
+			QVector<int> rootCommaPos(1, 0);
+			int level = 0;
 
-			for (QString &str : chunks)
-				mList.append(new Result(str));
+			//find the positions of root level commas
+			for (int i=0; i<verbatim.count(); i++)
+			{
+				QChar c = verbatim[i];
+
+				if (c == "," && level == 0)
+				{
+					//only add if there is anything after this comma
+					if (verbatim.count() > i+1)
+						rootCommaPos.append(i+1);
+				}
+				else if (c == "(")
+					level++;
+				else if (c == ")")
+					level--;
+			}
+
+			QList<QStringRef> chunks;
+
+			//split verbaitm on all the positions found
+			for (int i=0; i<rootCommaPos.count(); i++)
+			{
+				int current = rootCommaPos[i];
+
+				if (i+1 < rootCommaPos.count())
+				{
+					int next = rootCommaPos[i+1];
+					chunks.append(verbatim.midRef(current, next-current-1));
+				}
+				else
+				{
+					chunks.append(verbatim.midRef(current));
+				}
+			}
+
+			for (QStringRef &str : chunks)
+				components().append(new Expression(str.toString()));
 		}
 	}
-}}
+}}}

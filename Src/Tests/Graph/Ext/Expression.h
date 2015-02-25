@@ -1,11 +1,12 @@
+#include "../Tests.h"
 #include <Graph/Expression.h>
-using namespace vc::graph;
+using namespace vc::graph::expression;
 
 namespace ext
 {
-	Expression::Id* addId(Expression::ComponentList &list, const QString &idName, Expression::Id::Type idType)
+	Id* addId(ComponentList &list, const QString &idName, Id::Type idType)
 	{
-		auto id = new Expression::Id(idName);
+		auto id = new Id(idName);
 		id->setType(idType);
 		list.append(id);
 		
@@ -13,105 +14,105 @@ namespace ext
 	}
 
 
-	Expression::Operator* addOperator(Expression::ComponentList &list, const QString &operatorVerbatim)
+	Operator* addOperator(ComponentList &list, const QString &operatorVerbatim)
 	{
-		auto op = new Expression::Operator(operatorVerbatim);
+		auto op = new Operator(operatorVerbatim);
 		list.append(op);
 
 		return op;
 	}
 
 
-	Expression::Result* addResult(Expression::ComponentList &list)
+	Expression* addResult(ComponentList &list)
 	{
-		auto result = new Expression::Result("");
+		auto result = new Expression("");
 		list.append(result);
 
 		return result;
 	}
 
 
-	Expression::Arguments* addArguments(Expression::ComponentList &list)
+	Arguments* addArguments(ComponentList &list)
 	{
-		auto args = new Expression::Arguments("");
+		auto args = new Arguments("");
 		list.append(args);
 
 		return args;
 	}
 
 
-	Expression::Result* addArgument(Expression::Arguments *arguments)
+	Expression* addArgument(Arguments *arguments)
 	{
-		auto arg = new Expression::Result("");
-		arguments->list().append(arg);
+		auto arg = new Expression("");
+		arguments->components().append(arg);
 
 		return arg;
 	}
 
 
-	void assertId(Expression::Component *component, const QString &expectedVerbatim, Expression::Id::Type type)
+	void assertId(Component *component, const QString &expectedVerbatim, Id::Type type)
 	{
-		auto id = dynamic_cast<Expression::Id*>(component);
+		auto id = dynamic_cast<Id*>(component);
 		ASSERT_NOT_NULL(id);
 		EXPECT_EQ_STR(expectedVerbatim, id->verbatim());
 		EXPECT_EQ(type, id->type());
 	}
 
 
-	void assertArguments(Expression::Component *component, const QString &expectedArg, int argCount)
+	void assertArguments(Component *component, const QString &expectedArg, int argCount)
 	{
-		auto args = dynamic_cast<Expression::Arguments*>(component);
+		auto args = dynamic_cast<Arguments*>(component);
 		ASSERT_NOT_NULL(args);
 		EXPECT_EQ_STR(expectedArg, args->verbatim());
-		EXPECT_EQ(argCount, args->list().count());
+		EXPECT_EQ(argCount, args->components().count());
 	}
 
 
-	void assertOperator(Expression::Component *component, const QString &expectedVerbatim)
+	void assertOperator(Component *component, const QString &expectedVerbatim)
 	{
-		auto op = dynamic_cast<Expression::Operator*>(component);
+		auto op = dynamic_cast<Operator*>(component);
 		ASSERT_NOT_NULL(op);
 		EXPECT_EQ_STR(expectedVerbatim, op->verbatim());
 	}
 
 
-	void assertEqualComponentList(const Expression::ComponentList &expected, const Expression::ComponentList &actual);
+	void assertEqualComponentList(const ComponentList &expected, const ComponentList &actual);
 
-	void assertEqualResult(const Expression::Result *expected, const Expression::Result *actual)
+	void assertEqualResult(const Expression *expected, const Expression *actual)
 	{
 		assertEqualComponentList(expected->components(), actual->components());
 	}
 
 
-	void assertEqualOperator(const Expression::Operator *expected, const Expression::Operator *actual)
+	void assertEqualOperator(const Operator *expected, const Operator *actual)
 	{
 		EXPECT_EQ_STR(expected->verbatim(), actual->verbatim());
 	}
 
 
-	void assertEqualId(const Expression::Id *expected, const Expression::Id *actual)
+	void assertEqualId(const Id *expected, const Id *actual)
 	{
 		EXPECT_EQ_STR(expected->verbatim(), actual->verbatim());
 		EXPECT_EQ(expected->type(), actual->type());
 	}
 
 
-	void assertEqualArguments(const Expression::Arguments *expected, const Expression::Arguments *actual)
+	void assertEqualArguments(const Arguments *expected, const Arguments *actual)
 	{
-		ASSERT_EQ(expected->list().count(), actual->list().count());
+		ASSERT_EQ(expected->components().count(), actual->components().count());
 
-		auto expectedIter = vc::makeIter(expected->list());
-		auto actualIter = vc::makeIter(actual->list());
+		auto expectedIter = vc::makeIter(expected->components());
+		auto actualIter = vc::makeIter(actual->components());
 
 		while (expectedIter.hasNext())
 		{
-			assertEqualResult(dynamic_cast<Expression::Result*>(expectedIter.next()),
-							  dynamic_cast<Expression::Result*>(actualIter.next()));
+			assertEqualResult(dynamic_cast<Expression*>(expectedIter.next()),
+							  dynamic_cast<Expression*>(actualIter.next()));
 		}
 	}
 
 
-	void assertEqualComponentList(const Expression::ComponentList &expected, const Expression::ComponentList &actual)
+	void assertEqualComponentList(const ComponentList &expected, const ComponentList &actual)
 	{
 		ASSERT_EQ(expected.count(), expected.count());
 
@@ -125,14 +126,14 @@ namespace ext
 
 			ASSERT_EQ(typeid(*expectedComponent), typeid(*actualComponent)) << "Components not of same type";
 
-			if (auto result = dynamic_cast<Expression::Result*>(expectedComponent))
-				assertEqualResult(result, dynamic_cast<Expression::Result*>(actualComponent));
-			else if (auto oper = dynamic_cast<Expression::Operator*>(expectedComponent))
-				assertEqualOperator(oper, dynamic_cast<Expression::Operator*>(actualComponent));
-			else if (auto id = dynamic_cast<Expression::Id*>(expectedComponent))
-				assertEqualId(id, dynamic_cast<Expression::Id*>(actualComponent));
-			else if (auto arguments = dynamic_cast<Expression::Arguments*>(expectedComponent))
-				assertEqualArguments(arguments, dynamic_cast<Expression::Arguments*>(actualComponent));
+			if (auto result = dynamic_cast<Expression*>(expectedComponent))
+				assertEqualResult(result, dynamic_cast<Expression*>(actualComponent));
+			else if (auto oper = dynamic_cast<Operator*>(expectedComponent))
+				assertEqualOperator(oper, dynamic_cast<Operator*>(actualComponent));
+			else if (auto id = dynamic_cast<Id*>(expectedComponent))
+				assertEqualId(id, dynamic_cast<Id*>(actualComponent));
+			else if (auto arguments = dynamic_cast<Arguments*>(expectedComponent))
+				assertEqualArguments(arguments, dynamic_cast<Arguments*>(actualComponent));
 		}
 	}
 
