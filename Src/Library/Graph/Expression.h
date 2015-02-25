@@ -102,11 +102,15 @@ namespace vc { namespace graph
 		class Arguments : public Component
 		{
 		public:
+			typedef QList<Result*> ResultList;
+			typedef QListIterator<Result*> ResultListIterator;
+
 			Arguments(const QString &verbatim);
-			const QList<Component*>& list() const { return mList; }
+			const ResultList& list() const { return mList; }
+			ResultList& list() { return mList; }
 
 		private:
-			QList<Component*> mList;
+			ResultList mList;
 		};
 
 	public:
@@ -117,9 +121,7 @@ namespace vc { namespace graph
 		 */
 		Expression(const QString &verbatim);
 
-		/**
-		 * @returns 
-		 */
+		ComponentList& components() { return mRoot.components(); }
 		const ComponentList& components() const { return mRoot.components(); }
 
 	private:
