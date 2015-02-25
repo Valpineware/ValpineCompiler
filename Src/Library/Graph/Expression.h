@@ -39,6 +39,12 @@ namespace vc { namespace graph { namespace expression
 		ComponentList& components() { return mComponents; }
 		const ComponentList& components() const { return mComponents; }
 
+		~ComponentListUser()
+		{
+			for (Component *cmp : mComponents)
+				delete cmp;
+		}
+
 	private:
 		ComponentList mComponents;
 	};
@@ -51,7 +57,6 @@ namespace vc { namespace graph { namespace expression
 	{
 	public:
 		Expression(const QString &verbatim);
-		~Expression();
 	};
 
 

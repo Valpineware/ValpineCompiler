@@ -30,7 +30,7 @@ namespace vc
 	template <typename T>
 	using unique = std::unique_ptr<T>;
 
-	const QRegExp gRegExp_numericConstant = QRegExp("[0-9]+");
+	const QRegExp gRegExp_numericConstant = QRegExp("([0-9]+)|(true|false)");
 	const QRegExp gRegExp_identifier = QRegExp("([A-Za-z_]\\w*)");
 	const QRegExp gRegExp_typeMod = QRegExp("(const|&|\\*|\\s)*");
 	const QRegExp gRegExp_typeId = QRegExp("(const|&|\\*|\\s|([A-Za-z_]\\w*))*");

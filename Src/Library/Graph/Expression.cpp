@@ -56,15 +56,6 @@ namespace vc { namespace graph { namespace expression
 	}
 
 
-	Expression::~Expression()
-	{
-		for (Component *cmp : components())
-		{
-			if (cmp) delete cmp;
-		}
-	}
-
-
 	Arguments::Arguments(const QString &verbatim) :
 		Component("")
 	{
