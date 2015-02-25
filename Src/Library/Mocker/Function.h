@@ -10,31 +10,22 @@
 
 #include <Graph/Graph.h>
 #include <Library.h>
+#include "DeclarationBlock.h"
 
 namespace vc { namespace mocker 
 {
-	struct Data
-	{
-		QVector<QString> *body;
-		QVector<QString> *forwardDecs;
-		int scope; 
-		QQueue<graph::Function*> *nestedFunctions;
-	};
-
 	/**
 	* @breif Contains information on cpp function conversion
 	*/
 	class Function
 	{
 	private:
-		Data mData;
 		void buildDeclartion(const graph::Function &function);
-
+		Data *mData;
 
 	public:
-		Function(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope);
-		QQueue<graph::Function*> &nestedFunctions() { return *(mData.nestedFunctions); }
-		Data &data() { return mData; }
+		Function(Data &data);
+		QQueue<const graph::Function*> &nestedFunctions() { return *(mData->functions); }
 	};
 
 

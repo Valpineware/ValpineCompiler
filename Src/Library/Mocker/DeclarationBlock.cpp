@@ -15,11 +15,13 @@ namespace vc { namespace mocker
 {
 	DeclarationBlock::DeclarationBlock(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope)
 	{
-		mBody = &body;
-		mForwardDecs = &forwardDecs;
-		mScope = scope;
+		mData.body = &body;
+		mData.forwardDecs = &forwardDecs;
+		mData.scope = scope;
+		mData.functions = new QQueue<const graph::Function*>;
+		mData.functions->enqueue(&function);
 
-		createFunction(function, *mBody, *mForwardDecs, mScope);
+		createFunction();
 	}
 
 
@@ -45,7 +47,7 @@ namespace vc { namespace mocker
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
-				data.nestedFunctions->enqueue(function);
+				data.functions->enqueue(function);
 			}
 			else if (graph::Preprocessor *preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
@@ -61,18 +63,14 @@ namespace vc { namespace mocker
 		data.body->append(Utility::createTabs(data.scope) + "}");
 	}
 
-	void DeclarationBlock::createFunction(const graph::Function &function, QVector<QString> &body, QVector<QString> &forwardDecs, int scope)
+	void DeclarationBlock::createFunction()
 	{
-		Function newFunction(body, forwardDecs, function, scope);
+		Function newFunction(mData);
 
-		//get nested functions and build them
-		QQueue<graph::Function*> &nestedFunctions = newFunction.nestedFunctions();
-
-		while (!nestedFunctions.isEmpty())
+		while (!mData.functions->isEmpty())
 		{
 			//build the nested function and add any new nested functions to the end of the queue
-			Function nestedFunction(body, forwardDecs, *nestedFunctions.dequeue(), scope);
-			nestedFunctions.append(nestedFunction.nestedFunctions());
+			Function nestedFunction(mData);
 		}
 	}
 }}
