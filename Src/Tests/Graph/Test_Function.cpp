@@ -9,11 +9,14 @@ TEST_CLASS
 };
 
 
-TEST_CASE(FunctionHeader_WhatIs)
+TEST_CASE(FunctionHeaderInRoot_WhatIs)
 {
-	#define tst(what) ASSERT_NOT_NULL(graph::Function::createFromVerbatimSignature(what))
+	//TODO we need to test Function::Type in this test
+	#define tst(what) { auto f = graph::Function::createFromVerbatimSignature(what, graph::ScopeType::Root); \
+						ASSERT_NOT_NULL(f); \
+						ASSERT_EQ(f->type(), graph::Function::Type::Normal); }
 
-	tst("void simple()");
+	tst("void simple()")
 	tst("int		 wacky	( ) ");
 	tst(" bool	isCool(  )");
 	tst("		float __compilerFunction ()");
@@ -37,11 +40,19 @@ TEST_CASE(FunctionHeader_WhatIs)
 }
 
 
+TEST_CASE(FunctionHeaderInClassBlock_WhatIs)
+{
+	auto f = graph::Function::createFromVerbatimSignature("Widget()", graph::ScopeType::ClassBlock);
+	ASSERT_NOT_NULL(f);
+	ASSERT_EQ(f->type(), graph::Function::Type::ConstructorDefault);
+}
+
+
 TEST_CASE(FunctionHeader_WhatIsNot)
 {
 	const QString header = "void process()";
 
-	#define tst(what) ASSERT_NULL(graph::Function::createFromVerbatimSignature(what))
+	#define tst(what) ASSERT_NULL(graph::Function::createFromVerbatimSignature(what, graph::ScopeType::Root))
 
 	tst("123Type doesNotWork()");
 	tst("NoGo 999Function		( )");

@@ -32,7 +32,16 @@ namespace vc { namespace graph
 		Function() = delete;
 		Function(const QString &verbatim) : SubBlock(verbatim) {}
 
-		static Function* createFromVerbatimSignature(const QString &signature);
+		static Function* createFromVerbatimSignature(const QString &signature, ScopeType scopeType);
+
+		enum class Type
+		{
+			Normal,
+			ConstructorDefault
+		};
+
+		void setType(Type type) { mType = type; }
+		Type type() const { return mType; }
 
 		void setReturnType(const TypeExpression &returnType) { mReturnType = returnType; }
 		TypeExpression returnType() const { return mReturnType; }
@@ -44,6 +53,7 @@ namespace vc { namespace graph
 
 	private:
 		QString mId;
+		Type mType = Type::Normal;
 		TypeExpression mReturnType;
 		QVector<Parameter> mParameters;
 	};

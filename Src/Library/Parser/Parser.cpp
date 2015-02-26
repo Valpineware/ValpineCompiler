@@ -78,7 +78,7 @@ namespace vc { namespace parser
 				member->accessType = currentAccessType;
 
 				// Statement : Function
-				if (auto f = graph::Function::createFromVerbatimSignature(line))
+				if (auto f = graph::Function::createFromVerbatimSignature(line, graph::ScopeType::ClassBlock))
 				{
 					index = parseStatement_subBlock(index, f->block());
 					member->statement = f;
@@ -122,7 +122,7 @@ namespace vc { namespace parser
 			}
 
 			// Statement : Function
-			else if (auto f = graph::Function::createFromVerbatimSignature(line))
+			else if (auto f = graph::Function::createFromVerbatimSignature(line, graph::ScopeType::ExecutionBlock))
 			{
 				host->appendStatement(f);
 				index = parseStatement_subBlock(index, f->block());
