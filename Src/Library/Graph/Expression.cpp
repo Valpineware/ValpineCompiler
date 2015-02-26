@@ -99,8 +99,23 @@ namespace vc { namespace graph { namespace expression
 				}
 			}
 
+
 			for (QStringRef &str : chunks)
-				components().append(new Expression(str.toString()));
+			{
+				Expression *exp = new Expression(str.toString());
+
+				if (exp->components().count() > 1 || exp->components().isEmpty())
+					components().append(exp);
+
+				//we don't need an extra Expression just to wrap this single Component
+				else
+				{
+					Component *stolen = exp->components().first();
+					exp->components().clear();
+					components().append(stolen);
+					delete exp;
+				}
+			}
 		}
 	}
 }}}

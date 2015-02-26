@@ -39,6 +39,8 @@ namespace vc { namespace graph { namespace expression
 		ComponentList& components() { return mComponents; }
 		const ComponentList& components() const { return mComponents; }
 
+		ComponentListUser() {}
+
 		~ComponentListUser()
 		{
 			for (Component *cmp : mComponents)
@@ -46,6 +48,7 @@ namespace vc { namespace graph { namespace expression
 		}
 
 	private:
+		Q_DISABLE_COPY(ComponentListUser)
 		ComponentList mComponents;
 	};
 

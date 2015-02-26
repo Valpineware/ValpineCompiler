@@ -72,7 +72,7 @@ TEST_CASE(FunctionExpressionSingleArgument2)
 			auto arg1 = addExpression(args);
 				addId(arg1, "99", Id::Type::Basic);
 				addOperator(arg1, "/");
-				auto res = addResult(arg1);
+				auto res = addExpression(arg1);
 					addId(res, "size", Id::Type::Basic);
 					addOperator(res, "+");
 					addId(res, "3", Id::Type::Basic);
@@ -86,10 +86,8 @@ TEST_CASE(FunctionExpressionMultipleArguments)
 	Expression exp("");
 		addId(&exp, "get_total_amount", Id::Type::FunctionCall);
 		auto args = addArguments(&exp);
-			auto arg1 = addExpression(args);
-				addId(arg1, "65", Id::Type::Basic);
-			auto arg2 = addExpression(args);
-				addId(arg2, "value", Id::Type::Basic);
+			addId(args, "65", Id::Type::Basic);
+			addId(args, "value", Id::Type::Basic);
 
 	assertEqualExpression(exp, Expression("get_total_amount(65, value)"));
 }
@@ -102,15 +100,12 @@ TEST_CASE(FunctionExpressionMultipleArgumentsNested)
 	Expression exp("");
 		addId(&exp, "turnOn", Id::Type::FunctionCall);
 		auto args = addArguments(&exp);
-			auto arg1 = addExpression(args);
-				addId(arg1, "true", Id::Type::Basic);
+			addId(args, "true", Id::Type::Basic);
 			auto arg2 = addExpression(args);
 				addId(arg2, "foo", Id::Type::FunctionCall);
 				auto args2 = addArguments(arg2);
-					auto arg2_1 = addExpression(args2);
-						addId(arg2_1, "44", Id::Type::Basic);
-					auto arg2_2 = addExpression(args2);
-						addId(arg2_2, "alpha", Id::Type::Basic);
+					addId(args2, "44", Id::Type::Basic);
+					addId(args2, "alpha", Id::Type::Basic);
 
 	assertEqualExpression(exp, Expression("turnOn(true, foo(44, alpha))"));
 }

@@ -99,7 +99,8 @@ namespace ext
 
 	void assertEqualArguments(const Arguments *expected, const Arguments *actual)
 	{
-		ASSERT_EQ(expected->components().count(), actual->components().count());
+		assertEqualComponentList(expected->components(), actual->components());
+		/*ASSERT_EQ(expected->components().count(), actual->components().count());
 
 		auto expectedIter = vc::makeIter(expected->components());
 		auto actualIter = vc::makeIter(actual->components());
@@ -108,7 +109,7 @@ namespace ext
 		{
 			assertEqualResult(dynamic_cast<Expression*>(expectedIter.next()),
 							  dynamic_cast<Expression*>(actualIter.next()));
-		}
+		}*/
 	}
 
 
