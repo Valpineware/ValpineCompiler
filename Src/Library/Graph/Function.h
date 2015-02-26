@@ -37,7 +37,8 @@ namespace vc { namespace graph
 		enum class Type
 		{
 			Normal,
-			ConstructorDefault
+			Constructor,
+			Destructor
 		};
 
 		void setType(Type type) { mType = type; }

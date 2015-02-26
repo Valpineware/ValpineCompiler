@@ -9,7 +9,7 @@ TEST_CLASS
 };
 
 
-TEST_CASE(FunctionHeaderInRoot_WhatIs)
+TEST_CASE(Normal_WhatIS)
 {
 	//TODO we need to test Function::Type in this test
 	#define tst(what) { auto f = graph::Function::createFromVerbatimSignature(what, graph::ScopeType::Root); \
@@ -40,19 +40,37 @@ TEST_CASE(FunctionHeaderInRoot_WhatIs)
 }
 
 
-TEST_CASE(FunctionHeaderInClassBlock_WhatIs)
+TEST_CASE(Constructor_WhatIs)
 {
-	auto f = graph::Function::createFromVerbatimSignature("Widget()", graph::ScopeType::ClassBlock);
-	ASSERT_NOT_NULL(f);
-	ASSERT_EQ(f->type(), graph::Function::Type::ConstructorDefault);
+#define tst(what) { auto f = graph::Function::createFromVerbatimSignature(what, graph::ScopeType::ClassBlock); \
+						ASSERT_NOT_NULL(f); \
+						ASSERT_EQ(f->type(), graph::Function::Type::Constructor); }
+
+	tst("Widget()");
+	tst("Widget(const Widget &widget)");
+	tst("my_type(const QString &name, int size)");
+
+#undef tst
 }
 
 
-TEST_CASE(FunctionHeader_WhatIsNot)
+TEST_CASE(Destructor_WhatIs)
 {
-	const QString header = "void process()";
+#define tst(what) { auto f = graph::Function::createFromVerbatimSignature(what, graph::ScopeType::ClassBlock); \
+					ASSERT_NOT_NULL(f); \
+					ASSERT_EQ(f->type(), graph::Function::Type::Destructor); }
 
-	#define tst(what) ASSERT_NULL(graph::Function::createFromVerbatimSignature(what, graph::ScopeType::Root))
+	tst("~Widget()");
+	tst("  ~ BigWidget ( )");
+	tst("~ destructorWithParameter(int parameter)") //this should be considered a dtor, but should generate an error later
+
+#undef tst
+}
+
+
+TEST_CASE(Normal_WhatIsNot)
+{
+#define tst(what) ASSERT_NULL(graph::Function::createFromVerbatimSignature(what, graph::ScopeType::Root))
 
 	tst("123Type doesNotWork()");
 	tst("NoGo 999Function		( )");
@@ -65,5 +83,16 @@ TEST_CASE(FunctionHeader_WhatIsNot)
 	tst("float thisIsImpossible(int a==3254, int m=  =	9832)");
 	tst("return &(new bool);");
 
-	#undef tst
+#undef tst
+}
+
+
+TEST_CASE(Destructor_WhatIsNot)
+{
+#define tst(what, scope) ASSERT_NULL(graph::Function::createFromVerbatimSignature(what, graph::ScopeType::scope))
+
+	tst("~Widget()", Root);
+	tst("~ Bigger_Widget( )", ExecutionBlock);
+
+#undef tst
 }

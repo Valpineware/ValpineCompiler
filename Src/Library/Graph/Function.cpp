@@ -25,6 +25,13 @@ namespace vc { namespace graph
 
 	graph::Function* parseType(QStringListIterator &i, graph::Function *function, graph::ScopeType scopeType)
 	{
+		bool looksLikeDtor = false;
+		if (i.hasNext() && i.peekNext() == "~")
+		{
+			looksLikeDtor = true;
+			i.next();
+		}
+
 		TypeExpression te;
 		if (!Utility::parseTypeExpression(i,te))
 		{
@@ -45,12 +52,11 @@ namespace vc { namespace graph
 
 			if (gRegExp_identifier.exactMatch(cmp))
 				function->setId(cmp);
-			else if (cmp == "(" && scopeType == graph::ScopeType::ClassBlock)
+			else if (scopeType == graph::ScopeType::ClassBlock && cmp == "(")
 			{
-				//this is probably a constructor
 				function->setId(te.baseType());
 				function->setReturnType(TypeExpression(""));
-				function->setType(graph::Function::Type::ConstructorDefault);
+				function->setType(looksLikeDtor ? graph::Function::Type::Destructor : graph::Function::Type::Constructor);
 				i.previous();
 			}
 			else

@@ -40,7 +40,7 @@ namespace vc
 	const QRegExp gRegExp_identifier = QRegExp("([A-Za-z_]\\w*)");
 	const QRegExp gRegExp_typeMod = QRegExp("(const|&|\\*|\\s)*");
 	const QRegExp gRegExp_typeId = QRegExp("(const|&|\\*|\\s|([A-Za-z_]\\w*))*");
-	const QRegExp gRegExp_operatorChar = QRegExp("[!%()\\^&*|:\\-+=<>?/,]");
+	const QRegExp gRegExp_operatorChar = QRegExp("[!%()\\^&*|:\\-+=<>?/,~]");
 
 	/**
 	 * Convenience QListIterator factory. Allows for use with the auto keyword. For example:
