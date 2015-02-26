@@ -2,7 +2,7 @@
 #include "Ext/Expression.h"
 
 #define CLASS Test_Expression
-using namespace vc::graph::expression;
+using namespace vc::graph::expr;
 using namespace ext;
 
 TEST_CLASS
@@ -10,10 +10,10 @@ TEST_CLASS
 protected:
 	void assertSingleIdentifier(const QString &expression)
 	{
-		Expression exp("");
+		Expression exp;
 			addId(&exp, expression, Id::Type::Basic);
 
-		assertEqualExpression(exp, Expression(expression));
+		assertEqualExpression(exp, *Expression::make(expression));	//TODO RAM LEAK!!
 	}
 };
 
@@ -32,27 +32,27 @@ TEST_CASE(SingleResult2)
 
 TEST_CASE(IdentifierAndOperator)
 {
-	Expression exp("");
+	Expression exp;
 		addId(&exp, "bar", Id::Type::Basic);
 		addOperator(&exp, "++");
 
-	assertEqualExpression(exp, Expression("bar++"));
+	assertEqualExpression(exp, *Expression::make("bar++"));	//TODO RAM LEAK!!
 }
 
 
 TEST_CASE(FunctionExpressionNoArguments)
 {
-	Expression exp("");
+	Expression exp;
 		addId(&exp, "foo", Id::Type::FunctionCall);
 		addArguments(&exp);
 
-	assertEqualExpression(exp, Expression("foo ()"));
+	assertEqualExpression(exp, *Expression::make("foo ()"));	//TODO RAM LEAK!!
 }
 
 
 TEST_CASE(FunctionExpressionSingleArgument1)
 {
-	Expression exp("");
+	Expression exp;
 		addId(&exp, "barFoo", Id::Type::FunctionCall);
 		auto args = addArguments(&exp);
 			auto arg1 = addExpression(args);
@@ -60,13 +60,13 @@ TEST_CASE(FunctionExpressionSingleArgument1)
 				addOperator(arg1, "+");
 				addId(arg1, "3", Id::Type::Basic);
 
-	assertEqualExpression(exp, Expression("barFoo(size+3)"));
+	assertEqualExpression(exp, *Expression::make("barFoo(size+3)"));	//TODO RAM LEAK!!
 }
 
 
 TEST_CASE(FunctionExpressionSingleArgument2)
 {
-	Expression exp("");
+	Expression exp;
 		addId(&exp, "calculate", Id::Type::FunctionCall);
 		auto args = addArguments(&exp);
 			auto arg1 = addExpression(args);
@@ -77,27 +77,25 @@ TEST_CASE(FunctionExpressionSingleArgument2)
 					addOperator(res, "+");
 					addId(res, "3", Id::Type::Basic);
 
-	assertEqualExpression(exp, Expression("calculate (99 /(size + 3))"));
+	assertEqualExpression(exp, *Expression::make("calculate (99 /(size + 3))"));	//TODO RAM LEAK!!
 }
 
 
 TEST_CASE(FunctionExpressionMultipleArguments)
 {
-	Expression exp("");
+	Expression exp;
 		addId(&exp, "get_total_amount", Id::Type::FunctionCall);
 		auto args = addArguments(&exp);
 			addId(args, "65", Id::Type::Basic);
 			addId(args, "value", Id::Type::Basic);
 
-	assertEqualExpression(exp, Expression("get_total_amount(65, value)"));
+	assertEqualExpression(exp, *Expression::make("get_total_amount(65, value)"));	//TODO RAM LEAK!!
 }
 
 
 TEST_CASE(FunctionExpressionMultipleArgumentsNested)
 {
-	Expression("foo(a,b,c)");
-
-	Expression exp("");
+	Expression exp;
 		addId(&exp, "turnOn", Id::Type::FunctionCall);
 		auto args = addArguments(&exp);
 			addId(args, "true", Id::Type::Basic);
@@ -107,5 +105,5 @@ TEST_CASE(FunctionExpressionMultipleArgumentsNested)
 					addId(args2, "44", Id::Type::Basic);
 					addId(args2, "alpha", Id::Type::Basic);
 
-	assertEqualExpression(exp, Expression("turnOn(true, foo(44, alpha))"));
+	assertEqualExpression(exp, *Expression::make("turnOn(true, foo(44, alpha))"));	//TODO RAM LEAK!!
 }

@@ -10,7 +10,7 @@
 
 #include "Statement.h"
 
-namespace vc { namespace graph { namespace expression
+namespace vc { namespace graph { namespace expr
 {
 	/**
 	* Base type for the various types of components in an expression.
@@ -23,6 +23,9 @@ namespace vc { namespace graph { namespace expression
 		virtual ~Component() {}
 
 		QString verbatim() const { return mVerbatim; }
+
+	protected:
+		void setVerbatim(const QString &verbatim) { mVerbatim = verbatim; }
 
 	private:
 		QString mVerbatim;
@@ -59,7 +62,9 @@ namespace vc { namespace graph { namespace expression
 	class Expression : public Component, public ComponentListUser
 	{
 	public:
-		Expression(const QString &verbatim);
+		Expression() : Component("") {}
+
+		static Expression* make(const QString &verbatim);
 	};
 
 
@@ -72,7 +77,9 @@ namespace vc { namespace graph { namespace expression
 		/**
 		* Simply sets the verbatim to \p verbatim.
 		*/
-		Operator(const QString &verbatim) : Component(verbatim) {}
+		Operator() : Component("") {}
+
+		static Operator* make(const QString &verbatim);
 	};
 
 
@@ -85,7 +92,9 @@ namespace vc { namespace graph { namespace expression
 		/**
 		* Simply sets the verbatim to \p verbatim.
 		*/
-		Id(const QString &verbatim) : Component(verbatim) {}
+		Id() : Component("") {}
+
+		static Id* make(const QString &verbatim);
 
 		/**
 		* The type of identifier.
@@ -110,7 +119,9 @@ namespace vc { namespace graph { namespace expression
 	class Arguments : public Component, public ComponentListUser
 	{
 	public:
-		Arguments(const QString &verbatim);
+		Arguments() : Component("") {}
+
+		static Arguments* make(const QString &verbatim);
 	};
 }}}
 

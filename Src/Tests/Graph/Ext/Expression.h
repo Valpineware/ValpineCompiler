@@ -1,12 +1,12 @@
 #include "../Tests.h"
 #include <Graph/Expression.h>
-using namespace vc::graph::expression;
+using namespace vc::graph::expr;
 
 namespace ext
 {
 	Id* addId(ComponentListUser *clu, const QString &idName, Id::Type idType)
 	{
-		auto id = new Id(idName);
+		auto id = Id::make(idName);
 		id->setType(idType);
 		clu->components().append(id);
 		
@@ -16,7 +16,7 @@ namespace ext
 
 	Operator* addOperator(ComponentListUser *clu, const QString &operatorVerbatim)
 	{
-		auto op = new Operator(operatorVerbatim);
+		auto op = Operator::make(operatorVerbatim);
 		clu->components().append(op);
 
 		return op;
@@ -25,7 +25,7 @@ namespace ext
 
 	Expression* addResult(ComponentListUser *clu)
 	{
-		auto result = new Expression("");
+		auto result = new Expression;
 		clu->components().append(result);
 
 		return result;
@@ -34,7 +34,7 @@ namespace ext
 
 	Arguments* addArguments(ComponentListUser *clu)
 	{
-		auto args = new Arguments("");
+		auto args = new Arguments();
 		clu->components().append(args);
 
 		return args;
@@ -43,7 +43,7 @@ namespace ext
 
 	Expression* addExpression(ComponentListUser *clu)
 	{
-		auto arg = new Expression("");
+		auto arg = new Expression;
 		clu->components().append(arg);
 
 		return arg;
@@ -100,16 +100,6 @@ namespace ext
 	void assertEqualArguments(const Arguments *expected, const Arguments *actual)
 	{
 		assertEqualComponentList(expected->components(), actual->components());
-		/*ASSERT_EQ(expected->components().count(), actual->components().count());
-
-		auto expectedIter = vc::makeIter(expected->components());
-		auto actualIter = vc::makeIter(actual->components());
-
-		while (expectedIter.hasNext())
-		{
-			assertEqualResult(dynamic_cast<Expression*>(expectedIter.next()),
-							  dynamic_cast<Expression*>(actualIter.next()));
-		}*/
 	}
 
 
@@ -124,9 +114,6 @@ namespace ext
 		{
 			auto expectedComponent = expectedIter.next();
 			auto actualComponent = actualIter.next();
-
-			if (typeid(*expectedComponent) != typeid(*actualComponent))
-				qFatal("POOP HEAD");
 
 			ASSERT_EQ(typeid(*expectedComponent), typeid(*actualComponent)) << "Components not of same type";
 

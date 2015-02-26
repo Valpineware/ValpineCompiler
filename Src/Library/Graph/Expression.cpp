@@ -8,10 +8,9 @@
 #include "Expression.h"
 #include "Utility.h"
 
-namespace vc { namespace graph { namespace expression
+namespace vc { namespace graph { namespace expr
 {
-	Expression::Expression(const QString &verbatim) :
-		Component(verbatim)
+	Expression* Expression::make(const QString &verbatim)
 	{
 		QString filtered = verbatim;
 		Utility::breakUpOperators(filtered);
@@ -19,6 +18,7 @@ namespace vc { namespace graph { namespace expression
 		Utility::breakUpByWhitespace(filtered, strList);
 
 		QVector<QString> cmps = strList.toVector();
+		Expression *expression = new Expression;
 		
 		for (int i=0; i<cmps.count(); i++)
 		{
@@ -33,32 +33,53 @@ namespace vc { namespace graph { namespace expression
 				QString body = Utility::flatten(cmps.mid(i+1, last-i-1));
 
 				bool couldBeArgumentList = false;
-				if (!components().isEmpty())
-					couldBeArgumentList = dynamic_cast<Id*>(components().last()) != nullptr;
+				if (!expression->components().isEmpty())
+					couldBeArgumentList = dynamic_cast<Id*>(expression->components().last()) != nullptr;
 
 				if (couldBeArgumentList)
 				{
-					if (auto prev = dynamic_cast<Id*>(components().last()))
+					if (auto prev = dynamic_cast<Id*>(expression->components().last()))
 						prev->setType(Id::Type::FunctionCall);
 
-					components().append(new Arguments(body));
+					expression->components().append(Arguments::make(body));
 				}
 				else
-					components().append(new Expression(body));
+					expression->components().append(Expression::make(body));
 
 				i = last;
 			}
 			else if (Utility::couldBeIdentifier(str) || Utility::couldBeNumericConstant(str))
-				components().append(new Id(str));
+				expression->components().append(Id::make(str));
 			else
-				components().append(new Operator(str));
+				expression->components().append(Operator::make(str));
 		}
+
+		return expression;
 	}
 
 
-	Arguments::Arguments(const QString &verbatim) :
-		Component("")
+	Operator* Operator::make(const QString &verbatim)
 	{
+		Operator *op = new Operator;
+		op->setVerbatim(verbatim);
+
+		return op;
+	}
+
+
+	Id* Id::make(const QString &verbatim)
+	{
+		Id *id = new Id;
+		id->setVerbatim(verbatim);
+
+		return id;
+	}
+
+
+	Arguments* Arguments::make(const QString &verbatim)
+	{
+		Arguments *arguments = new Arguments;
+
 		if (!verbatim.isEmpty())
 		{
 			QVector<int> rootCommaPos(1, 0);
@@ -99,23 +120,24 @@ namespace vc { namespace graph { namespace expression
 				}
 			}
 
-
 			for (QStringRef &str : chunks)
 			{
-				Expression *exp = new Expression(str.toString());
+				Expression *exp = Expression::make(str.toString());
 
 				if (exp->components().count() > 1 || exp->components().isEmpty())
-					components().append(exp);
+					arguments->components().append(exp);
 
 				//we don't need an extra Expression just to wrap this single Component
 				else
 				{
 					Component *stolen = exp->components().first();
 					exp->components().clear();
-					components().append(stolen);
+					arguments->components().append(stolen);
 					delete exp;
 				}
 			}
 		}
+
+		return arguments;
 	}
 }}}
