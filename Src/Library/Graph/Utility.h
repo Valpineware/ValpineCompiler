@@ -60,7 +60,7 @@ namespace vc { namespace graph
 			return buffer;
 		}
 
-	private:
+
 		struct ReservedIds
 		{
 			QStringList general, types, control, typeDeclarators, access, casting;
@@ -75,9 +75,6 @@ namespace vc { namespace graph
 						casting.contains(str));
 			}
 		};
-
-		static ReservedIds mReservedIds;
-		static ReservedIds buildReservedIds();
 	};
 }}
 

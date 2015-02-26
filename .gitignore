@@ -31,3 +31,4 @@ IDE/
 *.suo
 *.pdb
 Guitar.config
+*.TMP

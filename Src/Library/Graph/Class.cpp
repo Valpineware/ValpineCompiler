@@ -17,11 +17,11 @@ namespace vc { namespace graph
 		while (iter.hasNext())
 		{
 			const QString &cmp = iter.next();
-			graph::Class::AccessType at = graph::Utility::accessTypeForString(cmp);
+			auto accessType = graph::Utility::accessTypeForString(cmp);
 
-			if (at != graph::Class::None)
+			if (accessType != graph::Class::None)
 			{
-				currentSuper.accessType = at;
+				currentSuper.accessType = accessType;
 			}
 			else if (cmp == endString)
 			{

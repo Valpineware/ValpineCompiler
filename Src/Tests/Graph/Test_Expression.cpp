@@ -13,7 +13,7 @@ protected:
 		Expression exp;
 			addId(&exp, expression, Id::Type::Basic);
 
-		assertEqualExpression(exp, *Expression::make(expression));	//TODO RAM LEAK!!
+		assertEqualExpression(exp, *vc::toUnique(Expression::make(expression)));
 	}
 };
 
@@ -36,7 +36,7 @@ TEST_CASE(IdentifierAndOperator)
 		addId(&exp, "bar", Id::Type::Basic);
 		addOperator(&exp, "++");
 
-	assertEqualExpression(exp, *Expression::make("bar++"));	//TODO RAM LEAK!!
+	assertEqualExpression(exp, *vc::toUnique(Expression::make("bar++")));
 }
 
 
@@ -46,7 +46,7 @@ TEST_CASE(FunctionExpressionNoArguments)
 		addId(&exp, "foo", Id::Type::FunctionCall);
 		addArguments(&exp);
 
-	assertEqualExpression(exp, *Expression::make("foo ()"));	//TODO RAM LEAK!!
+	assertEqualExpression(exp, *vc::toUnique(Expression::make("foo ()")));
 }
 
 
@@ -60,7 +60,7 @@ TEST_CASE(FunctionExpressionSingleArgument1)
 				addOperator(arg1, "+");
 				addId(arg1, "3", Id::Type::Basic);
 
-	assertEqualExpression(exp, *Expression::make("barFoo(size+3)"));	//TODO RAM LEAK!!
+	assertEqualExpression(exp, *vc::toUnique(Expression::make("barFoo(size+3)")));
 }
 
 
@@ -77,7 +77,7 @@ TEST_CASE(FunctionExpressionSingleArgument2)
 					addOperator(res, "+");
 					addId(res, "3", Id::Type::Basic);
 
-	assertEqualExpression(exp, *Expression::make("calculate (99 /(size + 3))"));	//TODO RAM LEAK!!
+	assertEqualExpression(exp, *vc::toUnique(Expression::make("calculate (99 /(size + 3))")));
 }
 
 
@@ -89,7 +89,7 @@ TEST_CASE(FunctionExpressionMultipleArguments)
 			addId(args, "65", Id::Type::Basic);
 			addId(args, "value", Id::Type::Basic);
 
-	assertEqualExpression(exp, *Expression::make("get_total_amount(65, value)"));	//TODO RAM LEAK!!
+	assertEqualExpression(exp, *vc::toUnique(Expression::make("get_total_amount(65, value)")));
 }
 
 
@@ -105,5 +105,5 @@ TEST_CASE(FunctionExpressionMultipleArgumentsNested)
 					addId(args2, "44", Id::Type::Basic);
 					addId(args2, "alpha", Id::Type::Basic);
 
-	assertEqualExpression(exp, *Expression::make("turnOn(true, foo(44, alpha))"));	//TODO RAM LEAK!!
+	assertEqualExpression(exp, *vc::toUnique(Expression::make("turnOn(true, foo(44, alpha))")));
 }

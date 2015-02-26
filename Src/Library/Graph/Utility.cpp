@@ -10,23 +10,18 @@
 
 namespace vc { namespace graph
 {
-	Utility::ReservedIds Utility::mReservedIds = Utility::buildReservedIds();
+	Utility::ReservedIds gReservedIds;
 
-	Utility::ReservedIds Utility::buildReservedIds()
-	{
-		ReservedIds rid;
-
-		rid.general << "asm" << "decltype" << "delete" << "explicit" << "false" << "final" << "inline" << "new" << "override" << "nullptr" << "sizeof" << "static_assert" << "template" << "this" << "true" << "typeid" << "typename" << "using";
-		rid.general << "const" << "mutable" << "static" << "virtual" << "volatile";
+	STATIC_BLOCK_UNSAFE(BuildReservedIds,
+		gReservedIds.general << "asm" << "decltype" << "delete" << "explicit" << "false" << "final" << "inline" << "new" << "override" << "nullptr" << "sizeof" << "static_assert" << "template" << "this" << "true" << "typeid" << "typename" << "using";
+		gReservedIds.general << "const" << "mutable" << "static" << "virtual" << "volatile";
 		
-		rid.types << "auto" << "bool" << "char" << "float" << "int" << "long" << "short" << "signed" << "unsigned" << "void";
-		rid.control << "break" << "case" << "catch" << "continue" << "default" << "do" << "else"  << "elseif" << "for" << "goto" << "if" << "return" << "switch" << "throw" << "try" << "while";
-		rid.typeDeclarators << "class" << "enum" << "namespace" << "struct" << "typedef" << "union";
-		rid.access << "friend" << "operator" << "private" << "protected" << "public";
-		rid.casting << "const_cast" << "dynamic_cast" << "reinterpret_cast" << "static_cast";
-
-		return rid;
-	}
+		gReservedIds.types << "auto" << "bool" << "char" << "float" << "int" << "long" << "short" << "signed" << "unsigned" << "void";
+		gReservedIds.control << "break" << "case" << "catch" << "continue" << "default" << "do" << "else"  << "elseif" << "for" << "goto" << "if" << "return" << "switch" << "throw" << "try" << "while";
+		gReservedIds.typeDeclarators << "class" << "enum" << "namespace" << "struct" << "typedef" << "union";
+		gReservedIds.access << "friend" << "operator" << "private" << "protected" << "public";
+		gReservedIds.casting << "const_cast" << "dynamic_cast" << "reinterpret_cast" << "static_cast";
+	);
 
 
 	void Utility::breakUpByWhitespace(const QString &what, QStringList &list)
@@ -78,7 +73,7 @@ namespace vc { namespace graph
 		if (!gRegExp_identifier.exactMatch(what))
 			return false;
 		
-		if (mReservedIds.anyContain(what))
+		if (gReservedIds.anyContain(what))
 			return false;
 
 		//are any of the character operators?
@@ -97,7 +92,7 @@ namespace vc { namespace graph
 		if (!gRegExp_identifier.exactMatch(what))
 			return false;
 
-		if (!mReservedIds.types.contains(what)  &&  mReservedIds.anyContain(what))
+		if (!gReservedIds.types.contains(what)  &&  gReservedIds.anyContain(what))
 			return false;
 
 		return true;

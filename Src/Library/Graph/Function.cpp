@@ -140,7 +140,6 @@ namespace vc { namespace graph
 		if (!couldThisPossiblyBeAFunction(signature))
 			return nullptr;
 
-		
 		QString filtered = signature;
 		Utility::breakUpOperators(filtered);
 
