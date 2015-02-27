@@ -13,14 +13,14 @@
 namespace vc { namespace mocker
 {
 	//TODO ADD DEPTH LEVEL FOR INTERNAL TABBING
-	ControlStructure::ControlStructure(graph::ControlStructure &controlStructure, Data &data)
+	ControlStructure::ControlStructure(graph::ControlStructure &controlStructure, FileData &data)
 	{
 		buildStatement(controlStructure, data);
 		DeclarationBlock::buildBlock(controlStructure.block(), data);
 	}
 
 
-	void ControlStructure::buildStatement(graph::ControlStructure &controlStructure, Data &data)
+	void ControlStructure::buildStatement(graph::ControlStructure &controlStructure, FileData &data)
 	{
 		QString statement = Utility::createTabs(data.scope);
 		statement += controlStructure.name();

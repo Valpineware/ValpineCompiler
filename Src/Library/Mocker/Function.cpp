@@ -6,27 +6,22 @@
 //==================================================================================================================|
 
 #include "Function.h"
-#include "DeclarationBlock.h"
 #include "Utility.h"
 
 namespace vc {	namespace mocker
 {
-	Function::Function(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope)
+	Function::Function(FileData &data)
 	{
-		mData.body = &body;
-		mData.forwardDecs = &forwardDecs;
-		mData.scope = scope;
-		mData.nestedFunctions = new QQueue<graph::Function*>;
+		const graph::Function *function = data.functions->dequeue();
+		buildDeclartion(*function, data);
 
-		buildDeclartion(function);
-
-		DeclarationBlock::buildBlock(function.block(), mData);
+		DeclarationBlock::buildBlock(function->block(), data);
 	}
 
-	void Function::buildDeclartion(const graph::Function &function)
+	void Function::buildDeclartion(const graph::Function &function, FileData &data)
 	{
 		//build opening experssion
-		QString declartion = Utility::createTabs(mData.scope);
+		QString declartion = Utility::createTabs(data.scope);
 		declartion = function.returnType().fullType() + " " + function.id() + "(";
 
 		//add in the parameters
@@ -48,11 +43,11 @@ namespace vc {	namespace mocker
 		}
 
 		declartion += ")";
-		mData.body->append(declartion);
+		data.body->append(declartion);
 		
 		if (function.id() != "main")
 		{
-			mData.forwardDecs->append(declartion + ";");
+			data.forwardDecs->append(declartion + ";");
 		}
 	}
 

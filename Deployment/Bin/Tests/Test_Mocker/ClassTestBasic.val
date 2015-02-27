@@ -1,0 +1,16 @@
+class Mocker
+{
+private:
+	Cow bob;
+	int x;
+	
+public:
+	int getX()
+	{
+		return x;
+	}
+	Cow getCow()
+	{
+		return bob;
+	}
+}

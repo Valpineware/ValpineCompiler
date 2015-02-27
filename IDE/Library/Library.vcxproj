@@ -23,6 +23,7 @@
     <ClInclude Include="..\..\src\library\graph\TypeExpression.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Utility.h" />
     <ClInclude Include="..\..\Src\Library\Graph\Variable.h" />
+    <ClInclude Include="..\..\Src\Library\Mocker\Class.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\ControlStructure.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\DeclarationBlock.h" />
     <ClInclude Include="..\..\Src\Library\Mocker\Function.h" />
@@ -51,6 +52,8 @@
     <ClCompile Include="..\..\Src\Library\Graph\Function.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Utility.cpp" />
     <ClCompile Include="..\..\Src\Library\Graph\Variable.cpp" />
+    <ClCompile Include="..\..\Src\Library\Library.cpp" />
+    <ClCompile Include="..\..\Src\Library\Mocker\Class.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\ControlStructure.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\DeclarationBlock.cpp" />
     <ClCompile Include="..\..\Src\Library\Mocker\Function.cpp" />
