@@ -10,7 +10,7 @@
 
 namespace vc {	namespace mocker
 {
-	Function::Function(Data &data)
+	Function::Function(FileData &data)
 	{
 		const graph::Function *function = data.functions->dequeue();
 		buildDeclartion(*function, data);
@@ -18,7 +18,7 @@ namespace vc {	namespace mocker
 		DeclarationBlock::buildBlock(function->block(), data);
 	}
 
-	void Function::buildDeclartion(const graph::Function &function, Data &data)
+	void Function::buildDeclartion(const graph::Function &function, FileData &data)
 	{
 		//build opening experssion
 		QString declartion = Utility::createTabs(data.scope);

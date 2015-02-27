@@ -25,7 +25,7 @@ namespace vc { namespace mocker
 	}
 
 
-	void DeclarationBlock::buildBlock(const graph::Block &block, Data &data)
+	void DeclarationBlock::buildBlock(const graph::Block &block, FileData &data)
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
 		data.body->append(Utility::createTabs(data.scope) + "{");

@@ -13,7 +13,7 @@
 
 namespace vc { namespace mocker
 {
-	struct Data
+	struct FileData
 	{
 		QVector<QString> *body;
 		QVector<QString> *forwardDecs;
@@ -24,12 +24,12 @@ namespace vc { namespace mocker
 	class DeclarationBlock
 	{
 	private:
-		Data mData;
+		FileData mData;
 
 		void createFunction();
 	public:
 		DeclarationBlock(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope);
-		void static buildBlock(const graph::Block &block, Data &data);
+		void static buildBlock(const graph::Block &block, FileData &data);
 	};
 
 }}
