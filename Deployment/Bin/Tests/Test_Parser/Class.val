@@ -3,6 +3,16 @@
 class Book
 {
 public:
+	Book()
+	{
+		qDebug() << "We made a book";
+	}
+	
+	~Book()
+	{
+		qDebug() << "We destroyed a book";
+	}
+
 	void setText(const QString & text)
 	{
 		mText = text;
