@@ -59,26 +59,26 @@ namespace vc { namespace parser
 			return index;
 		}
 
-		graph::Class::AccessType currentAccessType = graph::Class::Private;
+		auto currentAccessType = graph::Class::Private;
 
 		while (++index < mLineBuffer.count()  &&  !QRegExp("\\s*\\}\\s*").exactMatch(mLineBuffer[index]))
 		{
 			QString &line = mLineBuffer[index];
 			
 			//look for access modifiers
-			graph::Class::AccessType at = graph::Utility::accessTypeForString(line);
-			if (at != graph::Class::None)
+			auto accessType = graph::Utility::accessTypeForString(line);
+			if (accessType != graph::Class::None)
 			{
-				currentAccessType = at;
+				currentAccessType = accessType;
 			}
 			//otherwise look for statements
 			else
 			{
-				graph::Class::Member *member = new graph::Class::Member;
+				auto member = new graph::Class::Member;
 				member->accessType = currentAccessType;
 
 				// Statement : Function
-				if (graph::Function *f = graph::Function::createFromVerbatimSignature(line))
+				if (auto f = graph::Function::createFromVerbatimSignature(line, graph::ScopeType::ClassBlock))
 				{
 					index = parseStatement_subBlock(index, f->block());
 					member->statement = f;
@@ -122,26 +122,26 @@ namespace vc { namespace parser
 			}
 
 			// Statement : Function
-			else if (graph::Function *f = graph::Function::createFromVerbatimSignature(line))
+			else if (auto f = graph::Function::createFromVerbatimSignature(line, graph::ScopeType::ExecutionBlock))
 			{
 				host->appendStatement(f);
 				index = parseStatement_subBlock(index, f->block());
 			}
 
 			// Statement : ControlStructure
-			else if (graph::ControlStructure *cs = graph::ControlStructure::createFromVerbatimSignature(line))
+			else if (auto cs = graph::ControlStructure::createFromVerbatimSignature(line))
 			{
 				host->appendStatement(cs);
 				index = parseStatement_subBlock(index, cs->block());
 			}
 			
-			else if (graph::Class *cls = graph::Class::createFromVerbatimSignature(line))
+			else if (auto cls = graph::Class::createFromVerbatimSignature(line))
 			{
 				host->appendStatement(cls);
 				index = parseStatement_classBlock(index, *cls);
 			}
 
-			else if (graph::Variable *variable = graph::Variable::createFromVerbatimSignature(line))
+			else if (auto variable = graph::Variable::createFromVerbatimSignature(line))
 			{
 				host->appendStatement(variable);
 			}

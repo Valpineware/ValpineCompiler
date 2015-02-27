@@ -23,13 +23,27 @@ namespace vc { namespace graph
 	}
 
 
-	graph::Function* parseType(QStringListIterator &i, graph::Function *function)
+	graph::Function* parseType(QStringListIterator &i, graph::Function *function, graph::ScopeType scopeType)
 	{
+		bool looksLikeDtor = false;
+		if (i.hasNext() && i.peekNext() == "~")
+		{
+			looksLikeDtor = true;
+			i.next();
+		}
+
 		TypeExpression te;
 		if (!Utility::parseTypeExpression(i,te))
-			return nullptr;
-
-		function->setReturnType(te);
+		{
+			//even if there is no type expression, this could be a ctor or dtor
+			if (scopeType != graph::ScopeType::ClassBlock)
+				return nullptr;
+			//so go back to the front and continue parsing with a blank return type
+			else
+				i.toFront();
+		}
+		else
+			function->setReturnType(te);
 
 		//	c) Identifier
 		if (i.hasNext())
@@ -38,6 +52,13 @@ namespace vc { namespace graph
 
 			if (gRegExp_identifier.exactMatch(cmp))
 				function->setId(cmp);
+			else if (scopeType == graph::ScopeType::ClassBlock && cmp == "(")
+			{
+				function->setId(te.baseType());
+				function->setReturnType(TypeExpression(""));
+				function->setType(looksLikeDtor ? graph::Function::Type::Destructor : graph::Function::Type::Constructor);
+				i.previous();
+			}
 			else
 				return nullptr;								//Error: invalid identifier
 		}
@@ -135,12 +156,11 @@ namespace vc { namespace graph
 	}
 
 
-	Function* Function::createFromVerbatimSignature(const QString &signature)
+	Function* Function::createFromVerbatimSignature(const QString &signature, ScopeType scopeType)
 	{
 		if (!couldThisPossiblyBeAFunction(signature))
 			return nullptr;
 
-		
 		QString filtered = signature;
 		Utility::breakUpOperators(filtered);
 
@@ -150,8 +170,8 @@ namespace vc { namespace graph
 
 		graph::Function *function = new graph::Function(signature);
 
-		//Return type
-		if (! parseType(i, function))
+		//Return type and id
+		if (! parseType(i, function, scopeType))
 			return nullptr;
 
 		//is it time for arguments yet?

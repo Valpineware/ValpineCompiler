@@ -122,7 +122,7 @@ namespace vc { namespace graph { namespace expr
 
 			for (QStringRef &str : chunks)
 			{
-				Expression *exp = Expression::make(str.toString());
+				auto exp = Expression::make(str.toString());
 
 				if (exp->components().count() > 1 || exp->components().isEmpty())
 					arguments->components().append(exp);

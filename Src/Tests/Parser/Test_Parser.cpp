@@ -226,38 +226,59 @@ TEST_CASE(Class)
 	{
 		QListIterator<Statement*> iter(root.statements());
 
-		Preprocessor *include = dynamic_cast<Preprocessor*>(iter.next());
+		auto include = dynamic_cast<Preprocessor*>(iter.next());
 		ASSERT_NOT_NULL(include);
 		EXPECT_EQ_STR("#include <QtCore/QDebug>", include->verbatim());
 
-		Class *cls = dynamic_cast<Class*>(iter.next());
+		auto cls = dynamic_cast<Class*>(iter.next());
 		ASSERT_NOT_NULL(cls);
 		EXPECT_EQ_STR("Book", cls->id());
 		{
 			QListIterator<Class::Member*> clsIter(cls->members());
+			ASSERT_EQ(5, cls->members().count());
 
 			{
 				const Class::Member *m = clsIter.next();
 				EXPECT_EQ(Class::Public, m->accessType);
-				Function *f = dynamic_cast<Function*>(m->statement);
+				auto *f = dynamic_cast<Function*>(m->statement);
+				ASSERT_NOT_NULL(f);
+				EXPECT_EQ_STR("Book", f->id());
+				EXPECT_EQ(Function::Type::Constructor, f->type());
+			}
+
+			{
+				const Class::Member *m = clsIter.next();
+				EXPECT_EQ(Class::Public, m->accessType);
+				auto *f = dynamic_cast<Function*>(m->statement);
+				ASSERT_NOT_NULL(f);
+				EXPECT_EQ_STR("Book", f->id());
+				EXPECT_EQ(Function::Type::Destructor, f->type());
+			}
+
+			{
+				const Class::Member *m = clsIter.next();
+				EXPECT_EQ(Class::Public, m->accessType);
+				auto f = dynamic_cast<Function*>(m->statement);
 				ASSERT_NOT_NULL(f);
 				EXPECT_EQ_STR("setText", f->id());
+				EXPECT_EQ(Function::Type::Normal, f->type());
 			}
 
 			
 			{
 				const Class::Member *m = clsIter.next();
 				EXPECT_EQ(Class::Public, m->accessType);
-				Function *f = dynamic_cast<Function*>(m->statement);
+				auto f = dynamic_cast<Function*>(m->statement);
 				ASSERT_NOT_NULL(f);
 				EXPECT_EQ_STR("read", f->id());
+				EXPECT_EQ(Function::Type::Normal, f->type());
 			}
 
 
 			{
 				const Class::Member *m = clsIter.next();
 				EXPECT_EQ(Class::Private, m->accessType);
-				Variable *v = dynamic_cast<Variable*>(m->statement);
+				auto v = dynamic_cast<Variable*>(m->statement);
 				ASSERT_NOT_NULL(v);
 				EXPECT_EQ_STR("QString", v->typeExpression().fullType());
 				EXPECT_EQ_STR("mText", v->id());

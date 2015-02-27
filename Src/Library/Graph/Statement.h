@@ -12,6 +12,14 @@
 
 namespace vc { namespace graph
 {
+	enum class ScopeType
+	{
+		Root,
+		ExecutionBlock,
+		ClassBlock
+	};
+
+
 	/**
 	 * @brief A base class for representing a statement in Valpine. It could be a declaration, function call, etc.
 	 */
