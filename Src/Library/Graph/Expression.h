@@ -10,119 +10,133 @@
 
 #include "Statement.h"
 
-namespace vc { namespace graph { namespace expr
+namespace vc { namespace graph
 {
-	/**
-	* Base type for the various types of components in an expression.
-	*/
-	class Component
+	class Expression : public Statement
 	{
 	public:
-		Component() = delete;
-		Component(const QString &verbatim) : mVerbatim(verbatim) {}
-		virtual ~Component() {}
-
-		QString verbatim() const { return mVerbatim; }
-
-	protected:
-		void setVerbatim(const QString &verbatim) { mVerbatim = verbatim; }
-
-	private:
-		QString mVerbatim;
-	};
-
-
-	typedef QList<Component*> ComponentList;
-	typedef QListIterator<Component*> ComponentListIterator;
-
-
-	class ComponentListUser
-	{
-	public:
-		ComponentList& components() { return mComponents; }
-		const ComponentList& components() const { return mComponents; }
-
-		ComponentListUser() {}
-
-		~ComponentListUser()
+		/**
+		* Base type for the various types of components in an expression.
+		*/
+		class Component
 		{
-			for (Component *cmp : mComponents)
-				delete cmp;
-		}
+		public:
+			Component() = delete;
+			Component(const QString &verbatim) : mVerbatim(verbatim) {}
+			virtual ~Component() {}
 
-	private:
-		Q_DISABLE_COPY(ComponentListUser)
-		ComponentList mComponents;
-	};
+			QString verbatim() const { return mVerbatim; }
 
+		protected:
+			void setVerbatim(const QString &verbatim) { mVerbatim = verbatim; }
 
-	/**
-	* The contains a list of all components in a sub-expression.
-	*/
-	class Expression : public Component, public ComponentListUser
-	{
-	public:
-		Expression() : Component("") {}
-
-		static Expression* make(const QString &verbatim);
-	};
-
-
-	/**
-	* An operator
-	*/
-	class Operator : public Component
-	{
-	public:
-		/**
-		* Simply sets the verbatim to \p verbatim.
-		*/
-		Operator() : Component("") {}
-
-		static Operator* make(const QString &verbatim);
-	};
-
-
-	/**
-	* An identifier that refers to a variable, numeric constant, or function call.
-	*/
-	class Id : public Component
-	{
-	public:
-		/**
-		* Simply sets the verbatim to \p verbatim.
-		*/
-		Id() : Component("") {}
-
-		static Id* make(const QString &verbatim);
-
-		/**
-		* The type of identifier.
-		*/
-		enum class Type
-		{
-			Basic,			/*! A variable or numeric constant */
-			FunctionCall	/*! A call to a function*/
+		private:
+			QString mVerbatim;
 		};
 
-		void setType(Type type) { mType = type; }
-		Type type() const { return mType; }
+
+		typedef QList<Component*> ComponentList;
+		typedef QListIterator<Component*> ComponentListIterator;
+
+
+		class ComponentListUser
+		{
+		public:
+			ComponentList& components() { return mComponents; }
+			const ComponentList& components() const { return mComponents; }
+
+			ComponentListUser() {}
+
+			~ComponentListUser()
+			{
+				for (Component *cmp : mComponents)
+					delete cmp;
+			}
+
+		private:
+			Q_DISABLE_COPY(ComponentListUser)
+			ComponentList mComponents;
+		};
+
+
+		/**
+		* The contains a list of all components in a sub-expression.
+		*/
+		class InnerExpression : public Component, public ComponentListUser
+		{
+		public:
+			InnerExpression() : Component("") {}
+
+			static InnerExpression* make(const QString &verbatim);
+		};
+
+
+		/**
+		* An operator
+		*/
+		class Operator : public Component
+		{
+		public:
+			/**
+			* Simply sets the verbatim to \p verbatim.
+			*/
+			Operator() : Component("") {}
+
+			static Operator* make(const QString &verbatim);
+		};
+
+
+		/**
+		* An identifier that refers to a variable, numeric constant, or function call.
+		*/
+		class Id : public Component
+		{
+		public:
+			/**
+			* Simply sets the verbatim to \p verbatim.
+			*/
+			Id() : Component("") {}
+
+			static Id* make(const QString &verbatim);
+
+			/**
+			* The type of identifier.
+			*/
+			enum class Type
+			{
+				Basic,			/*! A variable or numeric constant */
+				FunctionCall	/*! A call to a function*/
+			};
+
+			void setType(Type type) { mType = type; }
+			Type type() const { return mType; }
+
+		private:
+			Type mType = Type::Basic;
+		};
+
+
+		/**
+		* Holds a list components each representing an argument to a particular function call.
+		*/
+		class Arguments : public Component, public ComponentListUser
+		{
+		public:
+			Arguments() : Component("") {}
+
+			static Arguments* make(const QString &verbatim);
+		};
+
+	public:
+		Expression() : Expression("") {}
+		Expression(const QString verbatim) : Statement(verbatim), mInnerExpression(InnerExpression::make(verbatim)) {}
+
+		ComponentList& components() { return mInnerExpression->components(); }
+		const ComponentList& components() const { return mInnerExpression->components(); }
 
 	private:
-		Type mType = Type::Basic;
+		unique<InnerExpression> mInnerExpression;
 	};
-
-
-	/**
-	* Holds a list components each representing an argument to a particular function call.
-	*/
-	class Arguments : public Component, public ComponentListUser
-	{
-	public:
-		Arguments() : Component("") {}
-
-		static Arguments* make(const QString &verbatim);
-	};
-}}}
+}}
 
 #endif

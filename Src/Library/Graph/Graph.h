@@ -16,6 +16,7 @@
 #include "Block.h"
 #include "Class.h"
 #include "Variable.h"
+#include "Expression.h"
 
 namespace vc { namespace graph
 {

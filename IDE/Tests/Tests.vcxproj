@@ -30,7 +30,8 @@
     <ClCompile Include="..\..\Src\Tests\Tests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Src\Tests\Graph\Ext\Expression.h" />
+    <ClInclude Include="..\..\Src\Tests\.Ext\Expression.h" />
+    <ClInclude Include="..\..\Src\Tests\.Ext\Graph.h" />
     <ClInclude Include="..\..\Src\Tests\Tests.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

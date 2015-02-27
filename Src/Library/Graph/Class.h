@@ -73,6 +73,7 @@ namespace vc { namespace graph
 		 */
 		static Class* createFromVerbatimSignature(const QString &signature);	//TODO extract this into a common template interface
 
+		void setId(const QString &id) { mId = id; }
 		QString id() const { return mId; }
 		const QList<Member*>& members() const { return mMembers; }
 		void addMember(Member *member) { mMembers.append(member); }

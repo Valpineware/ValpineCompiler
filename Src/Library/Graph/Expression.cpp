@@ -8,9 +8,9 @@
 #include "Expression.h"
 #include "Utility.h"
 
-namespace vc { namespace graph { namespace expr
+namespace vc { namespace graph
 {
-	Expression* Expression::make(const QString &verbatim)
+	Expression::InnerExpression* Expression::InnerExpression::make(const QString &verbatim)
 	{
 		QString filtered = verbatim;
 		Utility::breakUpOperators(filtered);
@@ -18,7 +18,7 @@ namespace vc { namespace graph { namespace expr
 		Utility::breakUpByWhitespace(filtered, strList);
 
 		QVector<QString> cmps = strList.toVector();
-		Expression *expression = new Expression;
+		InnerExpression *expression = new InnerExpression;
 		
 		for (int i=0; i<cmps.count(); i++)
 		{
@@ -44,7 +44,7 @@ namespace vc { namespace graph { namespace expr
 					expression->components().append(Arguments::make(body));
 				}
 				else
-					expression->components().append(Expression::make(body));
+					expression->components().append(InnerExpression::make(body));
 
 				i = last;
 			}
@@ -58,7 +58,7 @@ namespace vc { namespace graph { namespace expr
 	}
 
 
-	Operator* Operator::make(const QString &verbatim)
+	Expression::Operator* Expression::Operator::make(const QString &verbatim)
 	{
 		Operator *op = new Operator;
 		op->setVerbatim(verbatim);
@@ -67,7 +67,7 @@ namespace vc { namespace graph { namespace expr
 	}
 
 
-	Id* Id::make(const QString &verbatim)
+	Expression::Id* Expression::Id::make(const QString &verbatim)
 	{
 		Id *id = new Id;
 		id->setVerbatim(verbatim);
@@ -76,7 +76,7 @@ namespace vc { namespace graph { namespace expr
 	}
 
 
-	Arguments* Arguments::make(const QString &verbatim)
+	Expression::Arguments* Expression::Arguments::make(const QString &verbatim)
 	{
 		Arguments *arguments = new Arguments;
 
@@ -122,12 +122,12 @@ namespace vc { namespace graph { namespace expr
 
 			for (QStringRef &str : chunks)
 			{
-				auto exp = Expression::make(str.toString());
+				auto exp = InnerExpression::make(str.toString());
 
 				if (exp->components().count() > 1 || exp->components().isEmpty())
 					arguments->components().append(exp);
 
-				//we don't need an extra Expression just to wrap this single Component
+				//we don't need an extra InnerExpression just to wrap this single Component
 				else
 				{
 					Component *stolen = exp->components().first();
@@ -140,4 +140,4 @@ namespace vc { namespace graph { namespace expr
 
 		return arguments;
 	}
-}}}
+}}

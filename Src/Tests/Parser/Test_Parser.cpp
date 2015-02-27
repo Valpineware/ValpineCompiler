@@ -1,4 +1,5 @@
 #include "Tests.h"
+#include ".Ext/Graph.h"
 #include <Parser/Parser.h>
 
 #define CLASS Test_Parser
@@ -240,7 +241,7 @@ TEST_CASE(Class)
 			{
 				const Class::Member *m = clsIter.next();
 				EXPECT_EQ(Class::Public, m->accessType);
-				auto *f = dynamic_cast<Function*>(m->statement);
+				auto f = dynamic_cast<Function*>(m->statement);
 				ASSERT_NOT_NULL(f);
 				EXPECT_EQ_STR("Book", f->id());
 				EXPECT_EQ(Function::Type::Constructor, f->type());
@@ -249,7 +250,7 @@ TEST_CASE(Class)
 			{
 				const Class::Member *m = clsIter.next();
 				EXPECT_EQ(Class::Public, m->accessType);
-				auto *f = dynamic_cast<Function*>(m->statement);
+				auto f = dynamic_cast<Function*>(m->statement);
 				ASSERT_NOT_NULL(f);
 				EXPECT_EQ_STR("Book", f->id());
 				EXPECT_EQ(Function::Type::Destructor, f->type());
