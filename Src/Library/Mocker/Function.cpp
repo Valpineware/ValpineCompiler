@@ -13,16 +13,15 @@ namespace vc {	namespace mocker
 	Function::Function(Data &data)
 	{
 		const graph::Function *function = data.functions->dequeue();
-		buildDeclartion(*function);
-		mData = &data;
+		buildDeclartion(*function, data);
 
-		DeclarationBlock::buildBlock(function->block(), *mData);
+		DeclarationBlock::buildBlock(function->block(), data);
 	}
 
-	void Function::buildDeclartion(const graph::Function &function)
+	void Function::buildDeclartion(const graph::Function &function, Data &data)
 	{
 		//build opening experssion
-		QString declartion = Utility::createTabs(mData->scope);
+		QString declartion = Utility::createTabs(data.scope);
 		declartion = function.returnType().fullType() + " " + function.id() + "(";
 
 		//add in the parameters
@@ -44,11 +43,11 @@ namespace vc {	namespace mocker
 		}
 
 		declartion += ")";
-		mData->body->append(declartion);
+		data.body->append(declartion);
 		
 		if (function.id() != "main")
 		{
-			mData->forwardDecs->append(declartion + ";");
+			data.forwardDecs->append(declartion + ";");
 		}
 	}
 

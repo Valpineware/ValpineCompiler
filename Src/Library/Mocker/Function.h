@@ -20,12 +20,10 @@ namespace vc { namespace mocker
 	class Function
 	{
 	private:
-		void buildDeclartion(const graph::Function &function);
-		Data *mData;
+		void buildDeclartion(const graph::Function &function, Data &data);
 
 	public:
 		Function(Data &data);
-		QQueue<const graph::Function*> &nestedFunctions() { return *(mData->functions); }
 	};
 
 
