@@ -186,62 +186,6 @@ TEST_CASE(ControlStructure)
 	}
 
 	assertEqualBlock(expected, sp.graph().block());
-
-
-	/*ASSERT_EQ(2, root.statements().count());
-	{
-		QListIterator<Statement*> iter(root.statements());
-
-		Preprocessor *include = dynamic_cast<Preprocessor*>(iter.next());
-		ASSERT_NOT_NULL(include);
-		EXPECT_EQ_STR("#include <QtCore/QDebug>", include->verbatim());
-
-		Function *f1 = dynamic_cast<Function*>(iter.next());
-		ASSERT_NOT_NULL(f1);
-		EXPECT_EQ_STR("main", f1->id());
-		{
-			QListIterator<Statement*> f1Iter(f1->block().statements());
-
-			ControlStructure *csFor = dynamic_cast<ControlStructure*>(f1Iter.next());
-			ASSERT_NOT_NULL(csFor);
-			EXPECT_EQ_STR("for", csFor->name());
-			EXPECT_EQ_STR("int i=0; i<100; i++", csFor->expression());
-			{
-				EXPECT_EQ_STR("qDebug() << i;", csFor->block().statements().first()->verbatim());
-			}
-
-			{
-				Variable *varQuit = dynamic_cast<Variable*>(f1Iter.next());
-				ASSERT_NOT_NULL(varQuit);
-				EXPECT_EQ_STR("bool", varQuit->typeExpression().fullType());
-				EXPECT_EQ_STR("quit", varQuit->id());
-				EXPECT_EQ_STR("false", varQuit->initExpression());
-			}
-
-
-			{
-				Variable *varN = dynamic_cast<Variable*>(f1Iter.next());
-				ASSERT_NOT_NULL(varN);
-				EXPECT_EQ_STR("int", varN->typeExpression().fullType());
-				EXPECT_EQ_STR("n", varN->id());
-				EXPECT_EQ_STR("0", varN->initExpression());
-			}
-
-			ControlStructure *csWhile = dynamic_cast<ControlStructure*>(f1Iter.next());
-			ASSERT_NOT_NULL(csWhile);
-			EXPECT_EQ_STR("while", csWhile->name());
-			EXPECT_EQ_STR("!quit", csWhile->expression());
-			{
-				QListIterator<Statement*> csWhileIter(csWhile->block().statements());
-
-				EXPECT_EQ_STR("QThread::msleep(100);", csWhileIter.next()->verbatim());
-				EXPECT_EQ_STR("n += 40;", csWhileIter.next()->verbatim());
-				EXPECT_EQ_STR("agsdg	quit = n>50000;", csWhileIter.next()->verbatim());
-			}
-		}
-
-		//TODO finish testing rest of the file
-	}*/
 }
 
 
