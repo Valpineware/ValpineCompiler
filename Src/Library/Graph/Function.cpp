@@ -156,7 +156,7 @@ namespace vc { namespace graph
 	}
 
 
-	Function* Function::createFromVerbatimSignature(const QString &signature, ScopeType scopeType)
+	Function* Function::make(const QString &signature, ScopeType scopeType)
 	{
 		if (!couldThisPossiblyBeAFunction(signature))
 			return nullptr;

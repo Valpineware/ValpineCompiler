@@ -19,9 +19,7 @@ namespace vc { namespace graph
 	class Variable : public Statement
 	{
 	public:
-		Variable(const QString &verbatim) : Statement(verbatim) {}
-
-		static Variable* createFromVerbatimSignature(const QString signature);
+		static Variable* make(const QString signature);
 
 		void setTypeExpression(const TypeExpression &typeExpression) { mTypeExpression = typeExpression; }
 		const TypeExpression& typeExpression() const { return mTypeExpression; }
@@ -31,6 +29,8 @@ namespace vc { namespace graph
 		QString initExpression() const { return mInitExpression; }
 
 	private:
+		Variable(const QString &verbatim) : Statement(verbatim) {}
+
 		TypeExpression mTypeExpression;
 		QString mId, mInitExpression;
 	};

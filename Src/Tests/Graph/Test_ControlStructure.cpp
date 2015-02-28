@@ -9,7 +9,7 @@ TEST_CLASS
 protected:
 	graph::ControlStructure* test(const QString &what)
 	{
-		graph::ControlStructure *cs = graph::ControlStructure::createFromVerbatimSignature(what);
+		graph::ControlStructure *cs = graph::ControlStructure::make(what);
 		if (cs == nullptr)
 			qFatal("Null control structure in Test_ControlStructure");
 
@@ -55,7 +55,7 @@ TEST_CASE(FunctionHeader_WhatIsNot)
 {
 	const QString header = "void process()";
 
-	#define tst(what) ASSERT_NULL(graph::ControlStructure::createFromVerbatimSignature(what))
+	#define tst(what) ASSERT_NULL(graph::ControlStructure::make(what))
 
 	tst("for for (true)");
 	tst("whil (thisExpression == false)");

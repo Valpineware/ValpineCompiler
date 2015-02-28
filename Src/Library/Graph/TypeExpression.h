@@ -81,6 +81,14 @@ namespace vc { namespace graph
 			return fullType;
 		}
 
+
+		bool operator==(const TypeExpression &rhs) const
+		{
+			return mPreModifiers == rhs.mPreModifiers &&
+					mPostModifiers == rhs.mPostModifiers &&
+					mBaseType == rhs.mBaseType;
+		}
+
 	private:
 		QVector<QString> mPreModifiers, mPostModifiers;
 		QString mBaseType;

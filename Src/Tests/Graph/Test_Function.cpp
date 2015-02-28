@@ -12,7 +12,7 @@ TEST_CLASS
 TEST_CASE(Normal_WhatIS)
 {
 	//TODO we need to test Function::Type in this test
-	#define tst(what) { auto f = graph::Function::createFromVerbatimSignature(what, graph::ScopeType::Root); \
+	#define tst(what) { auto f = graph::Function::make(what, graph::ScopeType::Root); \
 						ASSERT_NOT_NULL(f); \
 						ASSERT_EQ(f->type(), graph::Function::Type::Normal); }
 
@@ -42,7 +42,7 @@ TEST_CASE(Normal_WhatIS)
 
 TEST_CASE(Constructor_WhatIs)
 {
-#define tst(what) { auto f = graph::Function::createFromVerbatimSignature(what, graph::ScopeType::ClassBlock); \
+#define tst(what) { auto f = graph::Function::make(what, graph::ScopeType::ClassBlock); \
 						ASSERT_NOT_NULL(f); \
 						ASSERT_EQ(f->type(), graph::Function::Type::Constructor); }
 
@@ -56,7 +56,7 @@ TEST_CASE(Constructor_WhatIs)
 
 TEST_CASE(Destructor_WhatIs)
 {
-#define tst(what) { auto f = graph::Function::createFromVerbatimSignature(what, graph::ScopeType::ClassBlock); \
+#define tst(what) { auto f = graph::Function::make(what, graph::ScopeType::ClassBlock); \
 					ASSERT_NOT_NULL(f); \
 					ASSERT_EQ(f->type(), graph::Function::Type::Destructor); }
 
@@ -70,7 +70,7 @@ TEST_CASE(Destructor_WhatIs)
 
 TEST_CASE(Normal_WhatIsNot)
 {
-#define tst(what) ASSERT_NULL(graph::Function::createFromVerbatimSignature(what, graph::ScopeType::Root))
+#define tst(what) ASSERT_NULL(graph::Function::make(what, graph::ScopeType::Root))
 
 	tst("123Type doesNotWork()");
 	tst("NoGo 999Function		( )");
@@ -89,7 +89,7 @@ TEST_CASE(Normal_WhatIsNot)
 
 TEST_CASE(Destructor_WhatIsNot)
 {
-#define tst(what, scope) ASSERT_NULL(graph::Function::createFromVerbatimSignature(what, graph::ScopeType::scope))
+#define tst(what, scope) ASSERT_NULL(graph::Function::make(what, graph::ScopeType::scope))
 
 	tst("~Widget()", Root);
 	tst("~ Bigger_Widget( )", ExecutionBlock);

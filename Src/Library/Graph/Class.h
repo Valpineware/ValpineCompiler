@@ -76,7 +76,7 @@ namespace vc { namespace graph
 		 * @returns nullptr if \p signature does not represent a valid class header. Otherwise
 		 * a new Class instance is returned with the id value set according to \p signature.
 		 */
-		static Class* createFromVerbatimSignature(const QString &signature);	//TODO extract this into a common template interface
+		static Class* make(const QString &signature);	//TODO extract this into a common template interface
 
 		void setId(const QString &id) { mId = id; }
 		QString id() const { return mId; }

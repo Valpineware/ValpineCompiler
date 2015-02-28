@@ -89,6 +89,32 @@ namespace ext
 	}
 
 
+	void assertEqualBlock(const Block &expected, const Block &actual);
+
+
+	void assertEqualControlStructure(ControlStructure *expected, ControlStructure *actual)
+	{
+		EXPECT_EQ_STR(expected->name(), actual->name());
+		assertEqualBlock(expected->block(), actual->block());
+	}
+
+
+	void assertEqualFunction(Function *expected, Function *actual)
+	{
+		EXPECT_EQ_STR(expected->id(), actual->id());
+		EXPECT_EQ(expected->returnType(), actual->returnType());
+		EXPECT_EQ(expected->parameters(), actual->parameters());
+		assertEqualBlock(expected->block(), actual->block());
+	}
+
+
+	void assertEqualVariable(Variable *expected, Variable *actual)
+	{
+		EXPECT_EQ_STR(expected->id(), actual->id());
+		EXPECT_EQ_STR(expected->initExpression(), actual->initExpression());
+	}
+
+
 	void assertEqualBlock(const Block &expected, const Block &actual)
 	{
 		auto expectedIter = vc::makeIter(expected.statements());
@@ -109,17 +135,17 @@ namespace ext
 			else if (auto cls = dynamic_cast<Class*>(expectedStatement))
 				assertEqualClass(cls, dynamic_cast<Class*>(actualStatement));
 
-			//else if (auto controlStructure = dynamic_cast<ControlStructure*>(expectedStatement))
-			//	assertEqualControlStructure(controlStructure, dynamic_cast<ControlStructure*>(actualStatement));
+			else if (auto controlStructure = dynamic_cast<ControlStructure*>(expectedStatement))
+				assertEqualControlStructure(controlStructure, dynamic_cast<ControlStructure*>(actualStatement));
 
-			//else if (auto expression = dynamic_cast<Expression*>(expectedStatement))
-			//	assertEqualExpression(expression, dynamic_cast<Expression*>(actualStatement));
+			else if (auto expression = dynamic_cast<Expression*>(expectedStatement))
+				assertEqualExpression(*expression, *dynamic_cast<Expression*>(actualStatement));
 
-			//else if (auto function = dynamic_cast<Function*>(expectedStatement))
-			//	assertEqualFunction(function, dynamic_cast<Function*>(actualStatement));
+			else if (auto function = dynamic_cast<Function*>(expectedStatement))
+				assertEqualFunction(function, dynamic_cast<Function*>(actualStatement));
 
-			//else if (auto variable = dynamic_cast<Variable*>(expectedStatement))
-			//	assertEqualVariable(variable, dynamic_cast<Variable*>(expectedStatement));
+			else if (auto variable = dynamic_cast<Variable*>(expectedStatement))
+				assertEqualVariable(variable, dynamic_cast<Variable*>(expectedStatement));
 		}
 	}
 };

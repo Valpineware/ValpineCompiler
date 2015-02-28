@@ -11,7 +11,7 @@ TEST_CLASS
 
 TEST_CASE(Variable_WhatIs)
 {
-	#define IF(what) { Variable *v = Variable::createFromVerbatimSignature(what); ASSERT_NOT_NULL(v);
+	#define IF(what) { Variable *v = Variable::make(what); ASSERT_NOT_NULL(v);
 
 	IF("int a;")
 		EXPECT_EQ_STR("int", v->typeExpression().fullType());
@@ -47,7 +47,7 @@ TEST_CASE(Variable_WhatIs)
 
 TEST_CASE(Variable_WhatIsNot)
 {
-	#define tst(what) ASSERT_NULL(Variable::createFromVerbatimSignature(what))
+	#define tst(what) ASSERT_NULL(Variable::make(what))
 
 	tst("int bool a=10;");
 

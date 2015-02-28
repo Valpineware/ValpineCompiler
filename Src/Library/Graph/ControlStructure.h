@@ -18,9 +18,7 @@ namespace vc { namespace graph
 	class ControlStructure : public SubBlock
 	{
 	public:
-		ControlStructure(const QString &verbatim) : SubBlock(verbatim) {}
-
-		static ControlStructure* createFromVerbatimSignature(const QString signature);
+		static ControlStructure* make(const QString signature);
 
 		void setName(const QString &name) { mName = name; }
 		QString name() const { return mName; }
@@ -29,6 +27,8 @@ namespace vc { namespace graph
 		QString expression() const { return mExpression; }
 
 	private:
+		ControlStructure(const QString &verbatim) : SubBlock(verbatim) {}
+
 		QString mName, mExpression;
 	};
 }}

@@ -19,6 +19,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\Tests\.Ext\Expression.cpp" />
     <ClCompile Include="..\..\Src\Tests\Graph\Test_Expression.cpp" />
     <ClCompile Include="..\..\Src\Tests\Graph\Test_Class.cpp" />
     <ClCompile Include="..\..\Src\Tests\Graph\Test_ControlStructure.cpp" />

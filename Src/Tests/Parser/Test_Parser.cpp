@@ -160,28 +160,28 @@ TEST_CASE(ControlStructure)
 	Block expected;
 	{
 		addPreprocessor(expected, new Preprocessor("#include <QtCore/QDebug>"));
-		auto fMain = addFunction(expected, new Function("int main()"));
-			auto csFor = addControlStructure(fMain->block(), new ControlStructure("int i=0; i<100; i++"));
+		auto fMain = addFunction(expected, Function::make("int main()", ScopeType::Root));
+			auto csFor = addControlStructure(fMain->block(), ControlStructure::make("for (int i=0; i<100; i++)"));
 				addStatement(csFor->block(), new Statement("qDebug() << i;"));
 
-			addVariable(fMain->block(), new Variable("bool quit = false"));
-			addVariable(fMain->block(), new Variable("int n = 0"));
+			addVariable(fMain->block(), Variable::make("bool quit = false"));
+			addVariable(fMain->block(), Variable::make("int n = 0"));
 
-			auto csWhile = addControlStructure(fMain->block(), new ControlStructure("while (!quit)"));
+			auto csWhile = addControlStructure(fMain->block(), ControlStructure::make("while (!quit)"));
 				addStatement(csWhile->block(), new Statement("QThread::msleep(100)"));
 				addStatement(csWhile->block(), new Statement("n += 40"));
 				addStatement(csWhile->block(), new Statement("quit = n>50000"));
 
-			addVariable(fMain->block(), new Variable("QString username = ""DanWatkins"""));
+			addVariable(fMain->block(), Variable::make("QString username = ""DanWatkins"""));
 
-			auto csIf = addControlStructure(fMain->block(), new ControlStructure("if (username == ""JohnKoehn"")"));
+			auto csIf = addControlStructure(fMain->block(), ControlStructure::make("if (username == ""JohnKoehn"")"));
 				addStatement(csIf->block(), new Statement("qDebug() << 56"));
 
-			auto csElseIf = addControlStructure(fMain->block(), new ControlStructure("elseif (username == ""Noob"" && false)"));
-				auto csSubWhile = addControlStructure(csElseIf->block(), new ControlStructure("while (true)"));
+			auto csElseIf = addControlStructure(fMain->block(), ControlStructure::make("elseif (username == ""Noob"" && false)"));
+				auto csSubWhile = addControlStructure(csElseIf->block(), ControlStructure::make("while (true)"));
 					addStatement(csSubWhile->block(), new Statement("qDebug() << ""Stuck in a loop that will never execute"""));
 
-			auto csElse = addControlStructure(fMain->block(), new ControlStructure("else"));
+			auto csElse = addControlStructure(fMain->block(), ControlStructure::make("else"));
 				addStatement(csElse->block(), new Statement("qDebug() << ""You must be Dan"""));
 	}
 

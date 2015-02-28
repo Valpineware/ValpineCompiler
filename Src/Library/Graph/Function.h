@@ -20,6 +20,13 @@ namespace vc { namespace graph
 		TypeExpression type;
 		QString id;
 		QString defaultValue;
+
+		bool operator==(const Parameter &rhs) const
+		{
+			return type==rhs.type &&
+					id == rhs.id &&
+					defaultValue == rhs.defaultValue;
+		}
 	};
 
 
@@ -29,11 +36,7 @@ namespace vc { namespace graph
 	class Function : public SubBlock
 	{
 	public:
-		Function() = delete;
-		Function(const QString &verbatim) : SubBlock(verbatim) {}
-
-		//TODO let's just move all of these to be constructor based
-		static Function* createFromVerbatimSignature(const QString &signature, ScopeType scopeType);
+		static Function* make(const QString &signature, ScopeType scopeType);
 
 		enum class Type
 		{
@@ -54,6 +57,8 @@ namespace vc { namespace graph
 		const QVector<Parameter>& parameters() const { return mParameters; }
 
 	private:
+		Function(const QString &verbatim) : SubBlock(verbatim) {}
+
 		QString mId;
 		Type mType = Type::Normal;
 		TypeExpression mReturnType;

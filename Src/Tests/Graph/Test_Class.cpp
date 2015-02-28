@@ -11,7 +11,7 @@ TEST_CLASS
 
 TEST_CASE(FunctionHeader_WhatIs)
 {
-	#define IF(what) { Class *c = Class::createFromVerbatimSignature(what); ASSERT_NOT_NULL(c);
+	#define IF(what) { Class *c = Class::make(what); ASSERT_NOT_NULL(c);
 
 	IF ("class Cow : public Animal")
 		EXPECT_EQ_STR("Cow", c->id());
@@ -59,7 +59,7 @@ TEST_CASE(FunctionHeader_WhatIsNot)
 {
 	const QString header = "void process()";
 
-	#define tst(what) ASSERT_NULL(Class::createFromVerbatimSignature(what))
+	#define tst(what) ASSERT_NULL(Class::make(what))
 
 	tst("class Door :: public Entity");
 

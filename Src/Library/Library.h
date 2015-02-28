@@ -31,9 +31,9 @@ namespace vc
 	using unique = std::unique_ptr<T>;
 
 	template <typename T>
-	vc::unique<T> toUnique(T *ptr)
+	unique<T> toUnique(T *ptr)
 	{
-		return vc::unique<T>(ptr);
+		return unique<T>(ptr);
 	}
 
 	const QRegExp gRegExp_numericConstant = QRegExp("([0-9]+)|(true|false)");

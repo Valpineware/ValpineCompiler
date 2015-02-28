@@ -47,7 +47,7 @@ namespace vc { namespace graph
 	);
 
 
-	ControlStructure* ControlStructure::createFromVerbatimSignature(const QString signature)
+	ControlStructure* ControlStructure::make(const QString signature)
 	{
 		QStringList list;
 		QString filtered = signature;

@@ -78,7 +78,7 @@ namespace vc { namespace parser
 				member->accessType = currentAccessType;
 
 				// Statement : Function
-				if (auto f = graph::Function::createFromVerbatimSignature(line, graph::ScopeType::ClassBlock))
+				if (auto f = graph::Function::make(line, graph::ScopeType::ClassBlock))
 				{
 					index = parseStatement_subBlock(index, f->block());
 					member->statement = f;
@@ -86,7 +86,7 @@ namespace vc { namespace parser
 				// Statement : Variable
 				else
 				{
-					member->statement = graph::Variable::createFromVerbatimSignature(line);
+					member->statement = graph::Variable::make(line);
 				}
 
 				host.addMember(member);
@@ -122,26 +122,26 @@ namespace vc { namespace parser
 			}
 
 			// Statement : Function
-			else if (auto f = graph::Function::createFromVerbatimSignature(line, graph::ScopeType::ExecutionBlock))
+			else if (auto f = graph::Function::make(line, graph::ScopeType::ExecutionBlock))
 			{
 				host->appendStatement(f);
 				index = parseStatement_subBlock(index, f->block());
 			}
 
 			// Statement : ControlStructure
-			else if (auto cs = graph::ControlStructure::createFromVerbatimSignature(line))
+			else if (auto cs = graph::ControlStructure::make(line))
 			{
 				host->appendStatement(cs);
 				index = parseStatement_subBlock(index, cs->block());
 			}
 			
-			else if (auto cls = graph::Class::createFromVerbatimSignature(line))
+			else if (auto cls = graph::Class::make(line))
 			{
 				host->appendStatement(cls);
 				index = parseStatement_classBlock(index, *cls);
 			}
 
-			else if (auto variable = graph::Variable::createFromVerbatimSignature(line))
+			else if (auto variable = graph::Variable::make(line))
 			{
 				host->appendStatement(variable);
 			}

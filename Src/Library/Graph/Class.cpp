@@ -41,7 +41,7 @@ namespace vc { namespace graph
 	}
 
 
-	Class* Class::createFromVerbatimSignature(const QString &signature)
+	Class* Class::make(const QString &signature)
 	{
 		//can this possibly be a class declaration?
 		{
