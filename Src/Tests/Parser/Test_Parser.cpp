@@ -1,5 +1,6 @@
 #include "Tests.h"
 #include ".Ext/Graph.h"
+#include ".Ext/ParseScript.h"
 #include <Parser/Parser.h>
 
 #define CLASS Test_Parser
@@ -155,37 +156,39 @@ TEST_CASE(ControlStructure)
 	parser::Parser sp;
 	sp.parseFile(gTestDir_Parser + "ControlStructure.val");
 
-	using namespace graph;
+	ParseScript parseScript;
+	parseScript.parse(gTestDir_Parser + "ControlStructure.ps");
 
-	Block expected;
+	using namespace graph;
+	Graph expected;
 	{
-		addPreprocessor(expected, new Preprocessor("#include <QtCore/QDebug>"));
-		auto fMain = addFunction(expected, Function::make("int main()", ScopeType::Root));
+		addPreprocessor(expected.block(), new Preprocessor("#include <QtCore/QDebug>"));
+		auto fMain = addFunction(expected.block(), Function::make("int main()", ScopeType::Root));
 			auto csFor = addControlStructure(fMain->block(), ControlStructure::make("for (int i=0; i<100; i++)"));
-				addStatement(csFor->block(), new Statement("qDebug() << i;"));
+				addStatement(csFor->block(), Statement::make("qDebug() << i;"));
 
 			addVariable(fMain->block(), Variable::make("bool quit = false"));
 			addVariable(fMain->block(), Variable::make("int n = 0"));
 
 			auto csWhile = addControlStructure(fMain->block(), ControlStructure::make("while (!quit)"));
-				addStatement(csWhile->block(), new Statement("QThread::msleep(100)"));
-				addStatement(csWhile->block(), new Statement("n += 40"));
-				addStatement(csWhile->block(), new Statement("quit = n>50000"));
+				addStatement(csWhile->block(), Statement::make("QThread::msleep(100)"));
+				addStatement(csWhile->block(), Statement::make("n += 40"));
+				addStatement(csWhile->block(), Statement::make("quit = n>50000"));
 
 			addVariable(fMain->block(), Variable::make("QString username = ""DanWatkins"""));
 
 			auto csIf = addControlStructure(fMain->block(), ControlStructure::make("if (username == ""JohnKoehn"")"));
-				addStatement(csIf->block(), new Statement("qDebug() << 56"));
+				addStatement(csIf->block(), Statement::make("qDebug() << 56"));
 
 			auto csElseIf = addControlStructure(fMain->block(), ControlStructure::make("elseif (username == ""Noob"" && false)"));
 				auto csSubWhile = addControlStructure(csElseIf->block(), ControlStructure::make("while (true)"));
-					addStatement(csSubWhile->block(), new Statement("qDebug() << ""Stuck in a loop that will never execute"""));
+					addStatement(csSubWhile->block(), Statement::make("qDebug() << ""Stuck in a loop that will never execute"""));
 
 			auto csElse = addControlStructure(fMain->block(), ControlStructure::make("else"));
-				addStatement(csElse->block(), new Statement("qDebug() << ""You must be Dan"""));
+				addStatement(csElse->block(), Statement::make("qDebug() << ""You must be Dan"""));
 	}
 
-	assertEqualBlock(expected, sp.graph().block());
+	assertEqualBlock(expected.block(), sp.graph().block());
 }
 
 

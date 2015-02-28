@@ -39,7 +39,7 @@ namespace vc { namespace parser
 	
 	bool Parser::isBlankLine(const QString &line)
 	{
-		return graph::Statement(line).verbatim() == "";
+		return line == "";
 	}
 
 
@@ -156,7 +156,7 @@ namespace vc { namespace parser
 			// Statement : Regular
 			else
 			{
-				host->appendStatement(new graph::Statement(line));
+				host->appendStatement(graph::Statement::make(line));
 			}
 
 			index++;

@@ -29,6 +29,8 @@ namespace vc { namespace graph
 		Block& block() { return mBlock; }
 		const Block& block() const { return mBlock; }
 
+		//TODO we need a move constructor
+
 	private:
 		Block mBlock;
 	};
