@@ -20,9 +20,17 @@ namespace vc {
 		class Class
 		{
 		private:
+			QString mClassName;
+			QVector<QString> mPublicDecs;
+			QVector<QString> mPrivateDecs;
+			QVector<QString> mProtectedDecs;
 
+			int mScope;
+
+			void buildClass(QVector<QString> &body, const graph::Class &classDef);
+			void buildMember(QVector<QString> &body, const graph::Class::Member &member, QVector<QString> &decs);
 		public:
-			Class(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Class &classDef, int scope);
+			Class(QVector<QString> &body, const graph::Class &classDef, int scope);
 			
 		};
 

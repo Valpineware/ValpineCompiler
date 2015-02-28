@@ -12,7 +12,6 @@
 
 namespace vc { namespace mocker
 {
-	//TODO ADD DEPTH LEVEL FOR INTERNAL TABBING
 	ControlStructure::ControlStructure(graph::ControlStructure &controlStructure, FileData &data)
 	{
 		buildStatement(controlStructure, data);
