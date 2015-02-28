@@ -159,7 +159,7 @@ TEST_CASE(ControlStructure)
 	ParseScript parseScript;
 	parseScript.parse(gTestDir_Parser + "ControlStructure.ps");
 
-	using namespace graph;
+	/*using namespace graph;
 	Graph expected;
 	{
 		addPreprocessor(expected.block(), new Preprocessor("#include <QtCore/QDebug>"));
@@ -186,9 +186,9 @@ TEST_CASE(ControlStructure)
 
 			auto csElse = addControlStructure(fMain->block(), ControlStructure::make("else"));
 				addStatement(csElse->block(), Statement::make("qDebug() << ""You must be Dan"""));
-	}
+	}*/
 
-	assertEqualBlock(expected.block(), sp.graph().block());
+	assertEqualBlock(parseScript.graph().block(), sp.graph().block());
 }
 
 

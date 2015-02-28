@@ -27,6 +27,7 @@ namespace ext
 		void applyStatement(int indentation, const QStringRef &keyword, const QStringRef &verbatim);
 
 		Graph mGraph;
+		QVector<Statement*> mPreviousStatementTiers;
 	};
 };
 

@@ -71,6 +71,7 @@ namespace vc { namespace graph
 
 	public:
 		Class(const QString &verbatim) : Statement(verbatim) {}
+		//TODO dtor needs to delete Member list
 
 		/**
 		 * @returns nullptr if \p signature does not represent a valid class header. Otherwise

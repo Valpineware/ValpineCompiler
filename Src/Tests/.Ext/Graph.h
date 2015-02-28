@@ -127,6 +127,11 @@ namespace ext
 
 			ASSERT_NOT_NULL(expectedStatement);
 			ASSERT_NOT_NULL(actualStatement);
+
+
+			if (typeid(*expectedStatement) != typeid(*actualStatement))
+				qDebug() << "Types are not the same";
+
 			ASSERT_EQ(typeid(*expectedStatement), typeid(*actualStatement)) << "Statements not of same type";
 
 			if (auto preprocessor = dynamic_cast<Preprocessor*>(expectedStatement))

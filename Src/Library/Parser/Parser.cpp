@@ -46,7 +46,7 @@ namespace vc { namespace parser
 	int Parser::parseStatement_preprocessor(int index, graph::Block &parent)
 	{
 		//TODO for now we will assume all preprocessor statements are 1 liners
-		parent.appendStatement(new graph::Preprocessor(mLineBuffer[index]));
+		parent.appendStatement(graph::Preprocessor::make(mLineBuffer[index]));
 		return index;
 	}
 
@@ -156,7 +156,7 @@ namespace vc { namespace parser
 			// Statement : Regular
 			else
 			{
-				host->appendStatement(graph::Statement::make(line));
+				host->appendStatement(new graph::Statement(line));
 			}
 
 			index++;

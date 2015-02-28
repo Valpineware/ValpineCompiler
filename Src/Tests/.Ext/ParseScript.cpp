@@ -12,6 +12,8 @@ namespace ext
 	bool ParseScript::parse(const QString &filepath)
 	{
 		mGraph = Graph();
+		mPreviousStatementTiers.push_back(&mGraph.block());
+
 		QFile file(filepath);
 
 		if (!file.open(QIODevice::ReadOnly))
@@ -53,10 +55,7 @@ namespace ext
 		}
 
 		QStringRef keyword = line.midRef(lastLeadingTab, space-lastLeadingTab);
-
-		//everything else is the verbatim string
 		QStringRef verbatim = line.rightRef(line.count()-space-1);
-
 		applyStatement(indentation, keyword, verbatim);
 
 		return true;
@@ -65,6 +64,53 @@ namespace ext
 
 	void ParseScript::applyStatement(int indentation, const QStringRef &keyword, const QStringRef &verbatim)
 	{
-		qDebug() << indentation << " " << keyword << " " << verbatim;
+		Statement *statement = nullptr;
+
+		if (keyword == "STATE")
+			statement = new Statement(verbatim.toString());
+		else if (keyword == "CLASS")
+			statement = Class::make(verbatim.toString());
+		else if (keyword == "CONTROL")
+			statement = ControlStructure::make(verbatim.toString());
+		else if (keyword == "FUNC")
+			statement = Function::make(verbatim.toString(), ScopeType::Root);	//TODO how can we figure out the outter block?
+		else if (keyword == "PREP")
+			statement = Preprocessor::make(verbatim.toString());
+		else if (keyword == "VAR")
+			statement = Variable::make(verbatim.toString());
+		else
+		{
+			qDebug() << "ParseScript: Unknown keyword " << keyword;
+			return;
+		}
+
+		int currentTier = indentation+1;
+
+		//save the current statement in the correct tier
+		{
+			if (mPreviousStatementTiers.count() == currentTier)
+				mPreviousStatementTiers.push_back(statement);
+			else if (mPreviousStatementTiers.count() < currentTier)
+			{
+				qDebug() << "ParseScript: Too much indentation";
+				return;
+			}
+			else
+				mPreviousStatementTiers[currentTier] = statement;
+		}
+
+		//add the current statement to the super tier
+		{
+			Statement *superTier = mPreviousStatementTiers[currentTier-1];
+
+			if (auto block = dynamic_cast<Block*>(superTier))
+				block->appendStatement(statement);
+			else if (auto subBlock = dynamic_cast<SubBlock*>(superTier))
+				subBlock->block().appendStatement(statement);
+			else if (auto cls = dynamic_cast<Class*>(superTier))
+			{
+				//TODO fill in later
+			}
+		}
 	}
 };

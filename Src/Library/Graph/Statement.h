@@ -27,17 +27,14 @@ namespace vc { namespace graph
 	{
 	public:
 		Statement() = delete;
+		Statement(const QString &verbatim) : mVerbatim(verbatim.trimmed()) { }
+
 		virtual ~Statement() {}
-
-		static Statement* make(const QString &verbatim) { return new Statement(verbatim); }
-
+		
 		/**
 		 * @returns the statement as a string as it appeared in the Valpine source file.
 		 */
 		QString verbatim() const { return mVerbatim; }
-
-	protected:
-		Statement(const QString &verbatim) : mVerbatim(verbatim.trimmed()) { }
 
 	private:
 		QString mVerbatim;
