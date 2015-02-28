@@ -1,3 +1,6 @@
+#ifndef _test_ext_Expression_H
+#define _test_ext_Expression_H
+
 #include "../Tests.h"
 #include <Graph/Expression.h>
 using namespace vc::graph;
@@ -119,6 +122,8 @@ namespace ext
 			auto expectedComponent = expectedIter.next();
 			auto actualComponent = actualIter.next();
 
+			ASSERT_NOT_NULL(expectedComponent);
+			ASSERT_NOT_NULL(actualComponent);
 			ASSERT_EQ(typeid(*expectedComponent), typeid(*actualComponent)) << "Components not of same type";
 
 			if (auto result = dynamic_cast<innerExpression_t*>(expectedComponent))
@@ -140,3 +145,5 @@ namespace ext
 		assertEqualComponentList(expected.components(), actual.components());
 	}
 };
+
+#endif

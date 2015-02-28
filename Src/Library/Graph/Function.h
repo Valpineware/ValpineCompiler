@@ -32,6 +32,7 @@ namespace vc { namespace graph
 		Function() = delete;
 		Function(const QString &verbatim) : SubBlock(verbatim) {}
 
+		//TODO let's just move all of these to be constructor based
 		static Function* createFromVerbatimSignature(const QString &signature, ScopeType scopeType);
 
 		enum class Type

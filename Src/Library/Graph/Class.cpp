@@ -99,7 +99,8 @@ namespace vc { namespace graph
 
 
 		//at this point, if there are any more string components, they must be for interfaces
-		parseComponents(newClass->mInterfaces, iter, ">");
+		if (newClass)
+			parseComponents(newClass->mInterfaces, iter, ">");
 
 		return newClass;
 	}

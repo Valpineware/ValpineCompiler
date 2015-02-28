@@ -37,23 +37,23 @@ namespace vc { namespace mocker
 		{
 			graph::Statement *statement = iter.next();
 
-			if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement))
+			if (auto variable = dynamic_cast<graph::Variable*>(statement))
 			{
 				Variable::createVar(*(data.body), *variable, data.scope);
 			}
-			else if (graph::ControlStructure *control = dynamic_cast<graph::ControlStructure*>(statement))
+			else if (auto control = dynamic_cast<graph::ControlStructure*>(statement))
 			{
 				ControlStructure structure(*control, data);
 			}
-			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
+			else if (auto function = dynamic_cast<graph::Function*>(statement))
 			{
 				data.functions->enqueue(function);
 			}
-			else if (graph::Preprocessor *preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
+			else if (auto preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
 				data.body->append(Utility::createTabs(data.scope) + preprocessor->verbatim());
 			}
-			else
+			else if (statement)
 			{ 
 				data.body->append(Utility::createTabs(data.scope) + statement->verbatim());
 			}
@@ -62,6 +62,7 @@ namespace vc { namespace mocker
 		data.scope -= 1;
 		data.body->append(Utility::createTabs(data.scope) + "}");
 	}
+
 
 	void DeclarationBlock::createFunction()
 	{

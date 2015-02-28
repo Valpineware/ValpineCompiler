@@ -28,7 +28,7 @@ const QString gTestDir = "./Tests/";
 
 
 #define ASSERT_NULL(what) ASSERT_TRUE(what == nullptr)
-#define ASSERT_NOT_NULL(what) ASSERT_FALSE(what == nullptr)
+#define ASSERT_NOT_NULL(what) ASSERT_FALSE(what == nullptr); if (what == nullptr) return	//the final return is to trick Visual Studio's code analysis
 
 void assertEqStr(const QString &exp, const QString &actual, const char *file, int line);
 #define EXPECT_EQ_STR(expected, actual) assertEqStr(expected, actual, __FILE__, __LINE__);

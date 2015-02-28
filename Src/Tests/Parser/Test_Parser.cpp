@@ -4,13 +4,13 @@
 
 #define CLASS Test_Parser
 using namespace vc;
+using namespace ext;
 
 const QString gTestDir_Parser = gTestDir + "/Test_Parser/";
 
 TEST_CLASS
 {
 };
-
 
 
 TEST_CASE(HelloWorld)
@@ -157,8 +157,38 @@ TEST_CASE(ControlStructure)
 
 	using namespace graph;
 
-	Block &root = sp.graph().block();
-	ASSERT_EQ(2, root.statements().count());
+	Block expected;
+	{
+		addPreprocessor(expected, new Preprocessor("#include <QtCore/QDebug>"));
+		auto fMain = addFunction(expected, new Function("int main()"));
+			auto csFor = addControlStructure(fMain->block(), new ControlStructure("int i=0; i<100; i++"));
+				addStatement(csFor->block(), new Statement("qDebug() << i;"));
+
+			addVariable(fMain->block(), new Variable("bool quit = false"));
+			addVariable(fMain->block(), new Variable("int n = 0"));
+
+			auto csWhile = addControlStructure(fMain->block(), new ControlStructure("while (!quit)"));
+				addStatement(csWhile->block(), new Statement("QThread::msleep(100)"));
+				addStatement(csWhile->block(), new Statement("n += 40"));
+				addStatement(csWhile->block(), new Statement("quit = n>50000"));
+
+			addVariable(fMain->block(), new Variable("QString username = ""DanWatkins"""));
+
+			auto csIf = addControlStructure(fMain->block(), new ControlStructure("if (username == ""JohnKoehn"")"));
+				addStatement(csIf->block(), new Statement("qDebug() << 56"));
+
+			auto csElseIf = addControlStructure(fMain->block(), new ControlStructure("elseif (username == ""Noob"" && false)"));
+				auto csSubWhile = addControlStructure(csElseIf->block(), new ControlStructure("while (true)"));
+					addStatement(csSubWhile->block(), new Statement("qDebug() << ""Stuck in a loop that will never execute"""));
+
+			auto csElse = addControlStructure(fMain->block(), new ControlStructure("else"));
+				addStatement(csElse->block(), new Statement("qDebug() << ""You must be Dan"""));
+	}
+
+	assertEqualBlock(expected, sp.graph().block());
+
+
+	/*ASSERT_EQ(2, root.statements().count());
 	{
 		QListIterator<Statement*> iter(root.statements());
 
@@ -211,7 +241,7 @@ TEST_CASE(ControlStructure)
 		}
 
 		//TODO finish testing rest of the file
-	}
+	}*/
 }
 
 

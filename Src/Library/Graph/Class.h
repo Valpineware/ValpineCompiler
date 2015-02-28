@@ -61,6 +61,11 @@ namespace vc { namespace graph
 		{
 			AccessType accessType = Private;
 			QString id;
+
+			bool operator==(const AccessIdPair &rhs) const
+			{
+				return (this->id == rhs.id && this->accessType == rhs.accessType);
+			}
 		};
 
 
