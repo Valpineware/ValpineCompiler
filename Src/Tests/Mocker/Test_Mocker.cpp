@@ -51,6 +51,24 @@ protected:
 			lines.append(in.readLine());
 		}
 	}
+
+	void performTest(QString valpineFile, QString cppFile)
+	{
+		QVector<QString> lines;
+		readLines(valpineFile, lines);
+
+		QVector<QString> expected;
+		readFile(cppFile, expected);
+
+		ASSERT_EQ(expected.size(), lines.size());
+
+		for (int i = 0; i < expected.size(); i++)
+		{
+			EXPECT_EQ_STR(expected[i], lines[i]);
+		}
+	}
+
+
 };
 
 
@@ -58,82 +76,27 @@ protected:
 //Okay, BI.
 TEST_CASE(HelloWorld)
 {
-	QVector<QString> lines;
-	readLines("HelloWorld.val", lines);
-
-	QVector<QString> expected;
-	readFile("HelloWorld.cpp", expected);
-
-	ASSERT_EQ(expected.size(), lines.size());
-
-	for (int i = 0; i < expected.size(); i++)
-	{
-		EXPECT_EQ_STR(expected[i], lines[i]);
-	}
+	performTest("HelloWorld.val", "HelloWorld.cpp");
 }
 
 TEST_CASE(FunctionTest)
 {
-	QVector<QString> lines;
-	readLines("FunctionTest.val", lines);
-
-	QVector<QString> expected;
-	readFile("FunctionTest.cpp", expected);
-
-	ASSERT_EQ(expected.size(), lines.size());
-
-	for (int i = 0; i < expected.size(); i++)
-	{
-		EXPECT_EQ_STR(expected[i], lines[i]);
-	}
+	performTest("FunctionTest.val", "FunctionTest.cpp");
 }
 
 TEST_CASE(VariableTest)
 {
-	QVector<QString> lines;
-	readLines("VariableTest.val", lines);
-
-	QVector<QString> expected;
-	readFile("VariableTest.cpp", expected);
-
-	ASSERT_EQ(expected.size(), lines.size());
-
-	for (int i = 0; i < expected.size(); i++)
-	{
-		EXPECT_EQ_STR(expected[i], lines[i]);
-	}
+	performTest("VariableTest.val", "VariableTest.cpp");
 }
 
 
 TEST_CASE(NestedFunctionBasic)
 {
-	QVector<QString> lines;
-	readLines("NestedFunctionBasic.val", lines);
-
-	QVector<QString> expected;
-	readFile("NestedFunctionBasic.cpp", expected);
-
-	ASSERT_EQ(expected.size(), lines.size());
-	
-	for (int i = 0; i < expected.size(); i++)
-	{
-		EXPECT_EQ_STR(expected[i], lines[i]);
-	}
+	performTest("NestedFunctionBasic.val", "NestedFunctionBasic.cpp");
 
 }
 
 TEST_CASE(ConditionalStatements)
 {
-	QVector<QString> lines;
-	readLines("ConditionalStatementsBasic.val", lines);
-
-	QVector<QString> expected;
-	readFile("ConditionalStatementsBasic.cpp", expected);
-
-	ASSERT_EQ(expected.size(), lines.size());
-
-	for (int i = 0; i < expected.size(); i++)
-	{
-		EXPECT_EQ_STR(expected[i], lines[i]);
-	}
+	performTest("ConditionalStatementsBasic.val", "ConditionalStatementsBasic.cpp");
 }
