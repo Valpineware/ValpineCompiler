@@ -68,7 +68,4 @@ namespace vc { namespace mocker
 			}
 		}
 	}
-
-
-
 }}

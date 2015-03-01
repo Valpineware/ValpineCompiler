@@ -12,7 +12,7 @@
 
 namespace vc { namespace mocker
 {
-	Class::Class(QVector<QString> &body, QVector<QString> &includes, const graph::Class &classDef, int scope)
+	Class::Class(QVector<QString> &body, QVector<QString> &includes, const graph::Class &classDef, QVector<QString> &header, int scope)
 	{
 		mScope = scope;
 		buildClass(body, classDef);
@@ -62,6 +62,31 @@ namespace vc { namespace mocker
 		}
 	}
 
+	void Class::buildHeader(QVector<QString> &header)
+	{
+		int headerScope = 1;
+		header.append("Class " + mClassName);
+		header.append("{");
+		
+		header.append("private:");
+		for (QString &line : mPrivateDecs)
+		{
+			header.append(Utility::createTabs(headerScope) + line);
+		}
+
+		header.append("protected:");
+		for (QString &line : mProtectedDecs)
+		{
+			header.append(Utility::createTabs(headerScope) + line);
+		}
+
+		header.append("public:");
+		for (QString &line : mPublicDecs)
+		{
+			header.append(Utility::createTabs(headerScope) + line);
+		}
+
+	}
 
 
 }}

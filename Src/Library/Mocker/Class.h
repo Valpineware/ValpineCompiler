@@ -29,10 +29,11 @@ namespace vc {
 
 			void buildClass(QVector<QString> &body, const graph::Class &classDef);
 			void buildMember(QVector<QString> &body, const graph::Class::Member &member, QVector<QString> &decs);
+			void buildHeader(QVector<QString> &header);
+
 		public:
-			Class(QVector<QString> &body, QVector<QString> &includes, const graph::Class &classDef, int scope);
+			Class(QVector<QString> &body, QVector<QString> &includes, const graph::Class &classDef, QVector<QString> &header, int scope);
 			
-			//QVector<QString> createHeaderFile();
 		};
 
 
