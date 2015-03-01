@@ -25,12 +25,13 @@ namespace vc { namespace mocker
 		QVector<QString> mIncludes;
 		QVector<QString> mForwardDecs;
 		QVector<QString> mBody;
+		QVector<QString> mHeader;
 
 		int mScope = 0;
 
 	public:
 		Mocker() {};
-		void mock(const graph::Graph &graph, QIODevice& outputDevice);
+		void mock(const graph::Graph &graph, QIODevice &outDevice_Implementation, QIODevice &outDevice_Header);
 	};
 }}
 

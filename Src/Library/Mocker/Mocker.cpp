@@ -12,22 +12,29 @@
 
 namespace vc { namespace mocker
 {
-	void Mocker::mock(const graph::Graph &graph, QIODevice &outputDevice)
+	void Mocker::mock(const graph::Graph &graph, QIODevice &outDevice_Implementation, QIODevice &outDevice_Header)
 	{
 		buildBlock(graph.block());		
 
-		QTextStream outStream(&outputDevice);
+		QTextStream outStream(&outDevice_Implementation);
 		for (const QString &line : mIncludes)
 		{
 			outStream << line << "\n";
 		}
 
+		//TODO, move to header file
 		for (const QString &line : mForwardDecs)
 		{
 			outStream << line << "\n";
 		}
 
 		for (const QString &line : mBody)
+		{
+			outStream << line << "\n";
+		}
+
+		outStream.setDevice(&outDevice_Header);
+		for (const QString &line : mHeader)
 		{
 			outStream << line << "\n";
 		}

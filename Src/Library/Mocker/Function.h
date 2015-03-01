@@ -20,10 +20,10 @@ namespace vc { namespace mocker
 	class Function
 	{
 	private:
-		void buildDeclartion(const graph::Function &function, FileData &data);
+		void buildDeclartion(const graph::Function &function, FunctionData &data);
 
 	public:
-		Function(FileData &data);
+		Function(FunctionData &data);
 	};
 
 

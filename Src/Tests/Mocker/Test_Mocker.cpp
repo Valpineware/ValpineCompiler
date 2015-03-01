@@ -19,11 +19,15 @@ protected:
 		parser::Parser parser;
 		parser.parseFile(gTestDir_Mocker + filename);
 
-		QBuffer buffer;
-		ASSERT_TRUE(buffer.open(QIODevice::ReadWrite | QIODevice::Text));
-		mocker::Mocker().mock(parser.graph(), buffer);
+		QBuffer bufferImplementation;
+		ASSERT_TRUE(bufferImplementation.open(QIODevice::ReadWrite | QIODevice::Text));
+		QBuffer bufferHeader;
+		ASSERT_TRUE(bufferHeader.open(QIODevice::ReadWrite | QIODevice::Text));
 
-		QTextStream stream(&buffer.buffer());
+		mocker::Mocker().mock(parser.graph(), bufferImplementation, bufferHeader);
+
+
+		QTextStream stream(&bufferImplementation.buffer());
 		QVector<QString> lines;
 
 		do
@@ -50,7 +54,8 @@ protected:
 };
 
 
-//TODO Hey John. All these test cases duplicate a lot of code. Bi.
+//TODO Hey John. All these test cases duplicate a lot of code. Bi. 
+//Okay, BI.
 TEST_CASE(HelloWorld)
 {
 	QVector<QString> lines;

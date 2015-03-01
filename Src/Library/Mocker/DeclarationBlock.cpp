@@ -13,19 +13,20 @@
 
 namespace vc { namespace mocker
 {
-	DeclarationBlock::DeclarationBlock(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope)
+	DeclarationBlock::DeclarationBlock(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope, const QString classID)
 	{
 		mData.body = &body;
 		mData.forwardDecs = &forwardDecs;
 		mData.scope = scope;
 		mData.functions = new QQueue<const graph::Function*>;
 		mData.functions->enqueue(&function);
+		mData.classID = &classID;
 
 		createFunction();
 	}
 
 
-	void DeclarationBlock::buildBlock(const graph::Block &block, FileData &data)
+	void DeclarationBlock::buildBlock(const graph::Block &block, FunctionData &data)
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
 		data.body->append(Utility::createTabs(data.scope) + "{");

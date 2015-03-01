@@ -12,11 +12,13 @@
 
 namespace vc { namespace mocker
 {
-	Class::Class(QVector<QString> &body, const graph::Class &classDef, int scope)
+	Class::Class(QVector<QString> &body, QVector<QString> &includes, const graph::Class &classDef, int scope)
 	{
 		mScope = scope;
-
 		buildClass(body, classDef);
+
+		//add include to header file
+		includes += "#include \"" + mClassName + "\"";
 	}
 
 	void Class::buildClass(QVector<QString> &body, const graph::Class &classDef)
@@ -59,5 +61,7 @@ namespace vc { namespace mocker
 			body.append(Utility::createTabs(mScope));
 		}
 	}
+
+
 
 }}

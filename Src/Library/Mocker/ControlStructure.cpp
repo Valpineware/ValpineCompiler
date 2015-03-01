@@ -12,14 +12,14 @@
 
 namespace vc { namespace mocker
 {
-	ControlStructure::ControlStructure(graph::ControlStructure &controlStructure, FileData &data)
+	ControlStructure::ControlStructure(graph::ControlStructure &controlStructure, FunctionData &data)
 	{
 		buildStatement(controlStructure, data);
 		DeclarationBlock::buildBlock(controlStructure.block(), data);
 	}
 
 
-	void ControlStructure::buildStatement(graph::ControlStructure &controlStructure, FileData &data)
+	void ControlStructure::buildStatement(graph::ControlStructure &controlStructure, FunctionData &data)
 	{
 		QString statement = Utility::createTabs(data.scope);
 		statement += controlStructure.name();

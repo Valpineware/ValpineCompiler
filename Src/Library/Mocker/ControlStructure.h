@@ -20,10 +20,10 @@ namespace vc {	namespace mocker {
 	class ControlStructure
 	{
 	private:
-		void buildStatement(graph::ControlStructure &controlStructure, FileData &data);
+		void buildStatement(graph::ControlStructure &controlStructure, FunctionData &data);
 
 	public:
-		ControlStructure(graph::ControlStructure &controlStructure, FileData &data);
+		ControlStructure(graph::ControlStructure &controlStructure, FunctionData &data);
 	};
 
 

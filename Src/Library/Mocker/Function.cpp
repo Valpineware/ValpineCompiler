@@ -10,7 +10,7 @@
 
 namespace vc {	namespace mocker
 {
-	Function::Function(FileData &data)
+	Function::Function(FunctionData &data)
 	{
 		const graph::Function *function = data.functions->dequeue();
 		buildDeclartion(*function, data);
@@ -18,11 +18,18 @@ namespace vc {	namespace mocker
 		DeclarationBlock::buildBlock(function->block(), data);
 	}
 
-	void Function::buildDeclartion(const graph::Function &function, FileData &data)
+	void Function::buildDeclartion(const graph::Function &function, FunctionData &data)
 	{
 		//build opening experssion
 		QString declartion = Utility::createTabs(data.scope);
-		declartion = function.returnType().fullType() + " " + function.id() + "(";
+
+		//check if we are building a method
+		if (*(data.classID) != "")
+		{
+			declartion += *(data.classID) + "::";
+		}
+
+		declartion += function.returnType().fullType() + " " + function.id() + "(";
 
 		//add in the parameters
 		const QVector<graph::Parameter> &param = function.parameters();
