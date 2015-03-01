@@ -120,27 +120,21 @@ namespace vc { namespace parser
 			{
 				index = parseStatement_preprocessor(index, *host);
 			}
-
-			// Statement : Function
 			else if (auto f = graph::Function::make(line, graph::ScopeType::ExecutionBlock))
 			{
 				host->appendStatement(f);
 				index = parseStatement_subBlock(index, f->block());
 			}
-
-			// Statement : ControlStructure
 			else if (auto cs = graph::ControlStructure::make(line))
 			{
 				host->appendStatement(cs);
 				index = parseStatement_subBlock(index, cs->block());
 			}
-			
 			else if (auto cls = graph::Class::make(line))
 			{
 				host->appendStatement(cls);
 				index = parseStatement_classBlock(index, *cls);
 			}
-
 			else if (auto variable = graph::Variable::make(line))
 			{
 				host->appendStatement(variable);
@@ -151,9 +145,6 @@ namespace vc { namespace parser
 			{
 				//do nothing
 			}
-
-
-			// Statement : Regular
 			else
 			{
 				host->appendStatement(new graph::Statement(line));
@@ -178,7 +169,6 @@ namespace vc { namespace parser
 
 	void Parser::removeComments()
 	{
-		//1. Remove comments
 		for (int i=0; i<mLineBuffer.count(); i++)
 		{
 			QString &line = mLineBuffer[i];

@@ -5,11 +5,11 @@
 // This file is licensed under the MIT License.
 //==================================================================================================================|
 
-#include "ParseScript.h"
+#include "GraphScript.h"
 
 namespace ext
 {
-	bool ParseScript::parse(const QString &filepath)
+	bool GraphScript::parse(const QString &filepath)
 	{
 		mGraph = Graph();
 		mPreviousStatementTiers.push_back(&mGraph.block());
@@ -30,7 +30,7 @@ namespace ext
 	}
 
 
-	bool ParseScript::parseLine(const QString &line, int lineNumber)
+	bool GraphScript::parseLine(const QString &line, int lineNumber)
 	{
 		//each leading tab increases the level
 		int indentation = 0;
@@ -50,41 +50,67 @@ namespace ext
 		int space = line.indexOf(QRegExp("[\t ]"), lastLeadingTab+1);
 		if (space == -1)
 		{
-			qDebug() << "ParseScript: Error parsing line " << lineNumber;
-			return false;
+			//special keyword
+			applyStatement(indentation, line.rightRef(line.count()-lastLeadingTab), QStringRef(nullptr));
 		}
-
-		QStringRef keyword = line.midRef(lastLeadingTab, space-lastLeadingTab);
-		QStringRef verbatim = line.rightRef(line.count()-space-1);
-		applyStatement(indentation, keyword, verbatim);
+		else
+		{
+			QStringRef keyword = line.midRef(lastLeadingTab, space-lastLeadingTab);
+			QStringRef verbatim = line.rightRef(line.count()-space-1);
+			applyStatement(indentation, keyword, verbatim);
+		}
 
 		return true;
 	}
 
 
-	void ParseScript::applyStatement(int indentation, const QStringRef &keyword, const QStringRef &verbatim)
+	void GraphScript::applyStatement(int indentation, const QStringRef &keyword, const QStringRef &verbatim)
 	{
+		//check for special keywords
+		if (verbatim.isNull())
+		{
+			if (keyword == "ENABLE_PUBLIC")
+				mCurrentAccessType = Class::Public;
+			else if (keyword == "ENABLE_PROTECTED")
+				mCurrentAccessType = Class::Protected;
+			else if (keyword == "ENABLE_PRIVATE")
+				mCurrentAccessType = Class::Private;
+
+			return;
+		}
+			
 		Statement *statement = nullptr;
+		int currentTier = indentation+1;
+		Statement *superTier = mPreviousStatementTiers[currentTier-1];
 
 		if (keyword == "STATE")
 			statement = new Statement(verbatim.toString());
 		else if (keyword == "CLASS")
+		{
 			statement = Class::make(verbatim.toString());
+			mCurrentAccessType = Class::Private;
+		}
 		else if (keyword == "CONTROL")
 			statement = ControlStructure::make(verbatim.toString());
 		else if (keyword == "FUNC")
-			statement = Function::make(verbatim.toString(), ScopeType::Root);	//TODO how can we figure out the outter block?
+		{
+			ScopeType currentScope = ScopeType::Root;
+			if (dynamic_cast<Class*>(superTier))
+				currentScope = ScopeType::ClassBlock;
+			else if (currentTier > 0)
+				currentScope = ScopeType::ExecutionBlock;
+
+			statement = Function::make(verbatim.toString(), currentScope);	//TODO how can we figure out the outter block?
+		}
 		else if (keyword == "PREP")
 			statement = Preprocessor::make(verbatim.toString());
 		else if (keyword == "VAR")
 			statement = Variable::make(verbatim.toString());
 		else
 		{
-			qDebug() << "ParseScript: Unknown keyword " << keyword;
+			qDebug() << "GraphScript: Unknown keyword " << keyword;
 			return;
 		}
-
-		int currentTier = indentation+1;
 
 		//save the current statement in the correct tier
 		{
@@ -92,7 +118,7 @@ namespace ext
 				mPreviousStatementTiers.push_back(statement);
 			else if (mPreviousStatementTiers.count() < currentTier)
 			{
-				qDebug() << "ParseScript: Too much indentation";
+				qDebug() << "GraphScript: Too much indentation";
 				return;
 			}
 			else
@@ -101,15 +127,16 @@ namespace ext
 
 		//add the current statement to the super tier
 		{
-			Statement *superTier = mPreviousStatementTiers[currentTier-1];
-
 			if (auto block = dynamic_cast<Block*>(superTier))
 				block->appendStatement(statement);
 			else if (auto subBlock = dynamic_cast<SubBlock*>(superTier))
 				subBlock->block().appendStatement(statement);
 			else if (auto cls = dynamic_cast<Class*>(superTier))
 			{
-				//TODO fill in later
+				Class::Member *member = new Class::Member;
+				member->accessType = mCurrentAccessType;
+				member->statement = statement;
+				cls->addMember(member);
 			}
 		}
 	}

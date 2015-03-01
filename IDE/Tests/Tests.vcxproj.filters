@@ -50,7 +50,7 @@
     <ClCompile Include="..\..\Src\Tests\.Ext\Expression.cpp">
       <Filter>Src\.Ext</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Tests\.Ext\ParseScript.cpp">
+    <ClCompile Include="..\..\Src\Tests\.Ext\GraphScript.cpp">
       <Filter>Src\.Ext</Filter>
     </ClCompile>
   </ItemGroup>
@@ -64,7 +64,7 @@
     <ClInclude Include="..\..\Src\Tests\.Ext\Expression.h">
       <Filter>Src\.Ext</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Tests\.Ext\ParseScript.h">
+    <ClInclude Include="..\..\Src\Tests\.Ext\GraphScript.h">
       <Filter>Src\.Ext</Filter>
     </ClInclude>
   </ItemGroup>

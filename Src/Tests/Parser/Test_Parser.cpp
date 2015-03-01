@@ -1,6 +1,6 @@
 #include "Tests.h"
 #include ".Ext/Graph.h"
-#include ".Ext/ParseScript.h"
+#include ".Ext/GraphScript.h"
 #include <Parser/Parser.h>
 
 #define CLASS Test_Parser
@@ -11,6 +11,17 @@ const QString gTestDir_Parser = gTestDir + "/Test_Parser/";
 
 TEST_CLASS
 {
+protected:
+	void assertValpineToParseScript(const QString &valpineFile, const QString &parseScriptFile)
+	{
+		parser::Parser sp;
+		sp.parseFile(gTestDir_Parser + valpineFile);
+
+		GraphScript parseScript;
+		parseScript.parse(gTestDir_Parser + parseScriptFile);
+
+		assertEqualBlock(parseScript.graph().block(), sp.graph().block());
+	}
 };
 
 
@@ -153,114 +164,11 @@ TEST_CASE(FunctionSignature)
 
 TEST_CASE(ControlStructure)
 {
-	parser::Parser sp;
-	sp.parseFile(gTestDir_Parser + "ControlStructure.val");
-
-	ParseScript parseScript;
-	parseScript.parse(gTestDir_Parser + "ControlStructure.ps");
-
-	/*using namespace graph;
-	Graph expected;
-	{
-		addPreprocessor(expected.block(), new Preprocessor("#include <QtCore/QDebug>"));
-		auto fMain = addFunction(expected.block(), Function::make("int main()", ScopeType::Root));
-			auto csFor = addControlStructure(fMain->block(), ControlStructure::make("for (int i=0; i<100; i++)"));
-				addStatement(csFor->block(), Statement::make("qDebug() << i;"));
-
-			addVariable(fMain->block(), Variable::make("bool quit = false"));
-			addVariable(fMain->block(), Variable::make("int n = 0"));
-
-			auto csWhile = addControlStructure(fMain->block(), ControlStructure::make("while (!quit)"));
-				addStatement(csWhile->block(), Statement::make("QThread::msleep(100)"));
-				addStatement(csWhile->block(), Statement::make("n += 40"));
-				addStatement(csWhile->block(), Statement::make("quit = n>50000"));
-
-			addVariable(fMain->block(), Variable::make("QString username = ""DanWatkins"""));
-
-			auto csIf = addControlStructure(fMain->block(), ControlStructure::make("if (username == ""JohnKoehn"")"));
-				addStatement(csIf->block(), Statement::make("qDebug() << 56"));
-
-			auto csElseIf = addControlStructure(fMain->block(), ControlStructure::make("elseif (username == ""Noob"" && false)"));
-				auto csSubWhile = addControlStructure(csElseIf->block(), ControlStructure::make("while (true)"));
-					addStatement(csSubWhile->block(), Statement::make("qDebug() << ""Stuck in a loop that will never execute"""));
-
-			auto csElse = addControlStructure(fMain->block(), ControlStructure::make("else"));
-				addStatement(csElse->block(), Statement::make("qDebug() << ""You must be Dan"""));
-	}*/
-
-	assertEqualBlock(parseScript.graph().block(), sp.graph().block());
+	assertValpineToParseScript("ControlStructure.val", "ControlStructure.gs");
 }
 
 
 TEST_CASE(Class)
 {
-	parser::Parser sp;
-	sp.parseFile(gTestDir_Parser + "Class.val");
-
-	using namespace graph;
-
-	Block &root = sp.graph().block();
-	ASSERT_EQ(3, root.statements().count());
-	{
-		QListIterator<Statement*> iter(root.statements());
-
-		auto include = dynamic_cast<Preprocessor*>(iter.next());
-		ASSERT_NOT_NULL(include);
-		EXPECT_EQ_STR("#include <QtCore/QDebug>", include->verbatim());
-
-		auto cls = dynamic_cast<Class*>(iter.next());
-		ASSERT_NOT_NULL(cls);
-		EXPECT_EQ_STR("Book", cls->id());
-		{
-			QListIterator<Class::Member*> clsIter(cls->members());
-			ASSERT_EQ(5, cls->members().count());
-
-			{
-				const Class::Member *m = clsIter.next();
-				EXPECT_EQ(Class::Public, m->accessType);
-				auto f = dynamic_cast<Function*>(m->statement);
-				ASSERT_NOT_NULL(f);
-				EXPECT_EQ_STR("Book", f->id());
-				EXPECT_EQ(Function::Type::Constructor, f->type());
-			}
-
-			{
-				const Class::Member *m = clsIter.next();
-				EXPECT_EQ(Class::Public, m->accessType);
-				auto f = dynamic_cast<Function*>(m->statement);
-				ASSERT_NOT_NULL(f);
-				EXPECT_EQ_STR("Book", f->id());
-				EXPECT_EQ(Function::Type::Destructor, f->type());
-			}
-
-			{
-				const Class::Member *m = clsIter.next();
-				EXPECT_EQ(Class::Public, m->accessType);
-				auto f = dynamic_cast<Function*>(m->statement);
-				ASSERT_NOT_NULL(f);
-				EXPECT_EQ_STR("setText", f->id());
-				EXPECT_EQ(Function::Type::Normal, f->type());
-			}
-
-			
-			{
-				const Class::Member *m = clsIter.next();
-				EXPECT_EQ(Class::Public, m->accessType);
-				auto f = dynamic_cast<Function*>(m->statement);
-				ASSERT_NOT_NULL(f);
-				EXPECT_EQ_STR("read", f->id());
-				EXPECT_EQ(Function::Type::Normal, f->type());
-			}
-
-
-			{
-				const Class::Member *m = clsIter.next();
-				EXPECT_EQ(Class::Private, m->accessType);
-				auto v = dynamic_cast<Variable*>(m->statement);
-				ASSERT_NOT_NULL(v);
-				EXPECT_EQ_STR("QString", v->typeExpression().fullType());
-				EXPECT_EQ_STR("mText", v->id());
-			}
-		}
-	}
+	assertValpineToParseScript("Class.val", "Class.gs");
 }

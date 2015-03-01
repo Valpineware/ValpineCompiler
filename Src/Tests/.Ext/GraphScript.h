@@ -14,7 +14,10 @@ using namespace vc::graph;
 
 namespace ext
 {
-	class ParseScript
+	/**
+	 * Utility that constructs an in-memory graph instance from .gs files.
+	 */
+	class GraphScript
 	{
 	public:
 		bool parse(const QString &filepath);
@@ -28,6 +31,7 @@ namespace ext
 
 		Graph mGraph;
 		QVector<Statement*> mPreviousStatementTiers;
+		Class::AccessType mCurrentAccessType;
 	};
 };
 

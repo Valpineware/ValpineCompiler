@@ -1,6 +1,8 @@
 #ifndef _test_ext_Graph_H
 #define _test_ext_Graph_H
 
+#include <functional>
+
 #include "../Tests.h"
 #include "Expression.h"
 #include <Graph/Graph.h>
@@ -57,6 +59,10 @@ namespace ext
 	}
 
 
+	void assertEqualBlock(const Block &expected, const Block &actual);
+	void assertEqualStatement(Statement *expected, Statement *actual);
+
+
 	void assertEqualPreprocessor(Preprocessor *expected, Preprocessor *actual)
 	{
 		EXPECT_EQ_STR(expected->verbatim(), actual->verbatim());
@@ -64,7 +70,7 @@ namespace ext
 
 
 	template <typename T>
-	void assertSameLists(const QList<T> &list1, const QList<T> &list2)
+	void assertSameLists(const QList<T> &list1, const QList<T> &list2, std::function<void(const T&, const T&)> assertCompare)
 	{
 		ASSERT_EQ(list1.count(), list2.count());
 		{
@@ -73,7 +79,7 @@ namespace ext
 
 			while (expectIter.hasNext())
 			{
-				ASSERT_EQ(expectIter.next(), actualIter.next());
+				assertCompare(expectIter.next(), actualIter.next());
 			}
 		}
 	};
@@ -83,13 +89,21 @@ namespace ext
 	{
 		EXPECT_EQ_STR(expected->id(), actual->id());
 
-		assertSameLists(expected->superClasses(), actual->superClasses());
-		assertSameLists(expected->interfaces(), actual->interfaces());
-		assertSameLists(expected->members(), actual->members());
+		auto assertAccessIdPair = [](const Class::AccessIdPair &lhs, const Class::AccessIdPair &rhs) -> void
+		{
+			EXPECT_EQ_STR(lhs.id, rhs.id);
+			EXPECT_EQ(lhs.accessType, rhs.accessType);
+		};
+
+		assertSameLists<Class::AccessIdPair>(expected->superClasses(), actual->superClasses(), assertAccessIdPair);
+		assertSameLists<Class::AccessIdPair>(expected->interfaces(), actual->interfaces(), assertAccessIdPair);
+		assertSameLists<Class::Member*>(expected->members(), actual->members(),
+										[](const Class::Member *lhs, const Class::Member *rhs) -> void
+										{
+											ASSERT_EQ(lhs->accessType, rhs->accessType);
+											assertEqualStatement(lhs->statement, rhs->statement);
+										});
 	}
-
-
-	void assertEqualBlock(const Block &expected, const Block &actual);
 
 
 	void assertEqualControlStructure(ControlStructure *expected, ControlStructure *actual)
@@ -125,33 +139,39 @@ namespace ext
 			Statement *expectedStatement = expectedIter.next();
 			Statement *actualStatement = actualIter.next();
 
-			ASSERT_NOT_NULL(expectedStatement);
-			ASSERT_NOT_NULL(actualStatement);
 
-
-			if (typeid(*expectedStatement) != typeid(*actualStatement))
-				qDebug() << "Types are not the same";
-
-			ASSERT_EQ(typeid(*expectedStatement), typeid(*actualStatement)) << "Statements not of same type";
-
-			if (auto preprocessor = dynamic_cast<Preprocessor*>(expectedStatement))
-				assertEqualPreprocessor(preprocessor, dynamic_cast<Preprocessor*>(actualStatement));
-
-			else if (auto cls = dynamic_cast<Class*>(expectedStatement))
-				assertEqualClass(cls, dynamic_cast<Class*>(actualStatement));
-
-			else if (auto controlStructure = dynamic_cast<ControlStructure*>(expectedStatement))
-				assertEqualControlStructure(controlStructure, dynamic_cast<ControlStructure*>(actualStatement));
-
-			else if (auto expression = dynamic_cast<Expression*>(expectedStatement))
-				assertEqualExpression(*expression, *dynamic_cast<Expression*>(actualStatement));
-
-			else if (auto function = dynamic_cast<Function*>(expectedStatement))
-				assertEqualFunction(function, dynamic_cast<Function*>(actualStatement));
-
-			else if (auto variable = dynamic_cast<Variable*>(expectedStatement))
-				assertEqualVariable(variable, dynamic_cast<Variable*>(expectedStatement));
+			assertEqualStatement(expectedStatement, actualStatement);
 		}
+	}
+
+
+	void assertEqualStatement(Statement *expected, Statement *actual)
+	{
+		ASSERT_NOT_NULL(expected);
+		ASSERT_NOT_NULL(actual);
+
+		if (typeid(*expected) != typeid(*actual))
+			qDebug() << "Types are not the same";
+
+		ASSERT_EQ(typeid(*expected), typeid(*actual)) << "Statements not of same type";
+
+		if (auto preprocessor = dynamic_cast<Preprocessor*>(expected))
+			assertEqualPreprocessor(preprocessor, dynamic_cast<Preprocessor*>(actual));
+
+		else if (auto cls = dynamic_cast<Class*>(expected))
+			assertEqualClass(cls, dynamic_cast<Class*>(actual));
+
+		else if (auto controlStructure = dynamic_cast<ControlStructure*>(expected))
+			assertEqualControlStructure(controlStructure, dynamic_cast<ControlStructure*>(actual));
+
+		else if (auto expression = dynamic_cast<Expression*>(expected))
+			assertEqualExpression(*expression, *dynamic_cast<Expression*>(actual));
+
+		else if (auto function = dynamic_cast<Function*>(expected))
+			assertEqualFunction(function, dynamic_cast<Function*>(actual));
+
+		else if (auto variable = dynamic_cast<Variable*>(expected))
+			assertEqualVariable(variable, dynamic_cast<Variable*>(expected));
 	}
 };
 
