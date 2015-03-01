@@ -41,8 +41,6 @@ namespace vc { namespace graph
 			AccessType accessType = AccessType::Private;
 			Statement *statement = nullptr;
 			
-			
-
 			~Member()
 			{
 				if (statement != nullptr)
@@ -71,7 +69,7 @@ namespace vc { namespace graph
 
 	public:
 		Class(const QString &verbatim) : Statement(verbatim) {}
-		//TODO dtor needs to delete Member list
+		~Class();
 
 		/**
 		 * @returns nullptr if \p signature does not represent a valid class header. Otherwise

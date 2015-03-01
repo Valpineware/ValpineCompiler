@@ -10,6 +10,13 @@
 
 namespace vc { namespace graph
 {
+	Class::~Class()
+	{
+		for (Member *m : mMembers)
+			delete m;
+	}
+
+
 	void parseComponents(QList<Class::AccessIdPair> &list, QStringListIterator &iter, const QString &endString)
 	{
 		Class::AccessIdPair currentSuper;

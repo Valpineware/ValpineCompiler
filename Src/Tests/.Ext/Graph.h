@@ -172,6 +172,9 @@ namespace ext
 
 		else if (auto variable = dynamic_cast<Variable*>(expected))
 			assertEqualVariable(variable, dynamic_cast<Variable*>(expected));
+
+		else
+			EXPECT_EQ_STR(expected->verbatim(), actual->verbatim());
 	}
 };
 

@@ -1,11 +1,15 @@
-#include <iostream>
-
-int main() {foo();
-	return 0;
+int * access(bool opened, int count)
+{
+	return new int;
 }
 
-void foo(
-)
 
+void apply(float amount=14.0f)
 {
-	std::cout << "Called foo" << std::endl; }
+}
+
+
+bool** longDistanceCommunication(Type1 t1, Type2 t2, float distance=320.0f)
+{
+	return &(new bool);	//yes, this is a bad thing to do
+}
