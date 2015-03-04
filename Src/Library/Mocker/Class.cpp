@@ -44,7 +44,7 @@ namespace vc { namespace mocker
 			}
 		}
 	}
-
+	/*
 	void Class::buildMember(QVector<QString> &body, const graph::Class::Member &member, QVector<QString> &decs)
 	{
 		graph::Statement *statement = member.statement;
@@ -60,7 +60,7 @@ namespace vc { namespace mocker
 		{
 			body.append(Utility::createTabs(mScope));
 		}
-	}
+	}*/
 
 	void Class::buildHeader(QVector<QString> &header)
 	{

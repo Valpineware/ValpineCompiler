@@ -17,24 +17,24 @@ namespace vc { namespace mocker
 		buildBlock(graph.block());		
 
 		QTextStream outStream(&outDevice_Implementation);
-		for (const QString &line : mIncludes)
+		for (const QString &line : mData.includes)
 		{
 			outStream << line << "\n";
 		}
 
 		//TODO, move to header file
-		for (const QString &line : mForwardDecs)
+		for (const QString &line : mData.forwardDecs)
 		{
 			outStream << line << "\n";
 		}
 
-		for (const QString &line : mBody)
+		for (const QString &line : mData.body)
 		{
 			outStream << line << "\n";
 		}
 
 		outStream.setDevice(&outDevice_Header);
-		for (const QString &line : mHeader)
+		for (const QString &line : mData.header)
 		{
 			outStream << line << "\n";
 		}
@@ -51,20 +51,20 @@ namespace vc { namespace mocker
 
 			if (graph::Preprocessor *preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
-				mIncludes.append(preprocessor->verbatim());
+				mData.includes.append(preprocessor->verbatim());
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
 				//go into deceleration block
-				DeclarationBlock decBlock(mBody, mForwardDecs, *function, mScope);
+				DeclarationBlock decBlock(mData, *function);
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement)) // --happens with only global variables
 			{
-				Variable::createVar(mBody, *variable, mScope);
+				Variable::createVar(mData, *variable);
 			}
 			else
 			{
-				mBody.append(Utility::createTabs(mScope) + statement->verbatim());
+				mData.body.append(Utility::createTabs(mData.scope) + statement->verbatim());
 			}
 		}
 	}

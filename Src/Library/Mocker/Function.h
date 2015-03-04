@@ -10,7 +10,7 @@
 
 #include <Graph/Graph.h>
 #include <Library.h>
-#include "DeclarationBlock.h"
+#include "Mocker.h"
 
 namespace vc { namespace mocker 
 {
@@ -20,10 +20,10 @@ namespace vc { namespace mocker
 	class Function
 	{
 	private:
-		void buildDeclartion(const graph::Function &function, FunctionData &data);
+		void buildDeclartion(MockerData &data, const graph::Function &function, const QString &classID);
 
 	public:
-		Function(FunctionData &data);
+		Function(MockerData &data, const graph::Function &function, const QString &classID, QQueue<const graph::Function*> &functions);
 	};
 
 

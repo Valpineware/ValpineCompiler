@@ -10,27 +10,21 @@
 
 #include <Graph/Graph.h>
 #include <Library.h>
+#include "Mocker.h"
 
 namespace vc { namespace mocker
 {
-	struct FunctionData
-	{
-		QVector<QString> *body;
-		QVector<QString> *forwardDecs;
-		int scope;
-		QQueue<const graph::Function*> *functions;
-		const QString *classID;
-	};
-
 	class DeclarationBlock
 	{
 	private:
-		FunctionData mData;
+		QQueue<const graph::Function*> mFunctions;
 
-		void createFunction();
+		void createFunction(MockerData &data, const QString &classID);
 	public:
-		DeclarationBlock(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope, const QString classID = "");
-		void static buildBlock(const graph::Block &block, FunctionData &data);
+		DeclarationBlock(MockerData &data, const graph::Function &function, const QString classID = "");
+
+		//TODO, was a total bipshit. refactor to private
+		void static buildBlock(const graph::Block &block, MockerData &data, QQueue<const graph::Function*> &functions);
 	};
 
 }}

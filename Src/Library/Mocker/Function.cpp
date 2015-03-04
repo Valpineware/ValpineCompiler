@@ -7,26 +7,26 @@
 
 #include "Function.h"
 #include "Utility.h"
+#include "DeclarationBlock.h"
 
 namespace vc {	namespace mocker
 {
-	Function::Function(FunctionData &data)
+	Function::Function(MockerData &data, const graph::Function &function, const QString &classID, QQueue<const graph::Function*> &functions)
 	{
-		const graph::Function *function = data.functions->dequeue();
-		buildDeclartion(*function, data);
+		buildDeclartion(data, function, classID);
 
-		DeclarationBlock::buildBlock(function->block(), data);
+		DeclarationBlock::buildBlock(function.block(), data, functions);
 	}
 
-	void Function::buildDeclartion(const graph::Function &function, FunctionData &data)
+	void Function::buildDeclartion(MockerData &data, const graph::Function &function, const QString &classID)
 	{
 		//build opening experssion
 		QString declartion = Utility::createTabs(data.scope);
 
 		//check if we are building a method
-		if (*(data.classID) != "")
+		if (classID != "")
 		{
-			declartion += *(data.classID) + "::";
+			declartion += classID + "::";
 		}
 
 		declartion += function.returnType().fullType() + " " + function.id() + "(";
@@ -50,11 +50,11 @@ namespace vc {	namespace mocker
 		}
 
 		declartion += ")";
-		data.body->append(declartion);
+		data.body.append(declartion);
 		
 		if (function.id() != "main")
 		{
-			data.forwardDecs->append(declartion + ";");
+			data.forwardDecs.append(declartion + ";");
 		}
 	}
 

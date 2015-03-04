@@ -13,6 +13,16 @@
 
 namespace vc { namespace mocker
 {
+	struct MockerData
+	{
+		QVector<QString> includes;
+		QVector<QString> forwardDecs;
+		QVector<QString> header;
+		QVector<QString> body;
+		
+		int scope = 0;
+	};
+
 	/**
 	 * @brief Mocks a Valpine source graph as C++.
 	 */
@@ -22,12 +32,8 @@ namespace vc { namespace mocker
 		void buildBlock(const graph::Block &block);
 		void createVar(graph::Variable &var);
 
-		QVector<QString> mIncludes;
-		QVector<QString> mForwardDecs;
-		QVector<QString> mBody;
-		QVector<QString> mHeader;
-
-		int mScope = 0;
+		
+		MockerData mData;
 
 	public:
 		Mocker() {};
