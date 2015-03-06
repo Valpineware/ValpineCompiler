@@ -12,39 +12,23 @@ namespace vc { namespace graph
 {
 	struct Type
 	{
-		//blank indicates no keyword associated and should not be parsed
-		QString startKeyword = "";
-		bool needsStartExp = false;
+		QVector<QString> startKeywords;
+		bool needsExpression = false;
 	};
 
 
-	QList<Type> gRegisteredNames;
-	QRegExp gRegisteredNamesRegExp;
+	QList<Type> gRegisteredTypes;
 
-	#define A(start, need) {Type t; t.startKeyword = start; t.needsStartExp = need; gRegisteredNames.append( t );}
+	#define A(start, need) {Type t; t.startKeywords << start; t.needsExpression = need; gRegisteredTypes.append( t );}
 	STATIC_BLOCK_UNSAFE(RegisteredNames,
 		A("for", true)
 		A("while", true)
+		A("defer" << "while", true)
 		A("if", true)
-		A("elseif", true)
+		A("else" << "if", true)
 		A("else", false)
 	);
 	#undef A
-
-	STATIC_BLOCK_UNSAFE(RegisteredNamesRegExp,
-		QString buffer;
-		buffer.reserve(gRegisteredNames.count() * 4);
-
-		for (Type t : gRegisteredNames)
-		{
-			buffer.append(t.startKeyword + "|");
-		}
-
-		if (buffer.at(buffer.count()-1) == "|")
-			buffer.chop(1);
-
-		gRegisteredNamesRegExp = QRegExp(buffer);
-	);
 
 
 	ControlStructure* ControlStructure::make(const QString signature)
@@ -57,31 +41,38 @@ namespace vc { namespace graph
 		QStringListIterator i(list);
 		ControlStructure *cs = new ControlStructure(signature);
 
-		//get the name
-		if (i.hasNext())
+		//read in the control keywords
+		while (i.hasNext())
 		{
 			const QString &cmp = i.next();
 
-			if (gRegisteredNamesRegExp.exactMatch(cmp))
-				cs->setName(cmp);
+			if (Utility::isReservedWord_control(cmp))
+				cs->mKeywords.append(cmp);
+			else if (cmp == "(")
+			{
+				i.previous();
+				break;
+			}
 			else
 				return nullptr;
 		}
-		else
-			return nullptr;
 
-		//what registered type of control structure is this?
-		Type type;
-		for (Type &t : gRegisteredNames)
+		const Type *type = nullptr;
+
+		//match this up with a type
+		for (const Type &t : gRegisteredTypes)
 		{
-			if (t.startKeyword == cs->name())
+			if (t.startKeywords == cs->mKeywords)
 			{
-				type = t;
+				type = &t;
 				break;
 			}
 		}
 
-		if (!type.needsStartExp)
+		if (type == nullptr)
+			return nullptr;
+
+		if (!type->needsExpression)
 			return cs;
 
 		//there should be an opening parenthesis next and a closing one at the very end
@@ -94,5 +85,11 @@ namespace vc { namespace graph
 		cs->setExpression(signature.mid(openIndex, closeIndex-openIndex));
 
 		return cs;
+	}
+
+
+	QString ControlStructure::name() const
+	{
+		return Utility::flatten(mKeywords, " ");
 	}
 }}

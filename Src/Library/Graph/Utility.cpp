@@ -17,7 +17,7 @@ namespace vc { namespace graph
 		gReservedIds.general << "const" << "mutable" << "static" << "virtual" << "volatile";
 		
 		gReservedIds.types << "auto" << "bool" << "char" << "float" << "int" << "long" << "short" << "signed" << "unsigned" << "void";
-		gReservedIds.control << "break" << "case" << "catch" << "continue" << "default" << "do" << "else"  << "elseif" << "for" << "goto" << "if" << "return" << "switch" << "throw" << "try" << "while";
+		gReservedIds.control << "break" << "case" << "catch" << "continue" << "default" << "defer" << "else"  << "elseif" << "for" << "goto" << "if" << "return" << "switch" << "throw" << "try" << "while";
 		gReservedIds.typeDeclarators << "class" << "enum" << "namespace" << "struct" << "typedef" << "union";
 		gReservedIds.access << "friend" << "operator" << "private" << "protected" << "public";
 		gReservedIds.casting << "const_cast" << "dynamic_cast" << "reinterpret_cast" << "static_cast";
@@ -102,6 +102,12 @@ namespace vc { namespace graph
 	bool Utility::couldBeNumericConstant(const QString &what)
 	{
 		return gRegExp_numericConstant.exactMatch(what);
+	}
+
+
+	bool Utility::isReservedWord_control(const QString &what)
+	{
+		return gReservedIds.control.contains(what);
 	}
 
 

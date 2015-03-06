@@ -39,6 +39,8 @@ namespace vc { namespace graph
 
 		static bool couldBeNumericConstant(const QString &what);
 
+		static bool isReservedWord_control(const QString &what);
+
 
 		/**
 		 * Puts a space before and after every occurrence of an operator. Compound operators contain multiple 
@@ -54,8 +56,13 @@ namespace vc { namespace graph
 			QString buffer;
 			buffer.reserve(3 * list.count());
 
-			for (const QString &str : list)
-				buffer.append(str+spacer);
+			for (int i=0; i<list.count(); i++)
+			{
+				if (i == list.count()-1)
+					buffer.append(list.at(i));
+				else
+					buffer.append(list.at(i)+spacer);
+			}
 
 			return buffer;
 		}

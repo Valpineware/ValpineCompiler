@@ -25,7 +25,7 @@ int main()
 	{
 		x = 2;
 	}
-	elseif(y == x)
+	else if(y == x)
 	{
 		y = 1;
 	}

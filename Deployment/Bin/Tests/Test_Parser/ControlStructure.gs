@@ -11,7 +11,7 @@ FUNC int main()
 	VAR QString username = "DanWatkins"
 	CONTROL if (username == "JohnKoehn")
 		STATE qDebug() << 56;
-	CONTROL elseif (username == ""Noob"" && false)
+	CONTROL else if (username == ""Noob"" && false)
 		CONTROL while (true)
 			STATE qDebug() << "Stuck in a loop that will never execute";
 	CONTROL else
