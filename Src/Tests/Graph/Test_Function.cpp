@@ -1,8 +1,7 @@
 #include "Tests.h"
-#include <Graph/Function.h>
+#include ".Ext/Graph.h"
 
 #define CLASS Test_Function
-using namespace vc;
 
 TEST_CLASS
 {
@@ -12,9 +11,9 @@ TEST_CLASS
 TEST_CASE(Normal_WhatIS)
 {
 	//TODO we need to test Function::Type in this test
-	#define tst(what) { auto f = graph::Function::make(what, graph::ScopeType::Root); \
+	#define tst(what) { auto f = Function::make(what, ScopeType::Root); \
 						ASSERT_NOT_NULL(f); \
-						ASSERT_EQ(f->type(), graph::Function::Type::Normal); }
+						ASSERT_EQ(f->type(), Function::Type::Normal); }
 
 	tst("void simple()")
 	tst("int		 wacky	( ) ");
@@ -42,9 +41,9 @@ TEST_CASE(Normal_WhatIS)
 
 TEST_CASE(Constructor_WhatIs)
 {
-#define tst(what) { auto f = graph::Function::make(what, graph::ScopeType::ClassBlock); \
+#define tst(what) { auto f = Function::make(what, ScopeType::ClassBlock); \
 						ASSERT_NOT_NULL(f); \
-						ASSERT_EQ(f->type(), graph::Function::Type::Constructor); }
+						ASSERT_EQ(f->type(), Function::Type::Constructor); }
 
 	tst("Widget()");
 	tst("Widget(const Widget &widget)");
@@ -54,11 +53,24 @@ TEST_CASE(Constructor_WhatIs)
 }
 
 
+TEST_CASE(Constructor_InitiailzerList)
+{
+	auto f = Function::make("Cow() : mSize(140)", ScopeType::ClassBlock);
+	ASSERT_NOT_NULL(f);
+	ASSERT_EQ(f->type(), Function::Type::Constructor);
+
+	auto initList = f->initializerList();
+	ASSERT_EQ(1, initList.components().count());
+	std::unique_ptr<Expression::Arguments> expected(Expression::Arguments::make("mSize(140)"));
+	//ext::assertEqualComponentList(expected->components(), initList.components());
+}
+
+
 TEST_CASE(Destructor_WhatIs)
 {
-#define tst(what) { auto f = graph::Function::make(what, graph::ScopeType::ClassBlock); \
+#define tst(what) { auto f = Function::make(what, ScopeType::ClassBlock); \
 					ASSERT_NOT_NULL(f); \
-					ASSERT_EQ(f->type(), graph::Function::Type::Destructor); }
+					ASSERT_EQ(f->type(), Function::Type::Destructor); }
 
 	tst("~Widget()");
 	tst("  ~ BigWidget ( )");
@@ -70,7 +82,7 @@ TEST_CASE(Destructor_WhatIs)
 
 TEST_CASE(Normal_WhatIsNot)
 {
-#define tst(what) ASSERT_NULL(graph::Function::make(what, graph::ScopeType::Root))
+#define tst(what) ASSERT_NULL(Function::make(what, ScopeType::Root))
 
 	tst("123Type doesNotWork()");
 	tst("NoGo 999Function		( )");
@@ -89,8 +101,10 @@ TEST_CASE(Normal_WhatIsNot)
 
 TEST_CASE(Destructor_WhatIsNot)
 {
-#define tst(what, scope) ASSERT_NULL(graph::Function::make(what, graph::ScopeType::scope))
+#define tst(what, scope) ASSERT_NULL(Function::make(what, ScopeType::scope))
 
+	//can't have destructors and constructors in regular scopes
+	//TODO should we still consider these constructors and destructors just for the sake of error checking?
 	tst("~Widget()", Root);
 	tst("~ Bigger_Widget( )", ExecutionBlock);
 

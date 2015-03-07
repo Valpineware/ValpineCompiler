@@ -73,7 +73,12 @@ namespace vc { namespace graph
 			return nullptr;
 
 		if (!type->needsExpression)
-			return cs;
+		{
+			if (!i.hasNext())
+				return cs;
+			else
+				return nullptr;
+		}
 
 		//there should be an opening parenthesis next and a closing one at the very end
 		if (!i.hasNext() || i.next() != "(" || list.last() != ")")

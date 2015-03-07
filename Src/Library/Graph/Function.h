@@ -9,6 +9,7 @@
 
 #include "SubBlock.h"
 #include "TypeExpression.h"
+#include "Expression.h"
 
 #ifndef _vc_graph_Function_h
 #define _vc_graph_Function_h
@@ -56,6 +57,8 @@ namespace vc { namespace graph
 		void addParameter(const Parameter &parameter) { mParameters.append(parameter); }
 		const QVector<Parameter>& parameters() const { return mParameters; }
 
+		const Expression::Arguments& initializerList() const { return *mInitializerList.get(); }
+
 	private:
 		Function(const QString &verbatim) : SubBlock(verbatim) {}
 
@@ -63,6 +66,11 @@ namespace vc { namespace graph
 		Type mType = Type::Normal;
 		TypeExpression mReturnType;
 		QVector<Parameter> mParameters;
+		unique<Expression::Arguments> mInitializerList;
+
+	private:
+		static Function* parseType(QStringListIterator &i, Function *function, ScopeType scopeType);
+		static Function* parseParameters(QStringListIterator &i, Function *function);
 	};
 }}
 

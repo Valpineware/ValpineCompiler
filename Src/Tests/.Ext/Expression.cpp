@@ -55,6 +55,23 @@ namespace ext
 	}
 
 
+	void assertEqualComponents(const component_t *expected, const component_t *actual)
+	{
+		ASSERT_NOT_NULL(expected);
+		ASSERT_NOT_NULL(actual);
+		ASSERT_EQ(typeid(*expected), typeid(*actual)) << "Components not of same type";
+
+		if (auto result = dynamic_cast<const innerExpression_t*>(expected))
+			assertEqualResult(result, dynamic_cast<const innerExpression_t*>(actual));
+		else if (auto oper = dynamic_cast<const operator_t*>(expected))
+			assertEqualOperator(oper, dynamic_cast<const operator_t*>(actual));
+		else if (auto id = dynamic_cast<const id_t*>(expected))
+			assertEqualId(id, dynamic_cast<const id_t*>(actual));
+		else if (auto arguments = dynamic_cast<const arguments_t*>(expected))
+			assertEqualArguments(arguments, dynamic_cast<const arguments_t*>(actual));
+	}
+
+
 	void assertEqualComponentList(const componentList_t &expected, const componentList_t &actual)
 	{
 		ASSERT_EQ(expected.count(), expected.count());
@@ -64,21 +81,7 @@ namespace ext
 
 		while (expectedIter.hasNext())
 		{
-			auto expectedComponent = expectedIter.next();
-			auto actualComponent = actualIter.next();
-
-			ASSERT_NOT_NULL(expectedComponent);
-			ASSERT_NOT_NULL(actualComponent);
-			ASSERT_EQ(typeid(*expectedComponent), typeid(*actualComponent)) << "Components not of same type";
-
-			if (auto result = dynamic_cast<innerExpression_t*>(expectedComponent))
-				assertEqualResult(result, dynamic_cast<innerExpression_t*>(actualComponent));
-			else if (auto oper = dynamic_cast<operator_t*>(expectedComponent))
-				assertEqualOperator(oper, dynamic_cast<operator_t*>(actualComponent));
-			else if (auto id = dynamic_cast<id_t*>(expectedComponent))
-				assertEqualId(id, dynamic_cast<id_t*>(actualComponent));
-			else if (auto arguments = dynamic_cast<arguments_t*>(expectedComponent))
-				assertEqualArguments(arguments, dynamic_cast<arguments_t*>(actualComponent));
+			assertEqualComponents(expectedIter.next(), actualIter.next());
 		}
 	}
 }

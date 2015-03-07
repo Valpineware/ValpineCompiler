@@ -53,6 +53,9 @@
     <ClCompile Include="..\..\Src\Tests\.Ext\GraphScript.cpp">
       <Filter>Src\.Ext</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Tests\.Ext\Graph.cpp">
+      <Filter>Src\.Ext</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Tests\Tests.h">

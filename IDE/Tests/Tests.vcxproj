@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Tests\.Ext\Expression.cpp" />
+    <ClCompile Include="..\..\Src\Tests\.Ext\Graph.cpp" />
     <ClCompile Include="..\..\Src\Tests\.Ext\GraphScript.cpp" />
     <ClCompile Include="..\..\Src\Tests\Graph\Test_Expression.cpp" />
     <ClCompile Include="..\..\Src\Tests\Graph\Test_Class.cpp" />

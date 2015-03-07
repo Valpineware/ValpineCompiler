@@ -64,6 +64,7 @@ namespace ext
 	void assertEqualOperator(const operator_t *expected, const operator_t *actual);
 	void assertEqualId(const id_t *expected, const id_t *actual);
 	void assertEqualArguments(const arguments_t *expected, const arguments_t *actual);
+	void assertEqualComponents(const component_t *expected, const component_t *actual);
 	void assertEqualComponentList(const componentList_t &expected, const componentList_t &actual);
 
 	template <typename T>

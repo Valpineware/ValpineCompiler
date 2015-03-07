@@ -13,7 +13,7 @@ namespace vc { namespace graph
 	bool couldThisPossiblyBeAFunction(const QString &signature)
 	{
 		//there should be exactly one ( and one )
-		if (signature.count("(") != 1 || signature.count(")") != 1)
+		if (signature.count("(") < 1 || signature.count(")") < 1)
 			return false;
 
 		if (signature.contains(";"))
@@ -23,7 +23,7 @@ namespace vc { namespace graph
 	}
 
 
-	graph::Function* parseType(QStringListIterator &i, graph::Function *function, graph::ScopeType scopeType)
+	Function* Function::parseType(QStringListIterator &i, Function *function, ScopeType scopeType)
 	{
 		bool looksLikeDtor = false;
 		if (i.hasNext() && i.peekNext() == "~")
@@ -45,7 +45,7 @@ namespace vc { namespace graph
 		else
 			function->setReturnType(te);
 
-		//	c) Identifier
+		//identifier
 		if (i.hasNext())
 		{
 			const QString &cmp = i.next();
@@ -69,7 +69,7 @@ namespace vc { namespace graph
 	}
 
 
-	graph::Function* parseParameters(QStringListIterator &i, graph::Function *function)
+	Function* Function::parseParameters(QStringListIterator &i, Function *function)
 	{
 		while (i.hasNext())
 		{
@@ -85,7 +85,7 @@ namespace vc { namespace graph
 				i.previous();
 
 
-			//get the return type
+			//get the type
 			while (i.hasNext())
 			{
 				const QString &cmp = i.next();
@@ -168,13 +168,13 @@ namespace vc { namespace graph
 		Utility::breakUpByWhitespace(filtered, list);
 		QStringListIterator i(list);
 
-		graph::Function *function = new graph::Function(signature);
+		Function *function = new Function(signature);
 
 		//Return type and id
 		if (! parseType(i, function, scopeType))
 			return nullptr;
 
-		//is it time for arguments yet?
+		//is it time for parameters yet?
 		if (i.hasNext())
 		{
 			if (!i.next().contains("("))
@@ -184,6 +184,24 @@ namespace vc { namespace graph
 		//Parameters
 		if (!parseParameters(i, function))
 			return nullptr;
+
+		//do we have an initializer list?
+		if (i.hasNext())
+		{
+			//if (i.next() != ":") TODO need unit test for this
+			//	return nullptr;
+
+			int colonPos = signature.indexOf(':');
+
+			//if (colonPos == -1) TODO need unit test for this
+			//	return nullptr;
+
+			QString verbatimInitList = signature.right(signature.count() - colonPos);
+			function->mInitializerList.reset(Expression::Arguments::make(verbatimInitList));
+
+			if (function->mInitializerList == nullptr)
+				return nullptr;
+		}
 
 		return function;
 	}

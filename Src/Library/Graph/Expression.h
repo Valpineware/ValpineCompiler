@@ -47,6 +47,24 @@ namespace vc { namespace graph
 
 			ComponentListUser() {}
 
+			ComponentListUser(const ComponentListUser &other)
+			{
+				for (Component *cmp : other.components())
+					mComponents.append(new Component(*cmp));
+			}
+
+
+			ComponentListUser& operator=(const ComponentListUser &other)
+			{
+				if (&other == this)
+					return *this;
+
+				*this = ComponentListUser(other);
+
+				return *this;
+			}
+
+
 			~ComponentListUser()
 			{
 				for (Component *cmp : mComponents)
@@ -54,7 +72,6 @@ namespace vc { namespace graph
 			}
 
 		private:
-			Q_DISABLE_COPY(ComponentListUser)
 			ComponentList mComponents;
 		};
 

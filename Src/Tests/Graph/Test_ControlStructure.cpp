@@ -47,6 +47,11 @@ TEST_CASE(FunctionHeader_WhatIs)
 		EXPECT_EQ_STR("", cs->expression());
 	}
 
+	IF ("defer while (foo() > 42)")
+		EXPECT_EQ_STR("defer while", cs->name());
+		EXPECT_EQ_STR("foo() > 42", cs->expression());
+	}
+
 	#undef IF
 }
 
@@ -60,6 +65,7 @@ TEST_CASE(FunctionHeader_WhatIsNot)
 	tst("for for (true)");
 	tst("whil (thisExpression == false)");
 	tst("if (i < 99");
+	tst("else (false)");
 
 	#undef tst
 }

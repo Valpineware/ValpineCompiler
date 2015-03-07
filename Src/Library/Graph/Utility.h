@@ -36,11 +36,9 @@ namespace vc { namespace graph
 		 */
 		static bool couldBeTypeIdentifier(const QString &what);
 
-
 		static bool couldBeNumericConstant(const QString &what);
 
 		static bool isReservedWord_control(const QString &what);
-
 
 		/**
 		 * Puts a space before and after every occurrence of an operator. Compound operators contain multiple 
