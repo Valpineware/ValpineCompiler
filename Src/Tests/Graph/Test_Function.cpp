@@ -5,6 +5,18 @@
 
 TEST_CLASS
 {
+protected:
+	void assertInitializerList(const QString start, const QString listBody, int listCount)
+	{
+		auto f = Function::make(start, ScopeType::ClassBlock);
+		ASSERT_NOT_NULL(f);
+		ASSERT_EQ(f->type(), Function::Type::Constructor);
+
+		auto& initList = f->initializerList();
+		ASSERT_EQ(listCount, initList.components().count());
+		std::unique_ptr<Expression::Arguments> expected(Expression::Arguments::make(listBody));
+		ext::assertEqualComponentList(expected->components(), initList.components());
+	}
 };
 
 
@@ -53,16 +65,15 @@ TEST_CASE(Constructor_WhatIs)
 }
 
 
-TEST_CASE(Constructor_InitiailzerList)
+TEST_CASE(Constructor_InitiailzerList_OneArgument)
 {
-	auto f = Function::make("Cow() : mSize(140)", ScopeType::ClassBlock);
-	ASSERT_NOT_NULL(f);
-	ASSERT_EQ(f->type(), Function::Type::Constructor);
+	assertInitializerList("Cow() : mSize(140)", "mSize(140)", 1);
+}
 
-	auto initList = f->initializerList();
-	ASSERT_EQ(1, initList.components().count());
-	std::unique_ptr<Expression::Arguments> expected(Expression::Arguments::make("mSize(140)"));
-	//ext::assertEqualComponentList(expected->components(), initList.components());
+
+TEST_CASE(Constructor_InitiailzerList_TwoArgument)
+{
+	assertInitializerList("Entity():mRenderable(new Renderable(300)),mRadius(4.7)", "mRenderable(new Renderable(300)), mRadius(4.7)", 2);
 }
 
 

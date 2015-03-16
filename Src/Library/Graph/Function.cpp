@@ -76,7 +76,6 @@ namespace vc { namespace graph
 			graph::Parameter prm;
 			QString typeBuffer;
 			bool foundBaseType = false;
-			bool foundEndTag = false;
 
 			//are we at a comma?
 			if (i.hasNext() && QRegExp("\\s*,\\s*").exactMatch(i.next()))
@@ -92,8 +91,7 @@ namespace vc { namespace graph
 
 				if (cmp.contains(")"))
 				{
-					foundEndTag = true;
-					break;
+					return function;
 				}
 				else if (gRegExp_typeMod.exactMatch(cmp))
 				{
@@ -127,7 +125,7 @@ namespace vc { namespace graph
 				else
 					return nullptr;								//Error: invalid identifier
 			}
-			else if (!foundEndTag)
+			else
 				return nullptr;									//Error: nothing following return type
 
 
@@ -196,7 +194,7 @@ namespace vc { namespace graph
 			//if (colonPos == -1) TODO need unit test for this
 			//	return nullptr;
 
-			QString verbatimInitList = signature.right(signature.count() - colonPos);
+			QString verbatimInitList = signature.right(signature.count() - colonPos - 1);
 			function->mInitializerList.reset(Expression::Arguments::make(verbatimInitList));
 
 			if (function->mInitializerList == nullptr)
