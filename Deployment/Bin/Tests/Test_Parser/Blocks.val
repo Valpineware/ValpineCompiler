@@ -1,0 +1,28 @@
+class Big
+{
+public:
+	void foo()
+	{
+		{
+			double a = 10.0;
+			print(a);
+		}
+		print("Hello");
+	}
+}
+
+int main()
+{
+	{
+int l1; { int l2;
+			{
+				int l3;
+				{
+					int l4; }
+			}
+			{
+				int r3;
+			}
+		}
+	}
+}

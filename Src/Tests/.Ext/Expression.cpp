@@ -59,7 +59,8 @@ namespace ext
 	{
 		ASSERT_NOT_NULL(expected);
 		ASSERT_NOT_NULL(actual);
-		ASSERT_EQ(typeid(*expected), typeid(*actual)) << "Components not of same type";
+		AssertEq_Throw(typeid(*expected), typeid(*actual));
+
 
 		if (auto result = dynamic_cast<const innerExpression_t*>(expected))
 			assertEqualResult(result, dynamic_cast<const innerExpression_t*>(actual));

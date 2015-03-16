@@ -80,7 +80,7 @@ namespace vc { namespace parser
 				// Statement : Function
 				if (auto f = graph::Function::make(line, graph::ScopeType::ClassBlock))
 				{
-					index = parseStatement_subBlock(index, f->block());
+					index = parseStatement_subBlock(index+1, f->block());
 					member->statement = f;
 				}
 				// Statement : Variable
@@ -100,7 +100,7 @@ namespace vc { namespace parser
 	int Parser::parseStatement_subBlock(int index, graph::Block &block)
 	{
 		//if next line is an opening brace, it must be a block
-		if (QRegExp("\\s*\\{\\s*").exactMatch(mLineBuffer[++index]))
+		if (QRegExp("\\s*\\{\\s*").exactMatch(mLineBuffer[index]))
 		{
 			index = parseStatement_block(++index, &block);
 		}
@@ -123,12 +123,12 @@ namespace vc { namespace parser
 			else if (auto f = graph::Function::make(line, graph::ScopeType::ExecutionBlock))
 			{
 				host->appendStatement(f);
-				index = parseStatement_subBlock(index, f->block());
+				index = parseStatement_subBlock(index+1, f->block());
 			}
 			else if (auto cs = graph::ControlStructure::make(line))
 			{
 				host->appendStatement(cs);
-				index = parseStatement_subBlock(index, cs->block());
+				index = parseStatement_subBlock(index+1, cs->block());
 			}
 			else if (auto cls = graph::Class::make(line))
 			{
@@ -138,6 +138,13 @@ namespace vc { namespace parser
 			else if (auto variable = graph::Variable::make(line))
 			{
 				host->appendStatement(variable);
+			}
+			//anonymous block
+			else if (QRegExp("\\s*\\{\\s*").exactMatch(line))
+			{
+				graph::Block *block = new graph::Block;
+				host->appendStatement(block);
+				index = parseStatement_subBlock(index, *block);
 			}
 
 			// Blank line

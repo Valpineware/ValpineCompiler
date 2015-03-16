@@ -67,7 +67,7 @@ namespace ext
 	void GraphScript::applyStatement(int indentation, const QStringRef &keyword, const QStringRef &verbatim)
 	{
 		//check for special keywords
-		if (verbatim.isNull())
+		if (verbatim.isNull() && keyword != "BLOCK")
 		{
 			if (keyword == "ENABLE_PUBLIC")
 				mCurrentAccessType = Class::Public;
@@ -106,6 +106,8 @@ namespace ext
 			statement = Preprocessor::make(verbatim.toString());
 		else if (keyword == "VAR")
 			statement = Variable::make(verbatim.toString());
+		else if (keyword == "BLOCK")
+			statement = new Block;
 		else
 		{
 			qDebug() << "GraphScript: Unknown keyword " << keyword;

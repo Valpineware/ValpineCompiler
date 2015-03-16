@@ -33,4 +33,6 @@ const QString gTestDir = "./Tests/";
 void assertEqStr(const QString &exp, const QString &actual, const char *file, int line);
 #define EXPECT_EQ_STR(expected, actual) assertEqStr(expected, actual, __FILE__, __LINE__);
 
+#define AssertEq_Throw(a, b) if (a != b) { qFatal("Not equal, run the debugger to see what"); }
+
 #endif
