@@ -186,13 +186,10 @@ namespace vc { namespace graph
 		//do we have an initializer list?
 		if (i.hasNext())
 		{
-			//if (i.next() != ":") TODO need unit test for this
-			//	return nullptr;
+			if (i.next() != ":")
+				return nullptr;
 
 			int colonPos = signature.indexOf(':');
-
-			//if (colonPos == -1) TODO need unit test for this
-			//	return nullptr;
 
 			QString verbatimInitList = signature.right(signature.count() - colonPos - 1);
 			function->mInitializerList.reset(Expression::Arguments::make(verbatimInitList));

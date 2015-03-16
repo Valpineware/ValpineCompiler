@@ -34,7 +34,7 @@ TEST_CASE(Normal_WhatIS)
 	tst("		double whatIsPi(		)");
 
 	tst(" int* pointer1()");
-	tst(" *** void ** crazyPointerThatWontActuallyCompileButShouldLookLikeAFunction()");		//TODO should this look like function and flag as an error later, or just not even be considered a function?
+	tst(" *** void ** crazyPointerThatWontActuallyCompileButShouldLookLikeAFunction()");
 	tst("const double& cosntRefPlease()");
 	tst("	const void		* const *	const	*& superLongPointerRefThing()");
 
@@ -106,6 +106,14 @@ TEST_CASE(Normal_WhatIsNot)
 	tst("float thisIsImpossible(int a==3254, int m=  =	9832)");
 	tst("return &(new bool);");
 
+#undef tst
+}
+
+
+TEST_CASE(Constructor_WhatIsNot)
+{
+#define tst(what) ASSERT_NULL(Function::make(what, ScopeType::ClassBlock))
+    tst("Barnicle() mCount(400)");
 #undef tst
 }
 
