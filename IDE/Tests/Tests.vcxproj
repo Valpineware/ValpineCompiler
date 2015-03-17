@@ -37,6 +37,8 @@
     <ClInclude Include="..\..\Src\Tests\.Ext\Graph.h" />
     <ClInclude Include="..\..\Src\Tests\.Ext\GraphScript.h" />
     <ClInclude Include="..\..\Src\Tests\Tests.h" />
+    <ClInclude Include="..\..\Src\Tests\_Assert.h" />
+    <ClInclude Include="..\..\Src\Tests\_Expect.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{271266B0-26EE-4DEC-932B-16085893185C}</ProjectGuid>

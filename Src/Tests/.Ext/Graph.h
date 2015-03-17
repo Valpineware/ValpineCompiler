@@ -26,7 +26,7 @@ namespace ext
 	template <typename T>
 	void assertSameLists(const QList<T> &list1, const QList<T> &list2, std::function<void(const T&, const T&)> assertCompare)
 	{
-		ASSERT_EQ(list1.count(), list2.count());
+		Assert::Eq(list1.count(), list2.count());
 		{
 			auto expectIter = vc::makeIter(list1);
 			auto actualIter = vc::makeIter(list2);

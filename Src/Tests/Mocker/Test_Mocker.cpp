@@ -59,11 +59,11 @@ TEST_CASE(HelloWorld)
 	QVector<QString> expected;
 	readFile("HelloWorld.cpp", expected);
 
-	ASSERT_EQ(expected.size(), lines.size());
+	Assert::Eq(expected.size(), lines.size());
 
 	for (int i = 0; i < expected.size(); i++)
 	{
-		EXPECT_EQ_STR(expected[i], lines[i]);
+		Expect::EqStr(expected[i], lines[i]);
 	}
 }
 
@@ -75,11 +75,11 @@ TEST_CASE(FunctionTest)
 	QVector<QString> expected;
 	readFile("FunctionTest.cpp", expected);
 
-	ASSERT_EQ(expected.size(), lines.size());
+	Assert::Eq(expected.size(), lines.size());
 
 	for (int i = 0; i < expected.size(); i++)
 	{
-		EXPECT_EQ_STR(expected[i], lines[i]);
+		Expect::EqStr(expected[i], lines[i]);
 	}
 }
 
@@ -91,11 +91,11 @@ TEST_CASE(VariableTest)
 	QVector<QString> expected;
 	readFile("VariableTest.cpp", expected);
 
-	ASSERT_EQ(expected.size(), lines.size());
+	Assert::Eq(expected.size(), lines.size());
 
 	for (int i = 0; i < expected.size(); i++)
 	{
-		EXPECT_EQ_STR(expected[i], lines[i]);
+		Expect::EqStr(expected[i], lines[i]);
 	}
 }
 
@@ -108,11 +108,11 @@ TEST_CASE(NestedFunctionBasic)
 	QVector<QString> expected;
 	readFile("NestedFunctionBasic.cpp", expected);
 
-	ASSERT_EQ(expected.size(), lines.size());
+	Assert::Eq(expected.size(), lines.size());
 	
 	for (int i = 0; i < expected.size(); i++)
 	{
-		EXPECT_EQ_STR(expected[i], lines[i]);
+		Expect::EqStr(expected[i], lines[i]);
 	}
 
 }
@@ -125,10 +125,10 @@ TEST_CASE(ConditionalStatements)
 	QVector<QString> expected;
 	readFile("ConditionalStatementsBasic.cpp", expected);
 
-	ASSERT_EQ(expected.size(), lines.size());
+	Assert::Eq(expected.size(), lines.size());
 
 	for (int i = 0; i < expected.size(); i++)
 	{
-		EXPECT_EQ_STR(expected[i], lines[i]);
+		Expect::EqStr(expected[i], lines[i]);
 	}
 }

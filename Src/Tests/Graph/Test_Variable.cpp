@@ -11,34 +11,34 @@ TEST_CLASS
 
 TEST_CASE(Variable_WhatIs)
 {
-	#define IF(what) { Variable *v = Variable::make(what); ASSERT_NOT_NULL(v);
+	#define IF(what) { Variable *v = Variable::make(what); Assert::NotNull(v);
 
 	IF("int a;")
-		EXPECT_EQ_STR("int", v->typeExpression().fullType());
-		EXPECT_EQ_STR("a", v->id());
-		EXPECT_EQ_STR("", v->initExpression());
+		Expect::EqStr("int", v->typeExpression().fullType());
+		Expect::EqStr("a", v->id());
+		Expect::EqStr("", v->initExpression());
 	}
 
 
 	IF("float b = 10.4f;")
-		EXPECT_EQ_STR("float", v->typeExpression().fullType());
-		EXPECT_EQ_STR("b", v->id());
-		EXPECT_EQ_STR("10.4f", v->initExpression());
+		Expect::EqStr("float", v->typeExpression().fullType());
+		Expect::EqStr("b", v->id());
+		Expect::EqStr("10.4f", v->initExpression());
 	}
 
 
 	IF("bool isEnable = thing1.isEnabled() && thing2.isEnabled();")
-		EXPECT_EQ_STR("bool", v->typeExpression().fullType());
-		EXPECT_EQ_STR("isEnable", v->id());
-		EXPECT_EQ_STR("thing1.isEnabled() && thing2.isEnabled()", v->initExpression());
+		Expect::EqStr("bool", v->typeExpression().fullType());
+		Expect::EqStr("isEnable", v->id());
+		Expect::EqStr("thing1.isEnabled() && thing2.isEnabled()", v->initExpression());
 	}
 
 
 	IF("const MyType* _alamo= 77")	//intentionally no semi colon because we'll allow this to be considered a variable
 									//obviously compile error later.
-		EXPECT_EQ_STR("const MyType *", v->typeExpression().fullType());
-		EXPECT_EQ_STR("_alamo", v->id());
-		EXPECT_EQ_STR("77", v->initExpression());
+		Expect::EqStr("const MyType *", v->typeExpression().fullType());
+		Expect::EqStr("_alamo", v->id());
+		Expect::EqStr("77", v->initExpression());
 	}
 
 	#undef IF
@@ -47,7 +47,7 @@ TEST_CASE(Variable_WhatIs)
 
 TEST_CASE(Variable_WhatIsNot)
 {
-	#define tst(what) ASSERT_NULL(Variable::make(what))
+	#define tst(what) Assert::Null(Variable::make(what))
 
 	tst("int bool a=10;");
 

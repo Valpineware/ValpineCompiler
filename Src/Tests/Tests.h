@@ -26,13 +26,9 @@ const QString gTestDir = "./Tests/";
 
 #define FOR_TIMES(i, count) for (int i=0; i<count; ++i)
 
+#include "_Assert.h"
+#include "_Expect.h"
 
-#define ASSERT_NULL(what) if (what != nullptr) { qFatal("NULLPTR"); return; }
-#define ASSERT_NOT_NULL(what) if (what == nullptr) { qFatal("NULLPTR"); return; }	//the final return is to trick Visual Studio's code analysis
-
-void assertEqStr(const QString &exp, const QString &actual, const char *file, int line);
-#define EXPECT_EQ_STR(expected, actual) assertEqStr(expected, actual, __FILE__, __LINE__);
-
-#define AssertEq_Throw(a, b) if (a != b) { qFatal("Not equal, run the debugger to see what"); }
+using namespace ext;
 
 #endif

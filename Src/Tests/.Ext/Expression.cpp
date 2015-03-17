@@ -5,26 +5,26 @@ namespace ext
 	void assertId(component_t *component, const QString &expectedVerbatim, id_t::Type type)
 	{
 		auto id = dynamic_cast<id_t*>(component);
-		ASSERT_NOT_NULL(id);
-		EXPECT_EQ_STR(expectedVerbatim, id->verbatim());
-		EXPECT_EQ(type, id->type());
+		Assert::NotNull(id);
+		Expect::EqStr(expectedVerbatim, id->verbatim());
+		Expect::Eq(type, id->type());
 	}
 
 
 	void assertArguments(component_t *component, const QString &expectedArg, int argCount)
 	{
 		auto args = dynamic_cast<arguments_t*>(component);
-		ASSERT_NOT_NULL(args);
-		EXPECT_EQ_STR(expectedArg, args->verbatim());
-		EXPECT_EQ(argCount, args->components().count());
+		Assert::NotNull(args);
+		Expect::EqStr(expectedArg, args->verbatim());
+		Expect::Eq(argCount, args->components().count());
 	}
 
 
 	void assertOperator(component_t *component, const QString &expectedVerbatim)
 	{
 		auto op = dynamic_cast<operator_t*>(component);
-		ASSERT_NOT_NULL(op);
-		EXPECT_EQ_STR(expectedVerbatim, op->verbatim());
+		Assert::NotNull(op);
+		Expect::EqStr(expectedVerbatim, op->verbatim());
 	}
 
 
@@ -38,14 +38,14 @@ namespace ext
 
 	void assertEqualOperator(const operator_t *expected, const operator_t *actual)
 	{
-		EXPECT_EQ_STR(expected->verbatim(), actual->verbatim());
+		Expect::EqStr(expected->verbatim(), actual->verbatim());
 	}
 
 
 	void assertEqualId(const id_t *expected, const id_t *actual)
 	{
-		EXPECT_EQ_STR(expected->verbatim(), actual->verbatim());
-		EXPECT_EQ(expected->type(), actual->type());
+		Expect::EqStr(expected->verbatim(), actual->verbatim());
+		Expect::Eq(expected->type(), actual->type());
 	}
 
 
@@ -57,9 +57,9 @@ namespace ext
 
 	void assertEqualComponents(const component_t *expected, const component_t *actual)
 	{
-		ASSERT_NOT_NULL(expected);
-		ASSERT_NOT_NULL(actual);
-		AssertEq_Throw(typeid(*expected), typeid(*actual));
+		Assert::NotNull(expected);
+		Assert::NotNull(actual);
+		Assert::Eq(typeid(*expected), typeid(*actual));
 
 
 		if (auto result = dynamic_cast<const innerExpression_t*>(expected))
@@ -75,7 +75,7 @@ namespace ext
 
 	void assertEqualComponentList(const componentList_t &expected, const componentList_t &actual)
 	{
-		ASSERT_EQ(expected.count(), expected.count());
+		Assert::Eq(expected.count(), actual.count());
 
 		auto expectedIter = vc::makeIter(expected);
 		auto actualIter = vc::makeIter(actual);

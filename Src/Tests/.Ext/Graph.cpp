@@ -57,18 +57,18 @@ namespace ext
 
 	void assertEqualPreprocessor(Preprocessor *expected, Preprocessor *actual)
 	{
-		EXPECT_EQ_STR(expected->verbatim(), actual->verbatim());
+		Expect::EqStr(expected->verbatim(), actual->verbatim());
 	}
 
 
 	void assertEqualClass(Class *expected, Class *actual)
 	{
-		EXPECT_EQ_STR(expected->id(), actual->id());
+		Expect::EqStr(expected->id(), actual->id());
 
 		auto assertAccessIdPair = [](const Class::AccessIdPair &lhs, const Class::AccessIdPair &rhs) -> void
 		{
-			EXPECT_EQ_STR(lhs.id, rhs.id);
-			EXPECT_EQ(lhs.accessType, rhs.accessType);
+			Expect::EqStr(lhs.id, rhs.id);
+			Expect::Eq(lhs.accessType, rhs.accessType);
 		};
 
 		assertSameLists<Class::AccessIdPair>(expected->superClasses(), actual->superClasses(), assertAccessIdPair);
@@ -76,7 +76,7 @@ namespace ext
 		assertSameLists<Class::Member*>(expected->members(), actual->members(),
 										[](const Class::Member *lhs, const Class::Member *rhs) -> void
 										{
-											ASSERT_EQ(lhs->accessType, rhs->accessType);
+											Assert::Eq(lhs->accessType, rhs->accessType);
 											assertEqualStatement(lhs->statement, rhs->statement);
 										});
 	}
@@ -84,24 +84,24 @@ namespace ext
 
 	void assertEqualControlStructure(ControlStructure *expected, ControlStructure *actual)
 	{
-		EXPECT_EQ_STR(expected->name(), actual->name());
+		Expect::EqStr(expected->name(), actual->name());
 		assertEqualBlock(expected->block(), actual->block());
 	}
 
 
 	void assertEqualFunction(Function *expected, Function *actual)
 	{
-		EXPECT_EQ_STR(expected->id(), actual->id());
-		EXPECT_EQ(expected->returnType(), actual->returnType());
-		EXPECT_EQ(expected->parameters(), actual->parameters());
+		Expect::EqStr(expected->id(), actual->id());
+		Expect::Eq(expected->returnType(), actual->returnType());
+		Expect::Eq(expected->parameters(), actual->parameters());
 		assertEqualBlock(expected->block(), actual->block());
 	}
 
 
 	void assertEqualVariable(Variable *expected, Variable *actual)
 	{
-		EXPECT_EQ_STR(expected->id(), actual->id());
-		EXPECT_EQ_STR(expected->initExpression(), actual->initExpression());
+		Expect::EqStr(expected->id(), actual->id());
+		Expect::EqStr(expected->initExpression(), actual->initExpression());
 	}
 
 
@@ -123,11 +123,11 @@ namespace ext
 
 	void assertEqualStatement(Statement *expected, Statement *actual)
 	{
-		ASSERT_NOT_NULL(expected);
-		ASSERT_NOT_NULL(actual);
+		Assert::NotNull(expected);
+		Assert::NotNull(actual);
 
 
-		AssertEq_Throw(typeid(*expected), typeid(*actual));
+		Assert::Eq(typeid(*expected), typeid(*actual));
 
 		if (auto preprocessor = dynamic_cast<Preprocessor*>(expected))
 			assertEqualPreprocessor(preprocessor, dynamic_cast<Preprocessor*>(actual));
@@ -148,6 +148,6 @@ namespace ext
 			assertEqualVariable(variable, dynamic_cast<Variable*>(expected));
 
 		else
-			EXPECT_EQ_STR(expected->verbatim(), actual->verbatim());
+			Expect::EqStr(expected->verbatim(), actual->verbatim());
 	}
 }

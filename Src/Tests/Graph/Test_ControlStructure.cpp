@@ -23,33 +23,33 @@ TEST_CASE(FunctionHeader_WhatIs)
 	#define IF(what) { graph::ControlStructure *cs = test(what);
 
 	IF ("for (int i=0; i<100; i++)")
-		EXPECT_EQ_STR("for", cs->name());
-		EXPECT_EQ_STR("int i=0; i<100; i++", cs->expression());
+		Expect::EqStr("for", cs->name());
+		Expect::EqStr("int i=0; i<100; i++", cs->expression());
 	}
 
 	IF ("while ( true && false || true)")
-		EXPECT_EQ_STR("while", cs->name());
-		EXPECT_EQ_STR(" true && false || true", cs->expression());
+		Expect::EqStr("while", cs->name());
+		Expect::EqStr(" true && false || true", cs->expression());
 	}
 
 	IF ("if (b > 42 && myName != \"Dan\")")
-		EXPECT_EQ_STR("if", cs->name());
-		EXPECT_EQ_STR("b > 42 && myName != \"Dan\"", cs->expression());
+		Expect::EqStr("if", cs->name());
+		Expect::EqStr("b > 42 && myName != \"Dan\"", cs->expression());
 	}
 
 	IF ("else if ( (true) || (a + b < 90))")
-		EXPECT_EQ_STR("else if", cs->name());
-		EXPECT_EQ_STR(" (true) || (a + b < 90)", cs->expression());
+		Expect::EqStr("else if", cs->name());
+		Expect::EqStr(" (true) || (a + b < 90)", cs->expression());
 	}
 
 	IF ("else")
-		EXPECT_EQ_STR("else", cs->name());
-		EXPECT_EQ_STR("", cs->expression());
+		Expect::EqStr("else", cs->name());
+		Expect::EqStr("", cs->expression());
 	}
 
 	IF ("defer while (foo() > 42)")
-		EXPECT_EQ_STR("defer while", cs->name());
-		EXPECT_EQ_STR("foo() > 42", cs->expression());
+		Expect::EqStr("defer while", cs->name());
+		Expect::EqStr("foo() > 42", cs->expression());
 	}
 
 	#undef IF
@@ -60,7 +60,7 @@ TEST_CASE(FunctionHeader_WhatIsNot)
 {
 	const QString header = "void process()";
 
-	#define tst(what) ASSERT_NULL(graph::ControlStructure::make(what))
+	#define tst(what) Assert::Null(graph::ControlStructure::make(what))
 
 	tst("for for (true)");
 	tst("whil (thisExpression == false)");

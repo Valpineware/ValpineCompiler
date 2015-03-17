@@ -70,5 +70,11 @@
     <ClInclude Include="..\..\Src\Tests\.Ext\GraphScript.h">
       <Filter>Src\.Ext</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\Tests\_Expect.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Tests\_Assert.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

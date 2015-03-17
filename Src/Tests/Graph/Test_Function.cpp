@@ -9,11 +9,11 @@ protected:
 	void assertInitializerList(const QString start, const QString listBody, int listCount)
 	{
 		auto f = Function::make(start, ScopeType::ClassBlock);
-		ASSERT_NOT_NULL(f);
-		ASSERT_EQ(f->type(), Function::Type::Constructor);
+		Assert::NotNull(f);
+		Assert::Eq(f->type(), Function::Type::Constructor);
 
 		auto& initList = f->initializerList();
-		ASSERT_EQ(listCount, initList.components().count());
+		Assert::Eq(listCount, initList.components().count());
 		std::unique_ptr<Expression::Arguments> expected(Expression::Arguments::make(listBody));
 		ext::assertEqualComponentList(expected->components(), initList.components());
 	}
@@ -24,8 +24,8 @@ TEST_CASE(Normal_WhatIS)
 {
 	//TODO we need to test Function::Type in this test
 	#define tst(what) { auto f = Function::make(what, ScopeType::Root); \
-						ASSERT_NOT_NULL(f); \
-						ASSERT_EQ(f->type(), Function::Type::Normal); }
+						Assert::NotNull(f); \
+						Assert::Eq(f->type(), Function::Type::Normal); }
 
 	tst("void simple()")
 	tst("int		 wacky	( ) ");
@@ -54,8 +54,8 @@ TEST_CASE(Normal_WhatIS)
 TEST_CASE(Constructor_WhatIs)
 {
 #define tst(what) { auto f = Function::make(what, ScopeType::ClassBlock); \
-						ASSERT_NOT_NULL(f); \
-						ASSERT_EQ(f->type(), Function::Type::Constructor); }
+						Assert::NotNull(f); \
+						Assert::Eq(f->type(), Function::Type::Constructor); }
 
 	tst("Widget()");
 	tst("Widget(const Widget &widget)");
@@ -80,8 +80,8 @@ TEST_CASE(Constructor_InitiailzerList_TwoArgument)
 TEST_CASE(Destructor_WhatIs)
 {
 #define tst(what) { auto f = Function::make(what, ScopeType::ClassBlock); \
-					ASSERT_NOT_NULL(f); \
-					ASSERT_EQ(f->type(), Function::Type::Destructor); }
+					Assert::NotNull(f); \
+					Assert::Eq(f->type(), Function::Type::Destructor); }
 
 	tst("~Widget()");
 	tst("  ~ BigWidget ( )");
@@ -93,7 +93,7 @@ TEST_CASE(Destructor_WhatIs)
 
 TEST_CASE(Normal_WhatIsNot)
 {
-#define tst(what) ASSERT_NULL(Function::make(what, ScopeType::Root))
+#define tst(what) Assert::Null(Function::make(what, ScopeType::Root))
 
 	tst("123Type doesNotWork()");
 	tst("NoGo 999Function		( )");
@@ -112,7 +112,7 @@ TEST_CASE(Normal_WhatIsNot)
 
 TEST_CASE(Constructor_WhatIsNot)
 {
-#define tst(what) ASSERT_NULL(Function::make(what, ScopeType::ClassBlock))
+#define tst(what) Assert::Null(Function::make(what, ScopeType::ClassBlock))
     tst("Barnicle() mCount(400)");
 #undef tst
 }
@@ -120,7 +120,7 @@ TEST_CASE(Constructor_WhatIsNot)
 
 TEST_CASE(Destructor_WhatIsNot)
 {
-#define tst(what, scope) ASSERT_NULL(Function::make(what, ScopeType::scope))
+#define tst(what, scope) Assert::Null(Function::make(what, ScopeType::scope))
 
 	//can't have destructors and constructors in regular scopes
 	//TODO should we still consider these constructors and destructors just for the sake of error checking?
