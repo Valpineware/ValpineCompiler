@@ -12,16 +12,16 @@
 
 namespace vc { namespace mocker
 {
-	Class::Class(QVector<QString> &body, QVector<QString> &includes, const graph::Class &classDef, QVector<QString> &header, int scope)
+	Class::Class(MockerData &data, const graph::Class &classDef)
 	{
-		mScope = scope;
-		buildClass(body, classDef);
+		mScope = data.scope;
+		buildClass(data, classDef);
 
 		//add include to header file
-		includes += "#include \"" + mClassName + "\"";
+		data.includes += "#include \"" + mClassName + "\"";
 	}
 
-	void Class::buildClass(QVector<QString> &body, const graph::Class &classDef)
+	void Class::buildClass(MockerData &data, const graph::Class &classDef)
 	{
 		mClassName = classDef.id();
 
@@ -34,18 +34,18 @@ namespace vc { namespace mocker
 			switch (member->accessType)
 			{
 			case graph::Class::Private:
-				buildMember(body, *member, mPrivateDecs);
+				buildMember(data, *member, mPrivateDecs);
 				break;
 			case graph::Class::Public:
-				buildMember(body, *member, mPublicDecs);
+				buildMember(data, *member, mPublicDecs);
 				break;
 			case graph::Class::Protected:
-				buildMember(body, *member, mProtectedDecs);
+				buildMember(data, *member, mProtectedDecs);
 			}
 		}
 	}
-	/*
-	void Class::buildMember(QVector<QString> &body, const graph::Class::Member &member, QVector<QString> &decs)
+	
+	void Class::buildMember(MockerData &data, const graph::Class::Member &member, QVector<QString> &decs)
 	{
 		graph::Statement *statement = member.statement;
 		if (auto * variable = dynamic_cast<graph::Variable*>(statement))
@@ -60,7 +60,7 @@ namespace vc { namespace mocker
 		{
 			body.append(Utility::createTabs(mScope));
 		}
-	}*/
+	}
 
 	void Class::buildHeader(QVector<QString> &header)
 	{

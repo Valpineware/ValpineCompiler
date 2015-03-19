@@ -1,5 +1,5 @@
 //==================================================================================================================|
-// Created 2015.02.22 by John Koehn
+// Created 2015.03.17 by John Koehn
 //
 // Copyright (C) 2015 Valpineware
 // This file is licensed under the MIT License.
@@ -10,32 +10,34 @@
 
 #include <Graph/Graph.h>
 #include <Library.h>
+#include "ClassHeader.h"
 
 namespace vc { namespace mocker
 {
+	enum ScopeState
+	{
+		scopePrivate,
+		scopePublic,
+		scopeProtected,		
+	};
+	
 	/**
-	* Converts a Class to cpp
+	* Contains data for a cpp header file
 	*/
-	class Class
+	class Header
 	{
 	private:
-		QString mClassName;
-		QVector<QString> mPublicDecs;
-		QVector<QString> mPrivateDecs;
-		QVector<QString> mProtectedDecs;
+		QVector<QString> functionDecs;
+		QVector<ClassHeader> classHeaders;
 
-		int mScope;
-
-		void buildClass(MockerData &data, const graph::Class &classDef);
-		void buildMember(MockerData &data, const graph::Class::Member &member, QVector<QString> &decs);
-		void buildHeader(MockerData &data);
 	public:
-		Class(MockerData &data, const graph::Class &classDef);
+		Header();
+			
+		void addClass(QString className);
+		void addFunctionDec(QString functionDec);
+		void addClassMember(QString classID, QString memberDec, ScopeState state);
 			
 	};
-
-
-
 }}
 
 
