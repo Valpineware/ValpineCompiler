@@ -107,17 +107,23 @@ namespace ext
 
 	void assertEqualBlock(const Block &expected, const Block &actual)
 	{
-		auto expectedIter = vc::makeIter(expected.statements());
-		auto actualIter = vc::makeIter(actual.statements());
+		assertEqualStatementLists(expected.statements(), actual.statements());
+	}
+
+
+	void assertEqualStatementLists(const QList<Statement*> expected, const QList<Statement*> actual)
+	{
+		Assert::Eq(expected.count(), actual.count());
+		auto expectedIter = vc::makeIter(expected);
+		auto actualIter = vc::makeIter(actual);
 
 		while (expectedIter.hasNext())
 		{
-			Statement *expectedStatement = expectedIter.next();
-			Statement *actualStatement = actualIter.next();
-
-
-			assertEqualStatement(expectedStatement, actualStatement);
+			ext::assertEqualStatement(expectedIter.next(), actualIter.next());
 		}
+
+		Assert::False(expectedIter.hasNext());
+		Assert::False(actualIter.hasNext());
 	}
 
 

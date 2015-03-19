@@ -20,7 +20,7 @@ protected:
 		parser.parseFile(gTestDir_Mocker + filename);
 
 		QBuffer buffer;
-		ASSERT_TRUE(buffer.open(QIODevice::ReadWrite | QIODevice::Text));
+		Assert::True(buffer.open(QIODevice::ReadWrite | QIODevice::Text));
 		mocker::Mocker().mock(parser.graph(), buffer);
 
 		QTextStream stream(&buffer.buffer());
@@ -39,7 +39,7 @@ protected:
 	void readFile(const QString& filename, QVector<QString>& lines)
 	{
 		QFile file(gTestDir_Mocker + filename);
-		ASSERT_TRUE(file.open(QFile::ReadOnly | QFile::Text));
+		Assert::True(file.open(QFile::ReadOnly | QFile::Text));
 		QTextStream in(&file);
 		
 		while (!in.atEnd())

@@ -26,4 +26,4 @@ public:
 	
 private:
 	QString mText;
-};
+}

@@ -5,6 +5,7 @@
 // This file is licensed under the MIT License.
 //==================================================================================================================|
 
+#include "Variable.h"
 #include "ControlStructure.h"
 #include "Utility.h"
 
@@ -87,7 +88,7 @@ namespace vc { namespace graph
 		//now just copy everything between the two () and set that as the expression
 		int openIndex = signature.indexOf("(")+1;
 		int closeIndex = signature.lastIndexOf(")"); 
-		cs->setExpression(signature.mid(openIndex, closeIndex-openIndex));
+		cs->parseAndAssignExpression(signature.mid(openIndex, closeIndex-openIndex));
 
 		return cs;
 	}
@@ -96,5 +97,49 @@ namespace vc { namespace graph
 	QString ControlStructure::name() const
 	{
 		return Utility::flatten(mKeywords, " ");
+	}
+
+
+	QString ControlStructure::expression() const
+	{
+		QString buffer;
+
+		for (const Statement *statement : mExpression)
+		{
+			buffer.append(statement->verbatim() + "; ");
+		}
+
+		if (!buffer.isEmpty())
+			buffer.chop(2);
+
+		return buffer;
+	}
+
+
+	void ControlStructure::parseAndAssignExpression(const QString &verbatim)
+	{
+		/**
+		 * Figures out what type of Statement the chunk string represents and then appends
+		 * an instance to mExpression.
+		 */
+		auto decide = [this](const QString &chunk)	
+		{
+			if (auto variable = Variable::make(chunk))
+				mExpression.append(variable);
+			else if (auto expression = new Expression(chunk))
+				mExpression.append(expression);
+			else
+				mExpression.append(new Statement(chunk));
+		};
+
+
+		//for loops are the only type that parse differently
+		if (mKeywords.count() == 1 && mKeywords.first() == "for")
+		{
+			for (QString &chunk : verbatim.split(";"))
+				decide(chunk);
+		}
+		else
+			decide(verbatim);
 	}
 }}

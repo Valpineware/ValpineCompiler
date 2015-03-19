@@ -44,6 +44,7 @@ namespace ext
 	void assertEqualFunction(Function *expected, Function *actual);
 	void assertEqualVariable(Variable *expected, Variable *actual);
 	void assertEqualBlock(const Block &expected, const Block &actual);
+	void assertEqualStatementLists(const QList<Statement*> expected, const QList<Statement*> actual);
 	void assertEqualStatement(Statement *expected, Statement *actual);
 }
 

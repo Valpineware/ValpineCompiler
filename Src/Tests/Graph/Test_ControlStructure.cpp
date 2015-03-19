@@ -1,4 +1,4 @@
-#include "Tests.h"
+#include "../.Ext/Graph.h"
 #include <Graph/ControlStructure.h>
 
 #define CLASS Test_ControlStructure
@@ -7,52 +7,55 @@ using namespace vc;
 TEST_CLASS
 {
 protected:
-	graph::ControlStructure* test(const QString &what)
+	void assertBuild(const QString &verbatim, const QString &expectedName, const QList<Statement*> expectedExpressionList)
 	{
-		graph::ControlStructure *cs = graph::ControlStructure::make(what);
-		if (cs == nullptr)
-			qFatal("Null control structure in Test_ControlStructure");
-
-		return cs;
+		graph::ControlStructure *cs = ControlStructure::make(verbatim);
+		Assert::NotNull(cs);
+		Expect::EqStr(expectedName, cs->name());
+		assertEqualStatementLists(expectedExpressionList, cs->expressionList());
 	}
 };
 
-
-TEST_CASE(FunctionHeader_WhatIs)
+TEST_CASE(Build_For)
 {
-	#define IF(what) { graph::ControlStructure *cs = test(what);
+	assertBuild("for (int i=0; i<100; i++)", "for",
+				QList<Statement*>() << Variable::make("int i=0")
+									<< new Expression("i<100")
+									<< new Expression("i++"));
+}
 
-	IF ("for (int i=0; i<100; i++)")
-		Expect::EqStr("for", cs->name());
-		Expect::EqStr("int i=0; i<100; i++", cs->expression());
-	}
 
-	IF ("while ( true && false || true)")
-		Expect::EqStr("while", cs->name());
-		Expect::EqStr(" true && false || true", cs->expression());
-	}
+TEST_CASE(Build_While)
+{
+	assertBuild("while ( true && false || true)", "while",
+				QList<Statement*>() << new Expression(" true && false || true"));
+}
 
-	IF ("if (b > 42 && myName != \"Dan\")")
-		Expect::EqStr("if", cs->name());
-		Expect::EqStr("b > 42 && myName != \"Dan\"", cs->expression());
-	}
 
-	IF ("else if ( (true) || (a + b < 90))")
-		Expect::EqStr("else if", cs->name());
-		Expect::EqStr(" (true) || (a + b < 90)", cs->expression());
-	}
+TEST_CASE(Build_If)
+{
+	assertBuild("if (b > 42 && myName != \"Dan\")", "if",
+				QList<Statement*>() << new Expression("b > 42 && myName != \"Dan\""));
+}
 
-	IF ("else")
-		Expect::EqStr("else", cs->name());
-		Expect::EqStr("", cs->expression());
-	}
 
-	IF ("defer while (foo() > 42)")
-		Expect::EqStr("defer while", cs->name());
-		Expect::EqStr("foo() > 42", cs->expression());
-	}
+TEST_CASE(Build_ElseIf)
+{
+	assertBuild("else if ( true || (a + b < 90))", "else if", 
+				QList<Statement*>() << new Expression(" true || (a + b < 90)"));
+}
 
-	#undef IF
+
+TEST_CASE(Build_Else)
+{
+	assertBuild("else", "else", QList<Statement*>());
+}
+
+
+TEST_CASE(Build_DeferWhile)
+{
+	assertBuild("defer while (foo() > 42)", "defer while",
+				QList<Statement*>() << new Expression("foo() > 42"));
 }
 
 

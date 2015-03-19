@@ -1,5 +1,5 @@
 //==================================================================================================================|
-// Created 2015.03.17by Daniel L. Watkins
+// Created 2015.03.17 by Daniel L. Watkins
 //
 // Copyright (C) 2015 Valpineware
 // This file is licensed under the MIT License.
@@ -68,7 +68,7 @@ namespace ext
 					qFatal("Unequal");
 			}
 			else
-				Expect::Eq(a, b);
+				EXPECT_EQ(a, b);
 		}
 
 
@@ -84,7 +84,7 @@ namespace ext
 					qFatal("Unequal");
 			}
 			else
-				Expect::Eq(a, b);
+				EXPECT_EQ(a, b);
 		}
 
 

@@ -22,14 +22,16 @@ namespace vc { namespace graph
 
 		QString name() const;
 
-		void setExpression(const QString &expression) { mExpression = expression; }
-		QString expression() const { return mExpression; }
+		const QList<Statement*> expressionList() const { return mExpression; }
+		QString expression() const;
 
 	private:
 		ControlStructure(const QString &verbatim) : SubBlock(verbatim) {}
 
-		QString mExpression;
+		void parseAndAssignExpression(const QString &verbatim);
+
 		QVector<QString> mKeywords;
+		QList<Statement*> mExpression;
 	};
 }}
 

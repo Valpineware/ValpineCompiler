@@ -15,10 +15,10 @@ protected:
 	void assertValpineToGraphScript(const QString &valpineFile, const QString &parseScriptFile)
 	{
 		parser::Parser sp;
-		ASSERT_TRUE(sp.parseFile(gTestDir_Parser + valpineFile)) << "Does the valpine file exist?";
+		Assert::True(sp.parseFile(gTestDir_Parser + valpineFile));
 
 		GraphScript parseScript;
-		ASSERT_TRUE(parseScript.parse(gTestDir_Parser + parseScriptFile)) << "Does the GS file exist?";
+		Assert::True(parseScript.parse(gTestDir_Parser + parseScriptFile));
 
 		assertEqualBlock(parseScript.graph().block(), sp.graph().block());
 	}
