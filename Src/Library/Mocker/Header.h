@@ -27,15 +27,17 @@ namespace vc { namespace mocker
 	class Header
 	{
 	private:
-		QVector<QString> functionDecs;
-		QVector<ClassHeader> classHeaders;
+		QVector<QString> mFunctionDecs;
+		QVector<ClassHeader> mClassHeaders;
 
 	public:
 		Header();
 			
-		void addClass(QString className);
-		void addFunctionDec(QString functionDec);
-		void addClassMember(QString classID, QString memberDec, ScopeState state);
+		void addClass(QString &className);
+		void addFunctionDec(QString &functionDec);
+		void addClassMember(QString &classID, QString &memberDec, ScopeState state);
+
+		QVector<QString> buildHeader();
 			
 	};
 }}
