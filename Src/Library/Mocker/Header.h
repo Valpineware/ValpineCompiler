@@ -30,8 +30,9 @@ namespace vc { namespace mocker
 		QVector<QString> mFunctionDecs;
 		QVector<ClassHeader> mClassHeaders;
 
+		int mScopeLevel;
 	public:
-		Header();
+		Header(int scopeLevel);
 			
 		void addClass(QString &className);
 		void addFunctionDec(QString &functionDec);
