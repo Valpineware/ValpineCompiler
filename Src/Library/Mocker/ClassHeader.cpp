@@ -4,16 +4,16 @@
 namespace vc { namespace mocker
 {
 
-	ClassHeader::ClassHeader(QString &classID, int scopeLevel)
+	ClassHeader::ClassHeader(const QString &classID, int scopeLevel)
 	{
-		mClassID = classID;
+		mClassID = &classID;
 		mScopeLevel = scopeLevel;
 	}
 
-	QVector<QString> ClassHeader::buildClass()
+	QVector<const QString> ClassHeader::buildClass()
 	{
-		QVector<QString> headerClass;
-		headerClass.append(Utility::createTabs(mScopeLevel) + "class " + mClassID);
+		QVector<const QString> headerClass;
+		headerClass.append(Utility::createTabs(mScopeLevel) + "class " + *mClassID);
 		headerClass.append(Utility::createTabs(mScopeLevel) + "{");
 
 		//add private members

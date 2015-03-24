@@ -8,18 +8,18 @@ namespace vc { namespace mocker
 	}
 
 
-	void Header::addClass(QString &className)
+	void Header::addClass(const QString &className)
 	{
 		ClassHeader classHeader(className, mScopeLevel);
 		mClassHeaders.append(classHeader);
 	}
 
-	void Header::addFunctionDec(QString &functionDec)
+	void Header::addFunctionDec(const QString &functionDec)
 	{
 		mFunctionDecs.append(functionDec);
 	}
 
-	void Header::addClassMember(QString &classID, QString &memberDec, ScopeState state)
+	void Header::addClassMember(const QString &classID, const QString &memberDec, const ScopeState state)
 	{
 		//search for class Dec
 		for (ClassHeader classHeader : mClassHeaders)
@@ -52,9 +52,9 @@ namespace vc { namespace mocker
 	}
 
 
-	QVector<QString> Header::buildHeader()
+	QVector<const QString> Header::buildHeader()
 	{
-		QVector<QString> header;
+		QVector<const QString> header;
 		header += mFunctionDecs;
 
 		//add class declerations
