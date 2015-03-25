@@ -5,8 +5,8 @@
 // This file is licensed under the MIT License.
 //==================================================================================================================|
 
-#ifndef _vc_mocker_Class_h
-#define _vc_mocker_Class_h
+#ifndef _vc_mocker_Header_h
+#define _vc_mocker_Header_h
 
 #include <Graph/Graph.h>
 #include <Library.h>
@@ -28,12 +28,14 @@ namespace vc { namespace mocker
 	{
 	private:
 		QVector<const QString> mFunctionDecs;
+		QVector<const QString> includes;
 		QVector<ClassHeader> mClassHeaders;
 
 		int mScopeLevel;
 	public:
-		Header(int scopeLevel);
-			
+		Header(int scopeLevel = 0);
+		
+		void addInclude(const QString &include);
 		void addClass(const QString &className);
 		void addFunctionDec(const QString &functionDec);
 		void addClassMember(const QString &classID, const QString &memberDec, const ScopeState state);

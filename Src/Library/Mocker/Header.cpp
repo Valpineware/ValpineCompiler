@@ -7,6 +7,10 @@ namespace vc { namespace mocker
 		mScopeLevel = scopeLevel;
 	}
 
+	void Header::addInclude(const QString &include)
+	{
+		includes.append(include);
+	}
 
 	void Header::addClass(const QString &className)
 	{
@@ -55,6 +59,7 @@ namespace vc { namespace mocker
 	QVector<const QString> Header::buildHeader()
 	{
 		QVector<const QString> header;
+		header += includes;
 		header += mFunctionDecs;
 
 		//add class declerations

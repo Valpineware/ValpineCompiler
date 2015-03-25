@@ -20,14 +20,10 @@ namespace vc { namespace mocker
 	{
 	private:
 		QString mClassName;
-		QVector<QString> mPublicDecs;
-		QVector<QString> mPrivateDecs;
-		QVector<QString> mProtectedDecs;
-
 		int mScope;
 
 		void buildClass(MockerData &data, const graph::Class &classDef);
-		void buildMember(MockerData &data, const graph::Class::Member &member, QVector<QString> &decs);
+		void buildMember(MockerData &data, const graph::Class::Member &member, const ScopeState state);
 		void buildHeader(MockerData &data);
 	public:
 		Class(MockerData &data, const graph::Class &classDef);

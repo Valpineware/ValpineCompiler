@@ -18,12 +18,15 @@ namespace vc { namespace mocker
 		buildClass(data, classDef);
 
 		//add include to header file
-		data.includes += "#include \"" + mClassName + "\"";
+		data.header.addFunctionDec("#include \"" + mClassName + "\"");
 	}
 
 	void Class::buildClass(MockerData &data, const graph::Class &classDef)
 	{
 		mClassName = classDef.id();
+		
+		//add a new class to the header data
+		data.header.addClass(mClassName);
 
 		//loop through member and build the graph
 		auto iter = vc::makeIter(classDef.members());
@@ -34,18 +37,18 @@ namespace vc { namespace mocker
 			switch (member->accessType)
 			{
 			case graph::Class::Private:
-				buildMember(data, *member, mPrivateDecs);
+				buildMember(data, *member, scopePrivate);
 				break;
 			case graph::Class::Public:
-				buildMember(data, *member, mPublicDecs);
+				buildMember(data, *member, scopePublic);
 				break;
 			case graph::Class::Protected:
-				buildMember(data, *member, mProtectedDecs);
+				buildMember(data, *member, scopeProtected);
 			}
 		}
 	}
 	
-	void Class::buildMember(MockerData &data, const graph::Class::Member &member, QVector<QString> &decs)
+	void Class::buildMember(MockerData &data, const graph::Class::Member &member, const ScopeState state)
 	{
 		graph::Statement *statement = member.statement;
 		if (auto * variable = dynamic_cast<graph::Variable*>(statement))

@@ -10,6 +10,7 @@
 
 #include <Graph/Graph.h>
 #include <Library.h>
+#include "Header.h"
 
 namespace vc { namespace mocker
 {
@@ -17,8 +18,9 @@ namespace vc { namespace mocker
 	{
 		QVector<QString> includes;
 		QVector<QString> forwardDecs;
-		QVector<QString> header;
 		QVector<QString> body;
+
+		Header header;
 		
 		int scope = 0;
 	};
