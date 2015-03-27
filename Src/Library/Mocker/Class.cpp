@@ -53,43 +53,17 @@ namespace vc { namespace mocker
 		graph::Statement *statement = member.statement;
 		if (auto * variable = dynamic_cast<graph::Variable*>(statement))
 		{
-			Variable::createVar(decs, *variable, mScope);
+			Variable::createVarClass(data, *variable, mClassName, state);
 		}
 		else if (auto * function = dynamic_cast<graph::Function*>(statement))
 		{
-			DeclarationBlock block(body, decs, *function, mScope);
+			//TODO get function dec and add to the header class :D
+			DeclarationBlock block(data, *function);
 		}
 		else
 		{
-			body.append(Utility::createTabs(mScope));
+			data.body.append(Utility::createTabs(mScope));
 		}
 	}
-
-	void Class::buildHeader(QVector<QString> &header)
-	{
-		int headerScope = 1;
-		header.append("Class " + mClassName);
-		header.append("{");
-		
-		header.append("private:");
-		for (QString &line : mPrivateDecs)
-		{
-			header.append(Utility::createTabs(headerScope) + line);
-		}
-
-		header.append("protected:");
-		for (QString &line : mProtectedDecs)
-		{
-			header.append(Utility::createTabs(headerScope) + line);
-		}
-
-		header.append("public:");
-		for (QString &line : mPublicDecs)
-		{
-			header.append(Utility::createTabs(headerScope) + line);
-		}
-
-	}
-
 
 }}

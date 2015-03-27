@@ -12,6 +12,16 @@ namespace vc { namespace mocker
 {
 	void Variable::createVar(MockerData &data, graph::Variable &var)
 	{
+		data.body.append(createVarInternal(data, var));
+	}
+
+	void Variable::createVarClass(MockerData &data, graph::Variable &var, QString &classID, const ScopeState state)
+	{
+		data.header.addClassMember(classID, createVarInternal(data, var), state);
+	}
+
+	const QString Variable::createVarInternal(MockerData &data, graph::Variable &var)
+	{
 		QString cppVar = Utility::createTabs(data.scope);
 		cppVar += var.typeExpression().fullType() + " " + var.id();
 
@@ -21,6 +31,7 @@ namespace vc { namespace mocker
 		}
 
 		cppVar += ";";
-		data.body.append(cppVar);
+
+		return cppVar;
 	}
 }}

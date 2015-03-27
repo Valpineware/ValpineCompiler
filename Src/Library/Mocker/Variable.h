@@ -19,7 +19,11 @@ namespace vc { namespace mocker
 	*/
 	class Variable
 	{
+	private:
+		static const QString createVarInternal(MockerData &data, graph::Variable &var);
+
 	public:
+		static void createVarClass(MockerData &data, graph::Variable &var, QString &classID, const ScopeState state);
 		static void createVar(MockerData &data, graph::Variable &var);
 	};
 
