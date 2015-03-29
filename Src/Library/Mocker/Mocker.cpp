@@ -30,10 +30,7 @@ namespace vc { namespace mocker
 
 		//build the header
 		outStream.setDevice(&outDevice_Header);
-		for (const QString &line : mData.header.buildHeader())
-		{
-			outStream << line << "\n";
-		}
+		mData.header.buildHeader(outStream);
 	}
 
 

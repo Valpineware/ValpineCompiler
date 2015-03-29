@@ -28,20 +28,20 @@ namespace vc { namespace mocker
 	class Header
 	{
 	private:
-		QVector<const QString> mFunctionDecs;
-		QVector<const QString> includes;
-		QVector<ClassHeader> mClassHeaders;
+		QVector<QString> mFunctionDecs;
+		QVector<QString> mIncludes;
+		QVector<ClassHeader *> mClassHeaders;
 
 		int mScopeLevel;
 	public:
 		Header(int scopeLevel = 0);
 		
-		void addInclude(const QString &include);
-		void addClass(const QString &className);
-		void addFunctionDec(const QString &functionDec);
-		void addClassMember(const QString &classID, const QString &memberDec, const ScopeState state);
+		void addInclude(QString &include);
+		void addClass(QString &className);
+		void addFunctionDec(QString &functionDec);
+		void addClassMember(const QString &classID, QString &memberDec, const ScopeState state);
 
-		QVector<const QString> buildHeader();
+		void buildHeader(QTextStream &outStream);
 			
 	};
 }}

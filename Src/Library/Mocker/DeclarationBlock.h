@@ -19,9 +19,9 @@ namespace vc { namespace mocker
 	private:
 		QQueue<const graph::Function*> mFunctions;
 
-		void createFunction(MockerData &data, const QString &classID, const ScopeState state);
+		void createFunction(MockerData &data, QString &classID, const ScopeState state);
 	public:
-		DeclarationBlock(MockerData &data, const graph::Function &function, const QString &classID = "", const ScopeState state = none);
+		DeclarationBlock(MockerData &data, const graph::Function &function, QString classID = "", const ScopeState state = none);
 
 		void static buildBlock(const graph::Block &block, MockerData &data, QQueue<const graph::Function*> &functions);
 	};

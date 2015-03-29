@@ -13,7 +13,7 @@
 
 namespace vc { namespace mocker
 {
-	DeclarationBlock::DeclarationBlock(MockerData &data, const graph::Function &function, const QString &classID, const ScopeState state)
+	DeclarationBlock::DeclarationBlock(MockerData &data, const graph::Function &function, QString classID, const ScopeState state)
 	{
 		mFunctions.enqueue(&function);
 
@@ -59,7 +59,7 @@ namespace vc { namespace mocker
 		data.body.append(Utility::createTabs(data.scope) + "}");
 	}
 
-	void DeclarationBlock::createFunction(MockerData &data, const QString &classID, const ScopeState state)
+	void DeclarationBlock::createFunction(MockerData &data, QString &classID, const ScopeState state)
 	{
 		Function newFunction(data, *(mFunctions.dequeue()), classID, mFunctions, state);
 

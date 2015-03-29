@@ -22,4 +22,12 @@ namespace vc { namespace mocker
 
 		return line;
 	}
+
+	void Utility::vectorToStream(QTextStream &outStream, QVector<QString> &vecData)
+	{
+		for (QString line : vecData)
+		{
+			outStream << line << "\n";
+		}
+	}
 }}

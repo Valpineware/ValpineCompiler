@@ -17,22 +17,22 @@ namespace vc { namespace mocker
 	class ClassHeader
 	{
 	private:
-		const QString * mClassID;
-		QVector<const QString> mPrivateMembers;
-		QVector<const QString> mPublicMembers;
-		QVector<const QString> mProtectedMembers;
+		QString mClassID;
+		QVector<QString> mPrivateMembers;
+		QVector<QString> mPublicMembers;
+		QVector<QString> mProtectedMembers;
 
 		int mScopeLevel;
 
 	public:
-		ClassHeader(const QString &classID, int scopeLevel);
+		ClassHeader(QString &classID, int scopeLevel);
 
-		void addPrivateMember(const QString &member)		{ mPrivateMembers.append(Utility::createTabs(mScopeLevel + 1) + member); }
-		void addPublicMember(const QString &member)		{ mPublicMembers.append(Utility::createTabs(mScopeLevel + 1) + member); }
-		void addProtectedMember(const QString &member)	{ mProtectedMembers.append(Utility::createTabs(mScopeLevel + 1) + member); }
+		void addPrivateMember(QString &member)		{ mPrivateMembers.append(Utility::createTabs(mScopeLevel + 1) + member); }
+		void addPublicMember(QString &member)		{ mPublicMembers.append(Utility::createTabs(mScopeLevel + 1) + member); }
+		void addProtectedMember(QString &member)	{ mProtectedMembers.append(Utility::createTabs(mScopeLevel + 1) + member); }
 
-		QVector<const QString> buildClass();
-		const QString getClassID()						{ return *mClassID; }
+		void buildClass(QTextStream &outStream);
+		QString getClassID()						{ return mClassID; }
 		
 	};
 }}

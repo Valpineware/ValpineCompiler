@@ -11,14 +11,14 @@
 
 namespace vc {	namespace mocker
 {
-	Function::Function(MockerData &data, const graph::Function &function, const QString &classID, QQueue<const graph::Function*> &functions, const ScopeState state)
+	Function::Function(MockerData &data, const graph::Function &function, QString &classID, QQueue<const graph::Function*> &functions, const ScopeState state)
 	{
 		buildDeclartion(data, function, classID, state);
 
 		DeclarationBlock::buildBlock(function.block(), data, functions);
 	}
 
-	void Function::buildDeclartion(MockerData &data, const graph::Function &function, const QString &classID, const ScopeState state)
+	void Function::buildDeclartion(MockerData &data, const graph::Function &function, QString &classID, const ScopeState state)
 	{
 		//build opening experssion
 		QString declartion = Utility::createTabs(data.scope);
@@ -60,7 +60,8 @@ namespace vc {	namespace mocker
 			}
 			else
 			{
-				data.header.addFunctionDec(declartion + ";");
+				declartion += ";";
+				data.header.addFunctionDec(declartion);
 			}
 		}
 	}

@@ -4,22 +4,23 @@
 namespace vc { namespace mocker
 {
 
-	ClassHeader::ClassHeader(const QString &classID, int scopeLevel)
+	ClassHeader::ClassHeader(QString &classID, int scopeLevel)
 	{
-		mClassID = &classID;
+		mClassID = classID;
 		mScopeLevel = scopeLevel;
 	}
 
-	QVector<const QString> ClassHeader::buildClass()
+	void ClassHeader::buildClass(QTextStream &outStream)
 	{
-		QVector<const QString> headerClass;
-		headerClass.append(Utility::createTabs(mScopeLevel) + "class " + *mClassID);
-		headerClass.append(Utility::createTabs(mScopeLevel) + "{");
+		outStream << Utility::createTabs(mScopeLevel) << "class " << mClassID << "\n";
+		outStream << Utility::createTabs(mScopeLevel) << "{" << "\n";
 
 		//add private members
-		headerClass.append(Utility::createTabs(mScopeLevel) + "private:");
-		headerClass += mPrivateMembers;
+		outStream << Utility::createTabs(mScopeLevel) << "private:" << "\n";
 		
+		Utility::vectorToStream(outStream, mPrivateMembers);
+		
+		/*
 		//add protected members
 		headerClass.append(Utility::createTabs(mScopeLevel) + "protected");
 		headerClass += mProtectedMembers;
@@ -30,6 +31,8 @@ namespace vc { namespace mocker
 
 		//finish class
 		headerClass.append("};");
+
+		return headerClass;*/
 	}
 	
 
