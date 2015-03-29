@@ -18,7 +18,7 @@ namespace vc { namespace mocker
 		buildClass(data, classDef);
 
 		//add include to header file
-		data.header.addFunctionDec("#include \"" + mClassName + "\"");
+		//data.header.addFunctionDec("#include \"" + mClassName + "\"");
 	}
 
 	void Class::buildClass(MockerData &data, const graph::Class &classDef)
@@ -57,8 +57,7 @@ namespace vc { namespace mocker
 		}
 		else if (auto * function = dynamic_cast<graph::Function*>(statement))
 		{
-			//TODO get function dec and add to the header class :D
-			DeclarationBlock block(data, *function);
+			DeclarationBlock block(data, *function, mClassName, state);
 		}
 		else
 		{

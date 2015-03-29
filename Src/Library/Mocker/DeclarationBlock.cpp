@@ -13,11 +13,11 @@
 
 namespace vc { namespace mocker
 {
-	DeclarationBlock::DeclarationBlock(MockerData &data, const graph::Function &function, const QString classID)
+	DeclarationBlock::DeclarationBlock(MockerData &data, const graph::Function &function, const QString &classID, const ScopeState state)
 	{
 		mFunctions.enqueue(&function);
 
-		createFunction(data, classID);
+		createFunction(data, classID, state);
 	}
 
 
@@ -59,14 +59,14 @@ namespace vc { namespace mocker
 		data.body.append(Utility::createTabs(data.scope) + "}");
 	}
 
-	void DeclarationBlock::createFunction(MockerData &data, const QString &classID)
+	void DeclarationBlock::createFunction(MockerData &data, const QString &classID, const ScopeState state)
 	{
-		Function newFunction(data, *(mFunctions.dequeue()), classID, mFunctions);
+		Function newFunction(data, *(mFunctions.dequeue()), classID, mFunctions, state);
 
 		while (!mFunctions.isEmpty())
 		{
 			//build the nested function and add any new nested functions to the end of the queue
-			Function nestedFunction(data, *(mFunctions.dequeue()), classID, mFunctions);
+			Function nestedFunction(data, *(mFunctions.dequeue()), classID, mFunctions, state);
 		}
 	}
 }}

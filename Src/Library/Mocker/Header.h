@@ -18,7 +18,8 @@ namespace vc { namespace mocker
 	{
 		scopePrivate,
 		scopePublic,
-		scopeProtected,		
+		scopeProtected,	
+		none,
 	};
 	
 	/**

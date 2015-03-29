@@ -20,10 +20,10 @@ namespace vc { namespace mocker
 	class Function
 	{
 	private:
-		void buildDeclartion(MockerData &data, const graph::Function &function, const QString &classID);
+		void buildDeclartion(MockerData &data, const graph::Function &function, const QString &classID, const ScopeState state);
 
 	public:
-		Function(MockerData &data, const graph::Function &function, const QString &classID, QQueue<const graph::Function*> &functions);
+		Function(MockerData &data, const graph::Function &function, const QString &classID, QQueue<const graph::Function*> &functions, const ScopeState state);
 	};
 
 

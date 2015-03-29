@@ -17,7 +17,6 @@ namespace vc { namespace mocker
 	struct MockerData
 	{
 		QVector<QString> includes;
-		QVector<QString> forwardDecs;
 		QVector<QString> body;
 
 		Header header;

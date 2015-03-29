@@ -28,7 +28,7 @@ namespace vc { namespace mocker
 		//search for class Dec
 		for (ClassHeader classHeader : mClassHeaders)
 		{
-			if (classHeader.getClassID == classID)
+			if (classHeader.getClassID() == classID)
 			{
 				//add member dec
 				if (state == scopePrivate)

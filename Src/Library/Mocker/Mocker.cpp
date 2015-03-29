@@ -9,6 +9,7 @@
 #include "DeclarationBlock.h"
 #include "Variable.h"
 #include "Utility.h"
+#include "Class.h"
 
 namespace vc { namespace mocker
 {
@@ -22,19 +23,14 @@ namespace vc { namespace mocker
 			outStream << line << "\n";
 		}
 
-		//TODO, move to header file
-		for (const QString &line : mData.forwardDecs)
-		{
-			outStream << line << "\n";
-		}
-
 		for (const QString &line : mData.body)
 		{
 			outStream << line << "\n";
 		}
 
+		//build the header
 		outStream.setDevice(&outDevice_Header);
-		for (const QString &line : mData.header)
+		for (const QString &line : mData.header.buildHeader())
 		{
 			outStream << line << "\n";
 		}
@@ -61,6 +57,10 @@ namespace vc { namespace mocker
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement)) // --happens with only global variables
 			{
 				Variable::createVar(mData, *variable);
+			}
+			else if (graph::Class *classDef = dynamic_cast<graph::Class*>(statement))
+			{
+				Class mockClass(mData, *classDef);
 			}
 			else
 			{

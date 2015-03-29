@@ -11,6 +11,8 @@
 #include <Graph/Graph.h>
 #include <Library.h>
 
+#include "Mocker.h"
+
 namespace vc { namespace mocker
 {
 	/**
