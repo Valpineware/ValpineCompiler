@@ -34,19 +34,14 @@ protected:
 	{
 		QTextStream stream(&buffer.buffer());
 
-		do
+		while (!stream.atEnd())
 		{
 			QString line = stream.readLine();
-			if (line != "\n")
+			if (line != NULL)
 			{
 				lines.append(line);
 			}
-			
-		} while (!lines.last().isNull());
-
-		if (!lines.isEmpty() && lines.last().isNull())
-			lines.removeLast();
-
+		}
 	}
 
 	void readFile(const QString& filename, QVector<QString>& lines)
@@ -58,7 +53,7 @@ protected:
 		while (!in.atEnd())
 		{
 			QString line = in.readLine();
-			if (line != "\n")
+			if (line.size() != 0)
 			{
 				lines.append(line);
 			}
