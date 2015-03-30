@@ -10,9 +10,20 @@
 
 #include <Graph/Graph.h>
 #include <Library.h>
+#include "Header.h"
 
 namespace vc { namespace mocker
 {
+	struct MockerData
+	{
+		QVector<QString> includes;
+		QVector<QString> body;
+
+		Header header;
+		
+		int scope = 0;
+	};
+
 	/**
 	 * @brief Mocks a Valpine source graph as C++.
 	 */
@@ -22,15 +33,12 @@ namespace vc { namespace mocker
 		void buildBlock(const graph::Block &block);
 		void createVar(graph::Variable &var);
 
-		QVector<QString> mIncludes;
-		QVector<QString> mForwardDecs;
-		QVector<QString> mBody;
-
-		int mScope = 0;
+		
+		MockerData mData;
 
 	public:
 		Mocker() {};
-		void mock(const graph::Graph &graph, QIODevice& outputDevice);
+		void mock(const graph::Graph &graph, QIODevice &outDevice_Implementation, QIODevice &outDevice_Header);
 	};
 }}
 

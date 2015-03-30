@@ -9,28 +9,28 @@
 #include "DeclarationBlock.h"
 #include "Variable.h"
 #include "Utility.h"
+#include "Class.h"
 
 namespace vc { namespace mocker
 {
-	void Mocker::mock(const graph::Graph &graph, QIODevice &outputDevice)
+	void Mocker::mock(const graph::Graph &graph, QIODevice &outDevice_Implementation, QIODevice &outDevice_Header)
 	{
 		buildBlock(graph.block());		
 
-		QTextStream outStream(&outputDevice);
-		for (const QString &line : mIncludes)
+		QTextStream outStream(&outDevice_Implementation);
+		for (const QString &line : mData.includes)
 		{
 			outStream << line << "\n";
 		}
 
-		for (const QString &line : mForwardDecs)
+		for (const QString &line : mData.body)
 		{
 			outStream << line << "\n";
 		}
 
-		for (const QString &line : mBody)
-		{
-			outStream << line << "\n";
-		}
+		//build the header
+		outStream.setDevice(&outDevice_Header);
+		mData.header.buildHeader(outStream);
 	}
 
 
@@ -44,24 +44,25 @@ namespace vc { namespace mocker
 
 			if (graph::Preprocessor *preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
-				mIncludes.append(preprocessor->verbatim());
+				mData.includes.append(preprocessor->verbatim());
 			}
 			else if (graph::Function *function = dynamic_cast<graph::Function*>(statement))
 			{
 				//go into deceleration block
-				DeclarationBlock decBlock(mBody, mForwardDecs, *function, mScope);
+				DeclarationBlock decBlock(mData, *function);
 			}
 			else if (graph::Variable *variable = dynamic_cast<graph::Variable*>(statement)) // --happens with only global variables
 			{
-				Variable::createVar(mBody, *variable, mScope);
+				Variable::createVar(mData, *variable);
+			}
+			else if (graph::Class *classDef = dynamic_cast<graph::Class*>(statement))
+			{
+				Class mockClass(mData, *classDef);
 			}
 			else
 			{
-				mBody.append(Utility::createTabs(mScope) + statement->verbatim());
+				mData.body.append(Utility::createTabs(mData.scope) + statement->verbatim());
 			}
 		}
 	}
-
-
-
 }}

@@ -11,25 +11,30 @@
 #include <Graph/Graph.h>
 #include <Library.h>
 
-namespace vc {
-	namespace mocker
+#include "Mocker.h"
+
+namespace vc { namespace mocker
+{
+	/**
+	* Converts a Class to cpp
+	*/
+	class Class
 	{
-		/**
-		* Converts a Class to cpp
-		*/
-		class Class
-		{
-		private:
+	private:
+		QString mClassName;
+		int mScope;
 
-		public:
-			Class(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Class &classDef, int scope);
+		void buildClass(MockerData &data, const graph::Class &classDef);
+		void buildMember(MockerData &data, const graph::Class::Member &member, const ScopeState state);
+		void buildHeader(MockerData &data);
+	public:
+		Class(MockerData &data, const graph::Class &classDef);
 			
-		};
+	};
 
 
 
-	}
-}
+}}
 
 
 

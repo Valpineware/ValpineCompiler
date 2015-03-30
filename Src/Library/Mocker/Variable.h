@@ -10,6 +10,7 @@
 
 #include <Graph/Graph.h>
 #include <Library.h>
+#include "Mocker.h"
 
 namespace vc { namespace mocker 
 {
@@ -18,8 +19,12 @@ namespace vc { namespace mocker
 	*/
 	class Variable
 	{
+	private:
+		static QString createVarInternal(MockerData &data, graph::Variable &var);
+
 	public:
-		static void createVar(QVector<QString> &body, graph::Variable &var, int scope);
+		static void createVarClass(MockerData &data, graph::Variable &var, QString &classID, const ScopeState state);
+		static void createVar(MockerData &data, graph::Variable &var);
 	};
 
 

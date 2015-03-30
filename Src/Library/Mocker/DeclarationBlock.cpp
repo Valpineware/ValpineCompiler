@@ -13,22 +13,18 @@
 
 namespace vc { namespace mocker
 {
-	DeclarationBlock::DeclarationBlock(QVector<QString> &body, QVector<QString> &forwardDecs, const graph::Function &function, int scope)
+	DeclarationBlock::DeclarationBlock(MockerData &data, const graph::Function &function, QString classID, const ScopeState state)
 	{
-		mData.body = &body;
-		mData.forwardDecs = &forwardDecs;
-		mData.scope = scope;
-		mData.functions = new QQueue<const graph::Function*>;
-		mData.functions->enqueue(&function);
+		mFunctions.enqueue(&function);
 
-		createFunction();
+		createFunction(data, classID, state);
 	}
 
 
-	void DeclarationBlock::buildBlock(const graph::Block &block, FileData &data)
+	void DeclarationBlock::buildBlock(const graph::Block &block, MockerData &data, QQueue<const graph::Function*> &functions)
 	{
 		QListIterator<graph::Statement*> iter(block.statements());
-		data.body->append(Utility::createTabs(data.scope) + "{");
+		data.body.append(Utility::createTabs(data.scope) + "{");
 
 		//increase scope level
 		data.scope += 1;
@@ -39,39 +35,38 @@ namespace vc { namespace mocker
 
 			if (auto variable = dynamic_cast<graph::Variable*>(statement))
 			{
-				Variable::createVar(*(data.body), *variable, data.scope);
+				Variable::createVar(data, *variable);
 			}
 			else if (auto control = dynamic_cast<graph::ControlStructure*>(statement))
 			{
-				ControlStructure structure(*control, data);
+				ControlStructure structure(*control, data, functions);
 			}
 			else if (auto function = dynamic_cast<graph::Function*>(statement))
 			{
-				data.functions->enqueue(function);
+				functions.enqueue(function);
 			}
 			else if (auto preprocessor = dynamic_cast<graph::Preprocessor*>(statement))
 			{
-				data.body->append(Utility::createTabs(data.scope) + preprocessor->verbatim());
+				data.body.append(Utility::createTabs(data.scope) + preprocessor->verbatim());
 			}
 			else if (statement)
 			{ 
-				data.body->append(Utility::createTabs(data.scope) + statement->verbatim());
+				data.body.append(Utility::createTabs(data.scope) + statement->verbatim());
 			}
 		}
 
 		data.scope -= 1;
-		data.body->append(Utility::createTabs(data.scope) + "}");
+		data.body.append(Utility::createTabs(data.scope) + "}");
 	}
 
-
-	void DeclarationBlock::createFunction()
+	void DeclarationBlock::createFunction(MockerData &data, QString &classID, const ScopeState state)
 	{
-		Function newFunction(mData);
+		Function newFunction(data, *(mFunctions.dequeue()), classID, mFunctions, state);
 
-		while (!mData.functions->isEmpty())
+		while (!mFunctions.isEmpty())
 		{
 			//build the nested function and add any new nested functions to the end of the queue
-			Function nestedFunction(mData);
+			Function nestedFunction(data, *(mFunctions.dequeue()), classID, mFunctions, state);
 		}
 	}
 }}

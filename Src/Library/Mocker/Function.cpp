@@ -7,22 +7,29 @@
 
 #include "Function.h"
 #include "Utility.h"
+#include "DeclarationBlock.h"
 
 namespace vc {	namespace mocker
 {
-	Function::Function(FileData &data)
+	Function::Function(MockerData &data, const graph::Function &function, QString &classID, QQueue<const graph::Function*> &functions, const ScopeState state)
 	{
-		const graph::Function *function = data.functions->dequeue();
-		buildDeclartion(*function, data);
+		buildDeclartion(data, function, classID, state);
 
-		DeclarationBlock::buildBlock(function->block(), data);
+		DeclarationBlock::buildBlock(function.block(), data, functions);
 	}
 
-	void Function::buildDeclartion(const graph::Function &function, FileData &data)
+	void Function::buildDeclartion(MockerData &data, const graph::Function &function, QString &classID, const ScopeState state)
 	{
 		//build opening experssion
 		QString declartion = Utility::createTabs(data.scope);
-		declartion = function.returnType().fullType() + " " + function.id() + "(";
+
+		//check if we are building a method
+		if (classID != "")
+		{
+			declartion += classID + "::";
+		}
+
+		declartion += function.returnType().fullType() + " " + function.id() + "(";
 
 		//add in the parameters
 		const QVector<graph::Parameter> &param = function.parameters();
@@ -43,11 +50,19 @@ namespace vc {	namespace mocker
 		}
 
 		declartion += ")";
-		data.body->append(declartion);
+		data.body.append(declartion);
 		
 		if (function.id() != "main")
 		{
-			data.forwardDecs->append(declartion + ";");
+			if (classID != "")
+			{
+				data.header.addClassMember(classID, declartion, state);
+			}
+			else
+			{
+				declartion += ";";
+				data.header.addFunctionDec(declartion);
+			}
 		}
 	}
 

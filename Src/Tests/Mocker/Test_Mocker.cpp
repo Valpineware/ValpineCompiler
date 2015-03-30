@@ -14,27 +14,35 @@ const QString gTestDir_Mocker = gTestDir + "/Test_Mocker/";
 TEST_CLASS
 {
 protected:
-	void readLines(const QString& filename, QVector<QString>& lineBuffer)
+	void readLines(const QString& filename, QVector<QString>& cppData, QVector<QString>& headerData)
 	{
 		parser::Parser parser;
 		parser.parseFile(gTestDir_Mocker + filename);
 
-		QBuffer buffer;
-		Assert::True(buffer.open(QIODevice::ReadWrite | QIODevice::Text));
-		mocker::Mocker().mock(parser.graph(), buffer);
+		QBuffer bufferImplementation;
+		ASSERT_TRUE(bufferImplementation.open(QIODevice::ReadWrite | QIODevice::Text));
+		QBuffer bufferHeader;
+		ASSERT_TRUE(bufferHeader.open(QIODevice::ReadWrite | QIODevice::Text));
 
-		QTextStream stream(&buffer.buffer());
-		QVector<QString> lines;
+		mocker::Mocker().mock(parser.graph(), bufferImplementation, bufferHeader);
 
-		do
-		{
-			lineBuffer.append(stream.readLine());
-		} while (!lineBuffer.last().isNull());
-
-		if (!lineBuffer.isEmpty() && lineBuffer.last().isNull())
-			lineBuffer.removeLast();
+		readBuffer(bufferImplementation, cppData);
+		readBuffer(bufferHeader, headerData);
 	}
 
+	void readBuffer(QBuffer &buffer, QVector<QString> &lines)
+	{
+		QTextStream stream(&buffer.buffer());
+
+		while (!stream.atEnd())
+		{
+			QString line = stream.readLine();
+			if (line != NULL)
+			{
+				lines.append(line);
+			}
+		}
+	}
 
 	void readFile(const QString& filename, QVector<QString>& lines)
 	{
@@ -44,91 +52,65 @@ protected:
 		
 		while (!in.atEnd())
 		{
-			lines.append(in.readLine());
+			QString line = in.readLine();
+			if (line.size() != 0)
+			{
+				lines.append(line);
+			}
+		}
+	}
+
+	void performTest(QString valpineFile, QString cppFile, QString headerFile)
+	{
+		//mock the valpine file and get the mocker "output"
+		QVector<QString> cppLines;
+		QVector<QString> headerLines;
+		readLines(valpineFile, cppLines, headerLines);
+
+		//get the expected data
+		QVector<QString> cppExpected;
+		QVector<QString> headerExpected;
+		readFile(cppFile, cppExpected);
+		readFile(headerFile, headerExpected);
+
+		Assert::Eq(cppExpected.size(), cppLines.size());
+
+		for (int i = 0; i < cppExpected.size(); i++)
+		{
+			Expect::EqStr(cppExpected[i], cppLines[i]);
+		}
+
+		Assert::Eq(headerExpected.size(), headerLines.size());
+
+		for (int i = 0; i < headerExpected.size(); i++)
+		{
+			Expect::EqStr(headerExpected[i], headerLines[i]);
 		}
 	}
 };
 
-
-//TODO Hey John. All these test cases duplicate a lot of code. Bi.
 TEST_CASE(HelloWorld)
 {
-	QVector<QString> lines;
-	readLines("HelloWorld.val", lines);
-
-	QVector<QString> expected;
-	readFile("HelloWorld.cpp", expected);
-
-	Assert::Eq(expected.size(), lines.size());
-
-	for (int i = 0; i < expected.size(); i++)
-	{
-		Expect::EqStr(expected[i], lines[i]);
-	}
+	performTest("HelloWorld.val", "HelloWorld.cpp", "HelloWorld.h");
 }
 
 TEST_CASE(FunctionTest)
 {
-	QVector<QString> lines;
-	readLines("FunctionTest.val", lines);
-
-	QVector<QString> expected;
-	readFile("FunctionTest.cpp", expected);
-
-	Assert::Eq(expected.size(), lines.size());
-
-	for (int i = 0; i < expected.size(); i++)
-	{
-		Expect::EqStr(expected[i], lines[i]);
-	}
+	performTest("FunctionTest.val", "FunctionTest.cpp", "FunctionTest.h");
 }
 
 TEST_CASE(VariableTest)
 {
-	QVector<QString> lines;
-	readLines("VariableTest.val", lines);
-
-	QVector<QString> expected;
-	readFile("VariableTest.cpp", expected);
-
-	Assert::Eq(expected.size(), lines.size());
-
-	for (int i = 0; i < expected.size(); i++)
-	{
-		Expect::EqStr(expected[i], lines[i]);
-	}
+	performTest("VariableTest.val", "VariableTest.cpp", "VariableTest.h");
 }
 
 
 TEST_CASE(NestedFunctionBasic)
 {
-	QVector<QString> lines;
-	readLines("NestedFunctionBasic.val", lines);
-
-	QVector<QString> expected;
-	readFile("NestedFunctionBasic.cpp", expected);
-
-	Assert::Eq(expected.size(), lines.size());
-	
-	for (int i = 0; i < expected.size(); i++)
-	{
-		Expect::EqStr(expected[i], lines[i]);
-	}
-
+	performTest("NestedFunctionBasic.val", "NestedFunctionBasic.cpp", "NestedFunctionBasic.h");
 }
 
 TEST_CASE(ConditionalStatements)
 {
-	QVector<QString> lines;
-	readLines("ConditionalStatementsBasic.val", lines);
-
-	QVector<QString> expected;
-	readFile("ConditionalStatementsBasic.cpp", expected);
-
-	Assert::Eq(expected.size(), lines.size());
-
-	for (int i = 0; i < expected.size(); i++)
-	{
-		Expect::EqStr(expected[i], lines[i]);
-	}
+	performTest("ConditionalStatementsBasic.val", "ConditionalStatementsBasic.cpp", "ConditionalStatementsBasic.h");
 }

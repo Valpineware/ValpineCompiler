@@ -17,6 +17,7 @@ namespace vc { namespace mocker
 		{
 		public:
 			static QString createTabs(int scopeLevel);
+			static void vectorToStream(QTextStream &outStream, QVector<QString> &vecData);
 		};
 
 }}
