@@ -14,7 +14,7 @@ const QString gTestDir_Mocker = gTestDir + "/Test_Mocker/";
 TEST_CLASS
 {
 protected:
-	void readLines(const QString& filename, QVector<QString>& lineBuffer)
+	void readLines(const QString& filename, QVector<QString>& cppData, QVector<QString>& headerData)
 	{
 		parser::Parser parser;
 		parser.parseFile(gTestDir_Mocker + filename);
@@ -26,19 +26,28 @@ protected:
 
 		mocker::Mocker().mock(parser.graph(), bufferImplementation, bufferHeader);
 
+		readBuffer(bufferImplementation, cppData);
+		readBuffer(bufferHeader, headerData);
+	}
 
-		QTextStream stream(&bufferImplementation.buffer());
-		QVector<QString> lines;
+	void readBuffer(QBuffer &buffer, QVector<QString> &lines)
+	{
+		QTextStream stream(&buffer.buffer());
 
 		do
 		{
-			lineBuffer.append(stream.readLine());
-		} while (!lineBuffer.last().isNull());
+			QString line = stream.readLine();
+			if (line != "\n")
+			{
+				lines.append(line);
+			}
+			
+		} while (!lines.last().isNull());
 
-		if (!lineBuffer.isEmpty() && lineBuffer.last().isNull())
-			lineBuffer.removeLast();
+		if (!lines.isEmpty() && lines.last().isNull())
+			lines.removeLast();
+
 	}
-
 
 	void readFile(const QString& filename, QVector<QString>& lines)
 	{
@@ -48,23 +57,39 @@ protected:
 		
 		while (!in.atEnd())
 		{
-			lines.append(in.readLine());
+			QString line = in.readLine();
+			if (line != "\n")
+			{
+				lines.append(line);
+			}
 		}
 	}
 
-	void performTest(QString valpineFile, QString cppFile)
+	void performTest(QString valpineFile, QString cppFile, QString headerFile)
 	{
-		QVector<QString> lines;
-		readLines(valpineFile, lines);
+		//mock the valpine file and get the mocker "output"
+		QVector<QString> cppLines;
+		QVector<QString> headerLines;
+		readLines(valpineFile, cppLines, headerLines);
 
-		QVector<QString> expected;
-		readFile(cppFile, expected);
+		//get the expected data
+		QVector<QString> cppExpected;
+		QVector<QString> headerExpected;
+		readFile(cppFile, cppExpected);
+		readFile(headerFile, headerExpected);
 
-		ASSERT_EQ(expected.size(), lines.size());
+		ASSERT_EQ(cppExpected.size(), cppLines.size());
 
-		for (int i = 0; i < expected.size(); i++)
+		for (int i = 0; i < cppExpected.size(); i++)
 		{
-			EXPECT_EQ_STR(expected[i], lines[i]);
+			EXPECT_EQ_STR(cppExpected[i], cppLines[i]);
+		}
+
+		ASSERT_EQ(headerExpected.size(), headerLines.size());
+
+		for (int i = 0; i < headerExpected.size(); i++)
+		{
+			EXPECT_EQ_STR(headerExpected[i], headerLines[i]);
 		}
 	}
 
@@ -76,27 +101,27 @@ protected:
 //Okay, BI.
 TEST_CASE(HelloWorld)
 {
-	performTest("HelloWorld.val", "HelloWorld.cpp");
+	performTest("HelloWorld.val", "HelloWorld.cpp", "HelloWorld.h");
 }
 
 TEST_CASE(FunctionTest)
 {
-	performTest("FunctionTest.val", "FunctionTest.cpp");
+	performTest("FunctionTest.val", "FunctionTest.cpp", "FunctionTest.h");
 }
 
 TEST_CASE(VariableTest)
 {
-	performTest("VariableTest.val", "VariableTest.cpp");
+	performTest("VariableTest.val", "VariableTest.cpp", "VariableTest.h");
 }
 
 
 TEST_CASE(NestedFunctionBasic)
 {
-	performTest("NestedFunctionBasic.val", "NestedFunctionBasic.cpp");
+	performTest("NestedFunctionBasic.val", "NestedFunctionBasic.cpp", "NestedFunctionBasic.h");
 
 }
 
 TEST_CASE(ConditionalStatements)
 {
-	performTest("ConditionalStatementsBasic.val", "ConditionalStatementsBasic.cpp");
+	performTest("ConditionalStatementsBasic.val", "ConditionalStatementsBasic.cpp", "ConditionalStatementsBasic.h");
 }

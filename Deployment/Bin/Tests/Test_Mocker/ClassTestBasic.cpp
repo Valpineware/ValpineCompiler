@@ -1,5 +1,3 @@
-#include "ClassTestBasic.h"
-
 Mocker::getX()
 {
 	return x;
