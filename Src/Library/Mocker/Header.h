@@ -11,6 +11,7 @@
 #include <Graph/Graph.h>
 #include <Library.h>
 #include "ClassHeader.h"
+#include "Mocker.h"
 
 namespace vc { namespace mocker
 {
@@ -42,6 +43,8 @@ namespace vc { namespace mocker
 		void addClassMember(const QString &classID, QString &memberDec, const ScopeState state);
 
 		void buildHeader(QTextStream &outStream);
+
+		int getScopeLevel() { return mScopeLevel; }
 			
 	};
 }}

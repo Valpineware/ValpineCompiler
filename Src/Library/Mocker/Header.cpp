@@ -26,7 +26,7 @@ namespace vc { namespace mocker
 	void Header::addClassMember(const QString &classID, QString &memberDec, const ScopeState state)
 	{
 		//search for class Dec
-		for (ClassHeader * classHeader : mClassHeaders)
+		for (ClassHeader *classHeader : mClassHeaders)
 		{
 			if (classHeader->getClassID() == classID)
 			{

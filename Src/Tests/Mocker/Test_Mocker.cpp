@@ -5,7 +5,6 @@
 
 #include "Tests.h"
 
-
 #define CLASS Test_Mocker
 using namespace vc;
 
@@ -113,4 +112,9 @@ TEST_CASE(NestedFunctionBasic)
 TEST_CASE(ConditionalStatements)
 {
 	performTest("ConditionalStatementsBasic.val", "ConditionalStatementsBasic.cpp", "ConditionalStatementsBasic.h");
+}
+
+TEST_CASE(ClassTestBasic)
+{
+	performTest("ClassTestBasic.val", "ClassTestBasic.cpp", "ClassTestBasic.h");
 }

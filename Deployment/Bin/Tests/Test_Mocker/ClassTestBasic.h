@@ -6,4 +6,4 @@ private:
 public:
 	int getX();
 	int getY();
-}
+};
