@@ -10,8 +10,7 @@
 
 #include <Graph/Graph.h>
 #include <Library.h>
-#include "ClassHeader.h"
-#include "Mocker.h"
+#include "ClassHeader.h"a
 
 namespace vc { namespace mocker
 {

@@ -1,9 +1,9 @@
-Mocker::getX()
+int Mocker::getX()
 {
 	return x;
 }
 
-Mocker::getCow()
+Cow Mocker::getCow()
 {
 	return bob;
 }

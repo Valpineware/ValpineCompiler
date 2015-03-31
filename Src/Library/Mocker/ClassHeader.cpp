@@ -25,7 +25,7 @@ namespace vc { namespace mocker
 		Utility::vectorToStream(outStream, mProtectedMembers);
 
 		//add public members
-		outStream << Utility::createTabs(mScopeLevel) << "protected:" << "\n";
+		outStream << Utility::createTabs(mScopeLevel) << "public:" << "\n";
 		Utility::vectorToStream(outStream, mProtectedMembers);
 
 		//finish class
